@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gnc.dao.CenterDao">
+   <!-- 수업등록 -->
+   <insert id="registerDao">
+      insert into TBL_CENTERS(CENTER_TTL,CENTER_ID,CENTER_UID,CENTER_PSWD,CENTER_MAX_NOPE)
+      values
+      (#{param1},#{param2},#{param3},#{param4},#{param5})
+    </insert>
+    <update id="updateDao">
+    update TBL_CENTERS set CENTER_TTL = #{CENTER_TTL}, CENTER_ID = #{CENTER_ID}, CENTER_UID = #{CENTER_UID},
+     CENTER_PSWD = #{CENTER_PSWD} , CENTER_MAX_NOPE = #{CENTER_MAX_NOPE},UPDT_DT=#{UPDT_DT} where CENTER_ID = #{CENTER_ID}
+    </update>
+    
+    <select id="centerListDao" resultType="com.gnc.dto.CenterDto" parameterType="string"> 
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS order by CENTER_ID desc LIMIT ${pageStart}, ${perPageNum}
+	</select>
+	
+	<select id="centerDao" resultType="com.gnc.dto.CenterDto">
+		select CENTER_TTL,CENTER_ID,CENTER_UID,CENTER_PSWD,CENTER_MAX_NOPE from TBL_CENTERS where CENTER_ID = #{CENTER_ID}
+	</select>
+	
+	
+<select id="getCount" resultType="int">
+    SELECT count(*) FROM TBL_CENTERS
+</select>
+
+<select id="getSearchCount" resultType="int">
+    SELECT count(*) FROM TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%')
+</select>
+
+	<select id="searchDao" resultType="com.gnc.dto.CenterDto">
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%')
+	</select>
+	
+	<delete id="deleteDao" >
+		 delete from TBL_CENTERS where CENTER_ID = #{CENTER_ID}
+	</delete>
+
+</mapper>

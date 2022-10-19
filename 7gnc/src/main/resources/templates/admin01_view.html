@@ -1,0 +1,422 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>성남시 공공도서관 AR서비스</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="css/board.css" />
+	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="nav">
+		<div class="logo">ADMIN</div>
+		<ul>
+			<li class="on">
+				<span class="material-symbols-outlined">list_alt</span>
+				<a th:href="@{/admin}">화상교육</a>
+			</li>
+			<li>
+				<span class="material-symbols-outlined">monitoring</span>
+				<a th:href="@{/ar}">AR 이용통계</a>
+			</li>
+			<li>
+				<span class="material-symbols-outlined">touch_app</span>
+				<a th:href="@{/center}">돌봄센터 관리</a>
+			</li>
+			<li>
+				<span class="material-symbols-outlined">group</span>
+				<a th:href="@{/satisfaction}">이용자 만족도</a>
+			</li>
+		</ul>
+	</div><!-- //nav -->
+	<div class="section">
+		<div class="header">
+			<button type="button" onclick="logOut()" >로그아웃</button>
+		</div>
+		<div class="inner">
+			<h1>수업 상세 정보</h1>
+
+			<div class="area_table">
+
+				<table class="table_listview">
+					<colgroup>
+						<col width="200px">
+						<col width="auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>수업명</th>
+							<td th:text="${view[0].LESSON_TTL}"></td>
+						</tr>
+						<tr>
+							<th>수업일시</th>
+							<td th:text="${view[0].BGNG_DT}"></td>
+						</tr>
+						<tr>
+							<th>수업시간</th>
+							<td th:text="${view[0].LESSON_TM}+'분'"></td>
+						</tr>
+						<tr>
+							<th>강의자</th>
+							<td th:text="${view[0].INSTR_NM}"></td>
+						</tr>
+						<tr>
+							<th>수업유형</th>
+							<td th:text="${view[0].LESSON_TYPE}"></td>
+						</tr>
+						<tr>
+							<th>수업설명(메모)</th>
+							<td th:text="${view[0].LESSON_DESC}"></td>
+						</tr>
+						<tr>
+							<th>참여 돌봄센터 수</th>
+							<td>0</td>
+						</tr>
+						<tr>
+							<th>전체 참석인원</th>
+							<td>
+				<span >0</span>
+							<button type="button" class="btn_basic ml20"
+									onclick="document.getElementById('popup_detail').style.display='block'">상세보기</button>
+								<!-- #popup_detail display:block -->	
+							
+							</td>
+						</tr>
+						<tr>
+
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="btn_area">
+					<div class="left">
+						<button type="button" onclick="location.href='/admin'" class="btn_list">목록</button>
+					</div>
+					<div class="right">
+						<button type="button" class="btn_basic"
+							onclick="document.getElementById('popup_modify').style.display='block'">정보수정</button>
+						<!-- #popup_modify display:block -->
+						<button type="button" class="btn_grey" onclick="deleteSend()">삭제</button>
+					</div>
+				</div>
+
+			</div><!-- //area_table -->
+		</div><!-- //inner -->
+
+		<!-- 참석인원상세보기 -->
+		<div class="popup_layer" id="popup_detail" style="display:none">
+			<div class="popup_box">
+				<h1>참석 인원 상세보기
+					<button type="button" class="btn_close"
+						onclick="document.getElementById('popup_detail').style.display='none'"><span
+							class="material-symbols-outlined">close</span></button>
+				</h1>
+				<div class="tablebox">
+					<table>
+						<colgroup>
+							<col width="">
+							<col width="">
+							<col width="100px">
+						</colgroup>
+						<thead>
+							<tr>
+								<th>아이디</th>
+								<th>돌봄센터 명</th>
+								<th>참석인원 수</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>abc123</td>
+								<td>중구 돌봄센터</td>
+								<td>20</td>
+							</tr>
+							
+			
+							<tr>
+								<td>abc123</td>
+								<td>중구 돌봄센터</td>
+								<td>20</td>
+							</tr>
+							<tr>
+								<td>abc123</td>
+								<td>중구 돌봄센터</td>
+								<td>20</td>
+							</tr>
+							<tr>
+								<td>abc123</td>
+								<td>중구 돌봄센터</td>
+								<td>20</td>
+							</tr>
+					
+						
+						</tbody>
+					</table>
+				</div>
+				<div class="btn"><button type="button" class="btn_save"
+						onclick="document.getElementById('popup_detail').style.display='none'">확인</button></div>
+			</div>
+		</div>
+		<!--// popup -->
+
+
+		<!-- 정보수정 -->
+		<div class="popup_layer" id="popup_modify" style="display: none;">
+			<div class="popup_box">
+				<h1>수업등록
+					<button type="button" class="btn_close"
+						onclick="document.getElementById('popup_modify').style.display='none'"><span
+							class="material-symbols-outlined">close</span></button>
+				</h1>
+				<div class="tablebox">
+					<table class="table_listview">
+						<colgroup>
+							<col width="100px">
+							<col width="auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>수업명</th>
+								<td ><input type="text" th:value="${view[0].LESSON_TTL}" id="LESSON_TTL" class="input_100per"></td>
+							</tr>
+							<tr>
+								<th>수업일시</th>
+								<td class="search_date">
+									<div class="">
+										<input type="datetime-local" 
+										th:value="${view[0].BGNG_DT}"
+										id="BGNG_DT">
+										<span class="material-symbols-outlined"></span>
+
+
+										<input type="datetime-local" 
+										th:value="${view[0].END_DT}"
+										id="END_DT">
+										<span class="material-symbols-outlined"></span>
+									</div>
+								
+								
+								</td>
+							</tr>
+							<tr>
+								<th>수업시간</th>
+								<td><input type="number" th:value="${view[0].LESSON_TM}" id="LESSON_TM" class="input_200">분</td>
+							</tr>
+							<tr>
+								<th>강의자</th>
+								<td><input type="text" th:value="${view[0].INSTR_NM}" id="INSTR_NM" class="input_200"></td>
+							</tr>
+							<tr>
+								<th>수업유형</th>
+								<td>
+									<select id="type_value" name="type_value">
+										<option>유형</option>
+										<option>강의</option>
+										<option value="direct">기타[직접입력]</option>
+									</select>
+									<input type="text" id="typeDirect" name="typeDirect" />
+								</td>
+							</tr>
+							<tr>
+								<th>수업설명(메모)</th>
+								<td><textarea th:text="${view[0].LESSON_DESC}" 
+								id="LESSON_DESC"></textarea></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="btn">
+					<button type="button" class="btn_delete"
+						onclick="document.getElementById('popup_modify').style.display='none'">취소</button>
+					<button type="button" class="btn_save" onclick="dataSend()">확인</button>
+				</div>
+			</div>
+		</div>
+		<!--// popup -->
+
+
+	</div><!-- //section -->
+</body>
+<script>
+	// Get the modal
+		let modal = document.getElementsByClassName("popup_layer")[1];
+
+	
+	
+	function dataSend() {
+		var result = confirm("수정하시겠습니까?");
+		if(result){
+		var LESSON_TTL = $("#LESSON_TTL").val();
+		var BGNG_DT = $("#BGNG_DT").val();
+		var END_DT = $("#END_DT").val();
+		var INSTR_NM = $("#INSTR_NM").val();
+		var LESSON_DESC = $("#LESSON_DESC").val();
+		var LESSON_TM = $("#LESSON_TM").val();
+		var t = document.getElementById("type_value")
+		var LESSON_TYPE = t.options[t.selectedIndex].text
+
+	
+		
+		if ($("#type_value").val() == "direct"){
+			LESSON_TYPE = $("#typeDirect").val();
+			
+		}
+
+
+		
+		
+			var LessonsDto = JSON.stringify({
+				LESSON_TTL: LESSON_TTL,
+				BGNG_DT: BGNG_DT,
+				END_DT: END_DT,
+				LESSON_TM: LESSON_TM,
+				INSTR_NM: INSTR_NM,
+				LESSON_TYPE: LESSON_TYPE,
+				LESSON_DESC: LESSON_DESC
+			});
+			$.ajax({
+				method: 'POST',
+				url: '/update',
+				headers: {'Content-type': 'application/json'},
+				data: LessonsDto
+
+			})
+			modal.style.display = "none";
+		setTimeout("location.reload()", 1000);
+
+	}
+	else{
+		location.reload()
+	}	
+	}
+	
+
+
+
+	$(function () {
+
+		//직접입력 인풋박스 기존에는 숨어있다가
+
+		$("#selboxDirect").hide();
+
+
+
+		$("#select_value").change(function () {
+
+
+
+			//직접입력을 누를 때 나타남
+
+			if ($("#select_value").val() == "direct") {
+
+				$("#selboxDirect").show();
+
+
+			} else {
+
+				$("#selboxDirect").hide();
+
+			}
+
+
+
+		})
+
+
+
+	});
+	$(function () {
+
+		//직접입력 인풋박스 기존에는 숨어있다가
+
+		$("#typeDirect").hide();
+
+
+
+		$("#type_value").change(function () {
+
+
+
+			//직접입력을 누를 때 나타남
+
+			if ($("#type_value").val() == "direct") {
+
+				$("#typeDirect").show();
+				time = $("#typeDirect").val();
+
+			} else {
+
+				$("#typeDirect").hide();
+
+			}
+
+
+
+		})
+
+
+
+	});
+
+
+	function deleteSend() {
+		var id = 1;
+		var result = confirm("정말로 삭제하시겠습니까?");
+
+		if (result) {
+			$.ajax({
+				method: 'POST',
+				url: '/delete',
+				headers: {'Content-type': 'application/json'},
+				data: id
+
+
+			})
+			location.replace('/admin');
+
+		}
+
+		else {
+			location.reload();
+		}
+
+
+
+	}
+
+
+
+</script>
+<script>
+	function logOut(){
+		var logout = confirm("로그아웃 하시겠습니까?");
+		if(logout){
+		$.ajax({
+				method: 'POST',
+				url: '/logout'
+				
+
+
+			})
+			location.replace('/login');
+		}
+		else {
+			location.reload();
+		}
+		
+	}
+</script>
+
+
+</html>

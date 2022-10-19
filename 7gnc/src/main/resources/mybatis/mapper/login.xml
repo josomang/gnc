@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnc.dao.UserDao">
+    <select id="getUserAccount" resultType="string">
+        select * from TBL_ADMINS where UID = #{UID} and PSWD = #{PSWD} </select>
+      
+      <update id="last_lgn_dtDao">
+        update TBL_ADMINS set LAST_LGN_DT= #{LAST_LGN_DT} where UID = #{UID}
+        </update>  
+       
+        <update id="use_dtDao">
+        update TBL_ADMINS set USE_DT= #{USE_DT} where UID = #{UID}
+        </update>  
+</mapper>

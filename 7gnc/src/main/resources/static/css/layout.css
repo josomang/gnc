@@ -1,0 +1,89 @@
+.nav {width:200px; display: inline-block; z-index: 9990; position: absolute; top:0; bottom: 0; left: 0;}
+.nav .logo {background: url(../images/logo_w.png) no-repeat; background-size: auto 30px; background-position: center center; height:50px; font-size: 0;}
+.nav ul {border-top: 1px dotted rgba(265,265,265,0.5);}
+.nav ul li {color:#FFF; padding:15px 10px; border-bottom: 1px dotted rgba(265,265,265,0.5);}
+.nav ul li span {color:#FFF}
+.nav ul li a {display: block;}
+
+.section {width:calc(100% - 200px); display:block; position: relative; padding-left: 200px;}
+.section .header {height:50px; text-align: right; line-height: 50px; padding-right:20px; border-bottom:1px solid #DDD}
+.section .header button {padding:0}
+.section > .inner {margin:50px; width:calc(100% - 100px); max-width:1500px; display: inline-block;}
+.section > .inner > h1 {display: inline-block; font-size: 20px; margin-bottom:30px;}
+
+/* 로그인 */
+.login_box {width:100%; height: 100vh;}
+.login {width:94%; max-width:600px; margin:0 auto; text-align: center; background: url(../images/logo.png) no-repeat; background-position: center 100px;  background-size: 200px auto; padding-top:200px;}
+.login h1 {margin-bottom: 100px; font-weight: 600; font-size: 24px;}
+.login ul {margin-bottom: 30px;}
+.login li {line-height: 45px; margin-bottom: 10px; text-align: left;}
+.login li:after {content: ""; clear: both;}
+.login li > label {width:20%; min-width:60px; display: inline-block; font-weight: 400; color:#000}
+.login li > input {width:400px; border-radius: 0; }
+.login > button {width:50%; border:1px solid #0066b3; border-radius: 0; padding:10px 0; color:#0066b3}
+.login > button:hover {background-color: #0066b3; color:#FFF; transition: 0.2s;}
+.login input[type=text]:focus, .login input[type=password]:focus {border:1px solid #0066b3;}
+
+/* 달력 */
+*{
+    margin: 0;
+    padding: 0;
+   
+    
+}
+.custom_calendar_table td {
+   
+    text-align: center;
+    height: 70px;
+            width: 250px;
+            
+}
+
+.custom_calendar_table thead.cal_date th {
+    font-size: larger;
+     
+}
+
+
+
+.custom_calendar_table thead.cal_date th button {
+    font-size: 5rem;
+    background: none;
+    border: none;
+      color: rgb(192, 192, 192);
+}
+
+.custom_calendar_table thead.cal_week th {
+    background-color: rgb(192, 192, 192);
+    color: rgb(255, 255, 255);
+    height: 30px;
+    width: 200px;
+   
+}
+
+.custom_calendar_table tbody td {
+    cursor: pointer;
+    
+}
+
+.custom_calendar_table tbody td:nth-child(1) {
+    color: red;
+}
+
+.custom_calendar_table tbody td:nth-child(7) {
+    color: #288CFF;
+    
+}
+
+.custom_calendar_table tbody td.select_day {
+    background-color: rgb(192, 192, 192);
+    color: #fff;
+}
+
+.chart {}
+.chart > h2 {margin-bottom: 20px;}
+.chart > h2 span {font-size: 20px;}
+.chart .date:after {content: "이용자수 : "; margin:0 5px}
+.chart .total {color:#0066b3}
+.chart .total:after {content: "명"; color:#000}
+.chart canvas {width:100%; max-height:400px}

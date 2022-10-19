@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 공공도서관 AR서비스</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/board.css" />
+    <link rel="stylesheet" type="text/css" href="css/color.css" />
+    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/date.js"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="nav">
+        <div class="logo">ADMIN</div>
+        <ul>
+           <li>
+                <span class="material-symbols-outlined">list_alt</span>
+               <a th:href="@{/admin}">화상교육</a>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">monitoring</span>
+                <a th:href="@{/ar}">AR 이용통계</a>
+            </li>
+            <li>
+				<span class="material-symbols-outlined">touch_app</span>
+				<a th:href="@{/center}">돌봄센터 관리</a>
+			</li>
+			<li class="on">
+				<span class="material-symbols-outlined">group</span>
+				<a th:href="@{/satisfaction}">이용자 만족도</a>
+			</li>
+        </ul>
+    </div><!-- //nav -->
+    <div class="section">
+        <div class="header">
+            <button type="button" onclick="logOut()">로그아웃</button>
+        </div>
+        <div class="inner">
+            <h1>이용자 만족도</h1>
+
+            <div class="area_table">
+                <div class="tablehead">
+                    <div class="searchbox">
+                        <select id="select_value" name="select_value">
+                            <option></option>
+                            <option>2022</option>
+                            <option>2023</option>
+                            <option>2024</option>
+                            <option>2025</option>
+                        </select>
+                        <button type="button" class="btn_basic" onclick="dataSend()">조회</button>
+                    </div>
+                </div>
+
+                <h2 class="mt20 mb10">AR공간 서비스 이용 만족도</h2>
+                <table style="display: inline-table;">
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>설문 응답자 수</th>
+                            <th>총 만족도 점수</th>
+                            <th>평균 만족도 점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>인어공주 AR 뮤지컬</td>
+                            <td><span></span>명</td>
+                            <td><span></span>점</td>
+                            <td><span></span>점</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
+                <div class="data_null" style="display: none;">조회할 데이터가 존재하지 않습니다.</div>
+
+                <h2 class="mt50 mb10">돌봄센터 아동 화상교육 이용 만족도</h2>
+                <table style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>설문 응답자 수</th>
+                            <th>총 만족도 점수</th>
+                            <th>�0\r�m��

@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 공공도서관 AR서비스</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/board.css" />
+    <link rel="stylesheet" type="text/css" href="css/color.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/date.js"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="login_box">
+        <div class="login">
+            <h1>공공도서관 AR 서비스 운영 관리</h1>
+            
+            <ul>
+                <li><label for="login_id">아이디</label>
+                    <input type="text" id="UID" placeholder="아이디를 입력하세요."></li>
+                <li><label for="login_pw">비밀번호</label>
+                    <input type="password" id="PSWD" placeholder="비밀번호를 입력하세요."></li>
+                </ul>
+            <button type="submit" class="btn btn-primary" onclick = "dataSend()">로그인</button>
+        
+        </div>
+    </div>
+</body>
+
+<script>
+	
+
+	function dataSend() {
+		var UID = $("#UID").val();
+		var PSWD = $("#PSWD").val();
+		
+		
+		
+		if (UID == "" || PSWD=="") {
+			alert("아이디 또는 비밀 번호를 입력해주세요")
+		}
+		
+		
+			var LoginDto = JSON.stringify({
+				UID : UID,
+				PSWD : PSWD
+			});
+
+
+			$.ajax({
+				method: 'POST',
+				url: '/login',
+				headers: {'Content-type': 'application/json'},
+				data: LoginDto			
+				});
+				setTimeout("location.href='/admin'", 1000);
+				
+		}
+			
+
+</script>
+
+</html>

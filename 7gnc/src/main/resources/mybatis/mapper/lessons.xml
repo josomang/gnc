@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gnc.dao.LessonsDao">
+   <!-- 수업등록 -->
+   <insert id="registerDao">
+      insert into TBL_LESSONS(LESSON_TTL,BGNG_DT,END_DT,LESSON_TM,INSTR_NM,LESSON_TYPE,LESSON_DESC)
+      values
+      (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+    </insert>
+   
+   
+    <update id="updateDao">
+    update TBL_LESSONS set LESSON_TTL = #{LESSON_TTL}, BGNG_DT = #{BGNG_DT}, 
+    END_DT = #{END_DT}, LESSON_TM = #{LESSON_TM} , 
+    INSTR_NM = #{INSTR_NM} ,LESSON_TYPE= #{LESSON_TYPE},
+    LESSON_DESC=#{LESSON_DESC},UPDT_DT=#{UPDT_DT} where LESSON_ID = #{LESSON_ID}
+    </update>
+    
+    
+
+<select id="lessonsListDao" resultType="com.gnc.dto.LessonsDto" parameterType="string"> 
+		select LESSON_ID,BGNG_DT, LESSON_TTL, INSTR_NM , LESSON_TYPE from TBL_LESSONS order by BGNG_DT desc LIMIT ${pageStart}, ${perPageNum}
+	</select>
+	
+<select id="test" resultType="com.gnc.dto.LessonsDto" parameterType="string" >
+		 select LESSON_ID,BGNG_DT, LESSON_TTL, INSTR_NM , LESSON_TYPE from TBL_LESSONS order by LESSON_ID desc
+	</select>
+	
+<select id="getCount" resultType="int">
+    SELECT count(*) FROM TBL_LESSONS
+</select>
+
+<select id="getSearchCount" resultType="int">
+    SELECT count(*) FROM TBL_LESSONS where LESSON_TTL LIKE CONCAT('%',#{keyword},'%')
+</select>
+	
+	<select id="lessonsDao" resultType="com.gnc.dto.LessonsDto">
+		select LESSON_ID,LESSON_TTL,BGNG_DT,END_DT,LESSON_TM,INSTR_NM,LESSON_TYPE,LESSON_DESC from TBL_LESSONS where LESSON_ID = #{LESSON_ID}
+	</select>
+	
+		<select id="getIdDao" resultType="int">
+		select LESSON_ID from TBL_LESSONS
+	</select>
+	
+	<select id="searchDao" resultType="com.gnc.dto.LessonsDto">
+		select LESSON_ID, BGNG_DT, LESSON_TTL, INSTR_NM , LESSON_TYPE from TBL_LESSONS where LESSON_TTL LIKE CONCAT('%',#{keyword},'%')
+	</select>
+	
+	<delete id="deleteDao" >
+		 delete from TBL_LESSONS where LESSON_ID = #{LESSON_ID}
+	</delete>
+	
+	<!-- <select id="arCountDao" resultType="map">
+    select now,count(*) as count from TBL_AR_REALTIME group by(now)
+</select>
+
+<select id="arMonthCountDao" resultType="int">
+    SELECT COUNT(*) FROM  TBL_AR_REALTIME WHERE datetime LIKE CONCAT('%',#{month},'%')
+</select> -->
+ 
+
+</mapper>

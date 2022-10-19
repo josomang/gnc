@@ -1,0 +1,23 @@
+.nav {background-color: #000;}
+.nav .logo {background-color: #000;}
+.nav ul li {background-color:#000;}
+.nav ul li.on span {color: yellow;}
+
+/* button */
+.btn_area button {padding:10px 20px; min-width:60px}
+.btn_list {border:1px solid #CCC}
+.btn_delete,.btn_grey {background-color: #999; border:1px solid #999; color:#FFF}
+.btn_modify {background-color: #28394e; border:1px solid #28394e; color:#FFF}
+.btn_save {background-color: #28394e; border:1px solid #28394e; color:#FFF}
+.btn_excel {border:1px solid #CCC; text-indent: 25px; background: url(../images/icon_excel.png) 10px center no-repeat; background-size: 16px auto;}
+.btn_basic {border:1px solid #CCC; padding:7px 20px;}
+.a_link {border:1px solid #FFF; width:80%; margin:0 auto; max-width:500px; padding:7px 0; display:inline-block; text-align:center;}
+.a_link:hover {background-color:#000; color:#FFF;}
+
+button:hover {opacity: 0.8;}
+button span {position: absolute; top:50%; left: 50%; transform: translate(-50%,-50%);}
+
+/* board */
+
+/* font */
+.color_seongnam {color: #0066b3;}
