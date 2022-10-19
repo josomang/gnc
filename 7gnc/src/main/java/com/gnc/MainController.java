@@ -203,7 +203,60 @@ LocalDateTime now = LocalDateTime.now();
 		return "redirect:/view";
 	}
 	@RequestMapping("/popup")
-	public String popup(String date) {
+	public String popup(@SessionAttribute(name=SessionConstants.LOGIN_MEMBER,required=false)
+	String check,String date,Model model) {
+		if(check == null) {
+			return "redirect:/login";
+		}
+		model.addAttribute("ar01_10",arDao.getCount01_10(date));
+		model.addAttribute("ar01_11",arDao.getCount01_11(date));
+		model.addAttribute("ar01_12",arDao.getCount01_12(date));
+		model.addAttribute("ar01_13",arDao.getCount01_13(date));
+		model.addAttribute("ar01_14",arDao.getCount01_14(date));
+		model.addAttribute("ar01_15",arDao.getCount01_15(date));
+		model.addAttribute("ar01_16",arDao.getCount01_16(date));
+		model.addAttribute("ar01_17",arDao.getCount01_17(date));
+		
+		model.addAttribute("ar02_10",arDao.getCount02_10(date));
+		model.addAttribute("ar02_11",arDao.getCount02_11(date));
+		model.addAttribute("ar02_12",arDao.getCount02_12(date));
+		model.addAttribute("ar02_13",arDao.getCount02_13(date));
+		model.addAttribute("ar02_14",arDao.getCount02_14(date));
+		model.addAttribute("ar02_15",arDao.getCount02_15(date));
+		model.addAttribute("ar02_16",arDao.getCount02_16(date));
+		model.addAttribute("ar02_17",arDao.getCount02_17(date));
+		
+		model.addAttribute("ar11_10",arDao.getCount11_10(date));
+		model.addAttribute("ar11_11",arDao.getCount11_11(date));
+		model.addAttribute("ar11_12",arDao.getCount11_12(date));
+		model.addAttribute("ar11_13",arDao.getCount11_13(date));
+		model.addAttribute("ar11_14",arDao.getCount11_14(date));
+		model.addAttribute("ar11_15",arDao.getCount11_15(date));
+		model.addAttribute("ar11_16",arDao.getCount11_16(date));
+		model.addAttribute("ar11_17",arDao.getCount11_17(date));
+		
+		model.addAttribute("ar12_10",arDao.getCount12_10(date));
+		model.addAttribute("ar12_11",arDao.getCount12_11(date));
+		model.addAttribute("ar12_12",arDao.getCount12_12(date));
+		model.addAttribute("ar12_13",arDao.getCount12_13(date));
+		model.addAttribute("ar12_14",arDao.getCount12_14(date));
+		model.addAttribute("ar12_15",arDao.getCount12_15(date));
+		model.addAttribute("ar12_16",arDao.getCount12_16(date));
+		model.addAttribute("ar12_17",arDao.getCount12_17(date));
+		
+		model.addAttribute("arsum_10",arDao.getCount01_10(date)+arDao.getCount02_10(date)+arDao.getCount11_10(date)+arDao.getCount12_10(date));
+		model.addAttribute("arsum_11",arDao.getCount01_11(date)+arDao.getCount02_11(date)+arDao.getCount11_11(date)+arDao.getCount12_11(date));
+		model.addAttribute("arsum_12",arDao.getCount01_12(date)+arDao.getCount02_12(date)+arDao.getCount11_12(date)+arDao.getCount12_12(date));
+		model.addAttribute("arsum_13",arDao.getCount01_13(date)+arDao.getCount02_13(date)+arDao.getCount11_13(date)+arDao.getCount12_13(date));
+		model.addAttribute("arsum_14",arDao.getCount01_14(date)+arDao.getCount02_14(date)+arDao.getCount11_14(date)+arDao.getCount12_14(date));
+		model.addAttribute("arsum_15",arDao.getCount01_15(date)+arDao.getCount02_15(date)+arDao.getCount11_15(date)+arDao.getCount12_15(date));
+		model.addAttribute("arsum_16",arDao.getCount01_16(date)+arDao.getCount02_16(date)+arDao.getCount11_16(date)+arDao.getCount12_16(date));
+		model.addAttribute("arsum_17",arDao.getCount01_17(date)+arDao.getCount02_17(date)+arDao.getCount11_17(date)+arDao.getCount12_17(date));
+		
+		
+		
+		
+		
 		
 		
 		return "popup";
@@ -277,6 +330,8 @@ LocalDateTime now = LocalDateTime.now();
 		}
 		return "admin02";
 	}
+	
+	
 	@PostMapping("/ar_user_log")
 	public @ResponseBody void mistake(@RequestBody String result) {
 		 LocalDate now = LocalDate.now();

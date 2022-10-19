@@ -97,13 +97,13 @@
                 <div class="paging">
                    <ul class="pagination pagination-sm no-margin pull-right">
 						<span class="before" th:if="${pageMaker.prev} == true">
-							<a th:href="@{/admin(page=${pageMaker.startPage}-1,
+							<a th:href="@{/center(page=${pageMaker.startPage}-1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
 						</span>
 						<span class="current" th:each="idx,iterStat : 
 					${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
 							th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
-							<a th:href="@{/admin(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+							<a th:href="@{/center(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
 								th:text="${idx}"></a>
 						</span>
 
@@ -154,7 +154,7 @@
                             </tr>
                             <tr>
                                 <th>돌봄 아동 수</th>
-                                <td><input type="text" id="CENTER_MAX_NOPE" class="input_100per"></td>
+                                <td><input type="number" id="CENTER_MAX_NOPE" class="input_100per"></td>
                             </tr>
                             
                         </tbody>
