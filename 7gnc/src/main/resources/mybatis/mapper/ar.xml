@@ -178,7 +178,106 @@ AR_CONTENT_TYPE="12"
 <select id="getCount12_17" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  LOG_CRT_YMD = #{LOG_CRT_YMD} and USE_DT LIKE CONCAT('%','17:','%') and 
 AR_CONTENT_TYPE="12"
+
+
 </select>  
+
+<select id="getCountday01" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday02" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday03" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday04" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday05" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday06" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday07" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday08" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday09" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday10" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday11" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday12" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday13" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday14" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday15" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday16" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday17" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday18" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday19" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday20" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday21" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday22" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday23" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday24" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday25" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday26" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday27" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday28" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday29" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday30" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+<select id="getCountday31" resultType="int">
+select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
+</select>
+  
+
+
 
 
 </mapper>

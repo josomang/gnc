@@ -67,6 +67,41 @@ public interface ArDao {
 	public int getCount12_17(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	
 	
+	public int getCountday01(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday02(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday03(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday04(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday05(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday06(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday07(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday08(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday09(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday10(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday11(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday12(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday13(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday14(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday15(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday16(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday17(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday18(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday19(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday20(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday21(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday22(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday23(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday24(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday25(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday26(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday27(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday28(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday29(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday30(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public int getCountday31(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	
+	
+	
+	
 	
 	
 	
