@@ -1,9 +1,11 @@
 package com.gnc;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,11 +29,14 @@ import com.gnc.dao.UserDao;
 import com.gnc.dto.Criteria;
 import com.gnc.dto.LessonsDto;
 import com.gnc.dto.Paging;
+import com.gnc.dto.lect_listDto;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @Controller
-public class MainController {
+public class MainController  {
 
 	String key;
 	int masterId;
@@ -126,7 +131,9 @@ public class MainController {
 		String LESSON_TTL = "";
 		String BGNG_DT = "";
 		String END_DT = "";
+		
 		String LESSON_TM = "";
+		String ROOM_ID="";
 		String INSTR_NM = "";
 		String LESSON_TYPE = "";
 		String LESSON_DESC = "";
@@ -135,13 +142,15 @@ public class MainController {
 		JsonElement element = parser.parse(result);
 		LESSON_TTL = element.getAsJsonObject().get("LESSON_TTL").getAsString();
 		BGNG_DT = element.getAsJsonObject().get("BGNG_DT").getAsString();
+		
 		END_DT = element.getAsJsonObject().get("END_DT").getAsString();
 		LESSON_TM = element.getAsJsonObject().get("LESSON_TM").getAsString();
+		ROOM_ID = element.getAsJsonObject().get("ROOM_ID").getAsString();
 		INSTR_NM = element.getAsJsonObject().get("INSTR_NM").getAsString();
 		LESSON_TYPE = element.getAsJsonObject().get("LESSON_TYPE").getAsString();
 		LESSON_DESC = element.getAsJsonObject().get("LESSON_DESC").getAsString();
 
-		lessonsDao.registerDao(LESSON_TTL, BGNG_DT, END_DT, LESSON_TM, INSTR_NM, LESSON_TYPE, LESSON_DESC);
+		lessonsDao.registerDao(LESSON_TTL, BGNG_DT, END_DT, LESSON_TM,ROOM_ID, INSTR_NM, LESSON_TYPE, LESSON_DESC);
 
 		return "redirect:/admin";
 	}
@@ -153,7 +162,9 @@ public class MainController {
 		String LESSON_TTL = "";
 		String BGNG_DT = "";
 		String END_DT = "";
+		
 		String LESSON_TM = "";
+		String ROOM_ID="";
 		String INSTR_NM = "";
 		String LESSON_TYPE = "";
 		String LESSON_DESC = "";
@@ -164,11 +175,12 @@ public class MainController {
 		BGNG_DT = element.getAsJsonObject().get("BGNG_DT").getAsString();
 		END_DT = element.getAsJsonObject().get("END_DT").getAsString();
 		LESSON_TM = element.getAsJsonObject().get("LESSON_TM").getAsString();
+		ROOM_ID = element.getAsJsonObject().get("ROOM_ID").getAsString();
 		INSTR_NM = element.getAsJsonObject().get("INSTR_NM").getAsString();
 		LESSON_TYPE = element.getAsJsonObject().get("LESSON_TYPE").getAsString();
 		LESSON_DESC = element.getAsJsonObject().get("LESSON_DESC").getAsString();
 
-		lessonsDao.updateDao(masterId, LESSON_TTL, BGNG_DT, END_DT, LESSON_TM, INSTR_NM, LESSON_TYPE, LESSON_DESC, now);
+		lessonsDao.updateDao(masterId, LESSON_TTL, BGNG_DT, END_DT, LESSON_TM,ROOM_ID ,INSTR_NM, LESSON_TYPE, LESSON_DESC, now);
 
 		return "redirect:/view";
 	}
@@ -247,22 +259,49 @@ public class MainController {
 		return "admin01_view";
 	}
 
-	@RequestMapping("/lect_result")
-	public String admin01_view(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
-			int id, Model model, LessonsDto lessonsDto) {
-		if (check == null) {
-			return "redirect:/login";
-		}
+	@PostMapping("/lect_result")
+	public String admin01_view (Model model,@RequestBody String result) {
+		
 		// List<LessonsDto> a = lessonsDao.lessonsDao(id);
-		model.addAttribute("view", lessonsDao.lessonsDao(id));
+		//model.addAttribute("view", lessonsDao.lessonsDao(id));
 
-		masterId = id;
+		LocalDate now = LocalDate.now();
+		int LESSON_ID;
+		String CENTER_ID = "";
+		int total_count;
+		//int NOPE;
+		JsonArray center_count;
+	
 
-		// System.out.println(id);
-		// System.out.println(lessonsDao.lessonsDao(id));
-		// System.out.print(lessonsDao.lessonsDao(lessonsDto.getId()));
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(result);
+		
+		LESSON_ID = element.getAsJsonObject().get("lecture_id").getAsInt();
+		total_count=element.getAsJsonObject().get("total_count").getAsInt();
+		//center_count = element.getAsJsonObject().get("center_count").getAsJsonArray();
+		
+		JsonObject jsonObj = (JsonObject) parser.parse(result);
+		
+		JsonArray memberArray = (JsonArray) jsonObj.get("center_count");
+		for (int i = 0; i < memberArray.size(); i++) {          
+			JsonObject object = (JsonObject) memberArray.get(i);
+		   String a = object.get("center_id").getAsString();
+			int b = object.get("count").getAsInt();
+			System.out.println("센터아이디 : " + a);    
+			centerDao.centerLessonsInsert(LESSON_ID,a,b);
+		}   
+		
 
-		return "admin01_view";
+
+		return "redirect:/";
+	}
+	
+	@GetMapping("/lect_list")
+	public @ResponseBody List<lect_listDto> lect_list() {
+		lessonsDao.lect_listDao();
+		
+		
+		return lessonsDao.lect_listDao();
 	}
 
 	@RequestMapping("/search")

@@ -10,6 +10,7 @@ import lombok.Data;
 public class LessonsDto {
 	private int LESSON_ID;
 	private String LESSON_TTL;
+	private String ROOM_ID;
 	private String INSTR_NM;
 	private String LESSON_TYPE;
 	private String LESSON_DESC;

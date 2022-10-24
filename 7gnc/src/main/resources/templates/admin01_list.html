@@ -150,6 +150,10 @@
 								<td><input type="number" id="LESSON_TM" class="input_200">분</td>
 							</tr>
 							<tr>
+								<th>화상교육방번호</th>
+								<td><input type="text" id="ROOM_ID" class="input_200"></td>
+							</tr>
+							<tr>
 								<th>강의자</th>
 								<td><input type="text" id="INSTR_NM" class="input_200"></td>
 							</tr>
@@ -250,6 +254,7 @@
 		var LESSON_TTL = $("#LESSON_TTL").val();
 		var BGNG_DT = $("#BGNG_DT").val();
 		var END_DT = $("#END_DT").val();
+		var ROOM_ID = $("#ROOM_ID").val();
 		var INSTR_NM = $("#INSTR_NM").val();
 		var LESSON_DESC = $("#LESSON_DESC").val();
 		var LESSON_TM = $("#LESSON_TM").val();
@@ -276,6 +281,7 @@
 				BGNG_DT: BGNG_DT,
 				END_DT: END_DT,
 				LESSON_TM: LESSON_TM,
+				ROOM_ID:ROOM_ID,
 				INSTR_NM: INSTR_NM,
 				LESSON_TYPE: LESSON_TYPE,
 				LESSON_DESC: LESSON_DESC

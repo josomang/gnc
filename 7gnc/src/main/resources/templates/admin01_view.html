@@ -68,6 +68,10 @@
 							<td th:text="${view[0].LESSON_TM}+'분'"></td>
 						</tr>
 						<tr>
+							<th>화상교육 방번호</th>
+							<td th:text="${view[0].ROOM_ID}"></td>
+						</tr>
+						<tr>
 							<th>강의자</th>
 							<td th:text="${view[0].INSTR_NM}"></td>
 						</tr>
@@ -174,7 +178,7 @@
 		<!-- 정보수정 -->
 		<div class="popup_layer" id="popup_modify" style="display: none;">
 			<div class="popup_box">
-				<h1>수업등록
+				<h1>수업수정
 					<button type="button" class="btn_close"
 						onclick="document.getElementById('popup_modify').style.display='none'"><span
 							class="material-symbols-outlined">close</span></button>
@@ -213,6 +217,11 @@
 								<th>수업시간</th>
 								<td><input type="number" th:value="${view[0].LESSON_TM}" id="LESSON_TM" class="input_200">분</td>
 							</tr>
+							<tr>
+								<th>화상교육 방번호</th>
+								<td><input type="text" th:value="${view[0].ROOM_ID}" id="ROOM_ID" class="input_200"></td>
+							</tr>
+							
 							<tr>
 								<th>강의자</th>
 								<td><input type="text" th:value="${view[0].INSTR_NM}" id="INSTR_NM" class="input_200"></td>
@@ -260,6 +269,7 @@
 		var LESSON_TTL = $("#LESSON_TTL").val();
 		var BGNG_DT = $("#BGNG_DT").val();
 		var END_DT = $("#END_DT").val();
+		var ROOM_ID = $("#ROOM_ID").val();
 		var INSTR_NM = $("#INSTR_NM").val();
 		var LESSON_DESC = $("#LESSON_DESC").val();
 		var LESSON_TM = $("#LESSON_TM").val();
@@ -280,6 +290,7 @@
 				LESSON_TTL: LESSON_TTL,
 				BGNG_DT: BGNG_DT,
 				END_DT: END_DT,
+				ROOM_ID: ROOM_ID,
 				LESSON_TM: LESSON_TM,
 				INSTR_NM: INSTR_NM,
 				LESSON_TYPE: LESSON_TYPE,

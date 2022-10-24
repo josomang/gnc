@@ -32,5 +32,7 @@ public interface CenterDao {
 	
 	public int getSearchCount (@Param("keyword")Object keyword);
 	
+	public void centerLessonsInsert(int LESSON_ID,String CENTER_ID,int NOPE);
+	
 
 }

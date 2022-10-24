@@ -39,5 +39,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteDao" >
 		 delete from TBL_CENTERS where CENTER_ID = #{CENTER_ID}
 	</delete>
+	<insert id="centerLessonsInsert">
+     insert into TBL_LESSON_CENTER(LESSON_ID,CENTER_ID,NOPE) values(#{param1},#{param2},#{param3})
+    </insert>
 
 </mapper>

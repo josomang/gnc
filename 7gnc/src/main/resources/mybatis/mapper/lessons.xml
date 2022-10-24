@@ -6,15 +6,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.gnc.dao.LessonsDao">
    <!-- 수업등록 -->
    <insert id="registerDao">
-      insert into TBL_LESSONS(LESSON_TTL,BGNG_DT,END_DT,LESSON_TM,INSTR_NM,LESSON_TYPE,LESSON_DESC)
+      insert into TBL_LESSONS(LESSON_TTL,BGNG_DT,END_DT,LESSON_TM,ROOM_ID,INSTR_NM,LESSON_TYPE,LESSON_DESC)
       values
-      (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+      (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8})
     </insert>
    
    
     <update id="updateDao">
     update TBL_LESSONS set LESSON_TTL = #{LESSON_TTL}, BGNG_DT = #{BGNG_DT}, 
-    END_DT = #{END_DT}, LESSON_TM = #{LESSON_TM} , 
+    END_DT = #{END_DT},ROOM_ID = #{ROOM_ID}, LESSON_TM = #{LESSON_TM} , 
     INSTR_NM = #{INSTR_NM} ,LESSON_TYPE= #{LESSON_TYPE},
     LESSON_DESC=#{LESSON_DESC},UPDT_DT=#{UPDT_DT} where LESSON_ID = #{LESSON_ID}
     </update>
@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 	
 	<select id="lessonsDao" resultType="com.gnc.dto.LessonsDto">
-		select LESSON_ID,LESSON_TTL,BGNG_DT,END_DT,LESSON_TM,INSTR_NM,LESSON_TYPE,LESSON_DESC from TBL_LESSONS where LESSON_ID = #{LESSON_ID}
+		select LESSON_ID,LESSON_TTL,BGNG_DT,END_DT,LESSON_TM,ROOM_ID,INSTR_NM,LESSON_TYPE,LESSON_DESC from TBL_LESSONS where LESSON_ID = #{LESSON_ID}
 	</select>
 	
 		<select id="getIdDao" resultType="int">
@@ -52,14 +52,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteDao" >
 		 delete from TBL_LESSONS where LESSON_ID = #{LESSON_ID}
 	</delete>
-	
-	<!-- <select id="arCountDao" resultType="map">
-    select now,count(*) as count from TBL_AR_REALTIME group by(now)
-</select>
+<select id="lect_listDao" resultType="com.gnc.dto.lect_listDto">
+		select LESSON_ID, date_format(BGNG_DT,'%Y%m%d%H%i') as BGNG_DT , date_format(END_DT,'%Y%m%d%H%i') as END_DT , ROOM_ID from TBL_LESSONS where END_DT &lt; NOW();
+	</select>
 
-<select id="arMonthCountDao" resultType="int">
-    SELECT COUNT(*) FROM  TBL_AR_REALTIME WHERE datetime LIKE CONCAT('%',#{month},'%')
-</select> -->
+
  
 
 </mapper>

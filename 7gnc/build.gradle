@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
+    implementation group: 'org.json', name: 'json', version: '20090211'
 }
 
 tasks.named('test') {
