@@ -22,8 +22,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
 
 <select id="lessonsListDao" resultType="com.gnc.dto.LessonsDto" parameterType="string"> 
-		select LESSON_ID,BGNG_DT, LESSON_TTL, INSTR_NM , LESSON_TYPE from TBL_LESSONS order by BGNG_DT desc LIMIT ${pageStart}, ${perPageNum}
+		select TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center 
+ from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID GROUP BY(TBL_LESSONS.LESSON_ID) order by TBL_LESSONS.BGNG_DT desc LIMIT ${pageStart}, ${perPageNum}
 	</select>
+	
+		<select id="searchDao" resultType="com.gnc.dto.LessonsDto" parameterType="string">
+		select   TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center 
+ from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON
+ TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID where LESSON_TTL LIKE CONCAT('%',#{keyword},'%') GROUP BY(TBL_LESSONS.LESSON_ID) order by TBL_LESSONS.BGNG_DT desc
+	</select>
+
+	<select id="centerLessonsListDao" resultType="com.gnc.dto.CenterDto"> 
+		select * from TBL_LESSON_CENTER LEFT JOIN TBL_CENTERS ON TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID where LESSON_ID = #{LESSON_ID}
+	</select>
+	
+	
+	
+	
 	
 <select id="test" resultType="com.gnc.dto.LessonsDto" parameterType="string" >
 		 select LESSON_ID,BGNG_DT, LESSON_TTL, INSTR_NM , LESSON_TYPE from TBL_LESSONS order by LESSON_ID desc
@@ -45,17 +60,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select LESSON_ID from TBL_LESSONS
 	</select>
 	
-	<select id="searchDao" resultType="com.gnc.dto.LessonsDto">
-		select LESSON_ID, BGNG_DT, LESSON_TTL, INSTR_NM , LESSON_TYPE from TBL_LESSONS where LESSON_TTL LIKE CONCAT('%',#{keyword},'%')
-	</select>
-	
 	<delete id="deleteDao" >
 		 delete from TBL_LESSONS where LESSON_ID = #{LESSON_ID}
 	</delete>
 <select id="lect_listDao" resultType="com.gnc.dto.lect_listDto">
 		select LESSON_ID, date_format(BGNG_DT,'%Y%m%d%H%i') as BGNG_DT , date_format(END_DT,'%Y%m%d%H%i') as END_DT , ROOM_ID from TBL_LESSONS where END_DT &lt; NOW();
 	</select>
-
+<select id="totalCountDao" resultType="int">
+select sum(NOPE) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
+	</select>
+<select id="centerCountDao" resultType="int">
+select count(CENTER_ID) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
+	</select>	
+	
 
  
 

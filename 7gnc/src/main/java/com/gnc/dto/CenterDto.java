@@ -13,5 +13,6 @@ public class CenterDto {
 	int CENTER_MAX_NOPE;
 	Date REG_DT;
 	Date UPDT_DT;
+	int NOPE;
 	
 }

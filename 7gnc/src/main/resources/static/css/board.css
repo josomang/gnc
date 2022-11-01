@@ -1,17 +1,19 @@
 .area_table {}
 table .link {text-decoration: underline; cursor: pointer;}
-.area_table h2 {font-size:16px; color:#999; display: inline-block;}
+.area_table h2 {font-size:16px; display: inline-block;}
 .area_table .tablehead {margin-bottom:10px; height:32px; line-height: 32px;}
 .area_table .tablehead span {font-weight: 800; margin:0 0 0 5px}
 .area_table .tablehead .qty:after {content: "건"; font-weight: 400;}
 .area_table .tablehead .qty:first-child:after {content: "건 /";}
-.area_table .tablehead > .searchbox {float: left;}
+.area_table .tablehead > .searchbox {display: inline-flex}
 .area_table .tablehead > .searchbox input[type=text] {width:250px}
+.area_table .tablehead > .searchbox button:hover {background-color: #28394e; color:#FFF; transition: 0.3s;}
 .area_table .tablehead > .btn_area {float: right; margin:0}
 .area_table .tablehead > .btn_area button {border:1px solid #DDD; padding:7px 20px;}
 
 .area_table table {width:100%}
 .area_table thead {border-top:1px solid #DDD; border-bottom:1px solid #DDD; background-color: #EEE;}
+.area_table tfoot {background-color: #f6f6f6;}
 .area_table thead,.area_table tbody {width:100%;}
 .area_table th,.area_table td {border-bottom:1px solid #DDD; border-left:1px solid #DDD; padding:10px; text-align: center; vertical-align: middle;}
 .area_table th:first-child,.area_table td:first-child {border-left: 0;}
@@ -35,11 +37,17 @@ table .link {text-decoration: underline; cursor: pointer;}
 /* 검색 */
 .search_date .hasDatepicker {width:40px; line-height: 36px; background: url(../images/icon_cal.png) 110px no-repeat; background-size: 20px auto; border-left: 1px solid #DDD; margin: 0 !important; cursor: pointer;}
 .search_date {padding-left: 10px !important; text-indent:0 !important}
+.search_date .select {display: inline-block}
+.search_date .select select {min-width:100px !important;}
+.search_date .select :first-child:after {content: "~"}
+
+/* datepicker */
 .search_date .date {float: left; width:200px; border:1px solid #CCC; border-radius: 3px; height: 30px; position: relative; margin-right: 10px;}
-.search_date .date input {border:none; width:160px; position: absolute; top: 0; left: 0; margin:0; cursor: pointer;}
+.search_date .date input {border:none; width:160px !important; position: absolute; top: 0; left: 0; margin:0; cursor: pointer;}
 .search_date .date label {float: right; width:35px; height: 30px; text-align: center;}
 .search_date .date input + label {cursor: pointer;}
 .search_date .date label span {margin-top:4px; font-size: 20px;}
+
 
 /* 페이징 */
 .paging {padding:50px 0 0; text-align: center;}
@@ -56,3 +64,6 @@ table .link {text-decoration: underline; cursor: pointer;}
 .editor {width:100%; height: 300px; border:1px solid #DDD; border-radius: 5px;}
 td.editor {border:none}
 .editor textarea {height:calc(100% - 10px) !important;}
+
+/* 데이터 없음 */
+.data_null {padding:30px 0; text-align:center; background-color: #EEE;}

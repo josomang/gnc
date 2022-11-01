@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnc.dao.LibraryDao">
+    <select id="getLibraryPeopleDao" resultType="int">
+       
+        select NOPE from TBL_LIBRARY_LOGS where REG_DT LIKE CONCAT('%',#{REG_DT},'%')</select>
+        
+</mapper>

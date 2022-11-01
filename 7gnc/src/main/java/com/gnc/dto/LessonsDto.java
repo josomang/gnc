@@ -17,6 +17,8 @@ public class LessonsDto {
 	private String BGNG_DT;
 	private String END_DT ;
 	private int LESSON_TM;
+	private int NOPE;
+	private int center;
 
 	
 }

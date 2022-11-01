@@ -4,6 +4,21 @@
 .nav ul li {color:#FFF; padding:15px 10px; border-bottom: 1px dotted rgba(265,265,265,0.5);}
 .nav ul li span {color:#FFF}
 .nav ul li a {display: block;}
+.nav > ul li:hover,.nav ul li input[id*="menu"] + label:hover p {color:yellow}
+
+.nav ul li input[id*="menu"] {display: none;}
+.nav ul li input[id*="menu"] + label {display: block; cursor: pointer; position: relative; color:#FFF;}
+.nav ul li input[id*="menu"] + label p {color:#FFF; display: block}
+.nav ul li input[id*="menu"]:checked + label {border-bottom:0;}
+.nav ul li input[id*="menu"] + label:after {background: url(../images/icon_arrow.png) no-repeat; background-position: -40px -40px; position: absolute; top:50%; right:10px; width:15px; height:10px; content: ""; transform: translate(0 , -50%);}
+.nav ul li input[id*="menu"]:checked + label:after {background: url(../images/icon_arrow.png) no-repeat; background-position: -80px -40px; position: absolute; top:50%; right:10px; width:15px; height:10px; content: ""; transform: translate(0 , -50%);}
+.nav ul li > .submenu {display: none; border:0; padding-top: 10px;}
+.nav ul li > .submenu li {padding:10px 5px; text-indent: 5px; border: 0;}
+.nav ul li > .submenu li a {display: inline-block;}
+.nav ul li > .submenu li:hover:before {content: ">";}
+.nav ul li > .submenu li.on:before {content: ">";}
+.nav ul li input:checked ~ .submenu {display: block;}
+
 
 .section {width:calc(100% - 200px); display:block; position: relative; padding-left: 200px;}
 .section .header {height:50px; text-align: right; line-height: 50px; padding-right:20px; border-bottom:1px solid #DDD}
@@ -23,6 +38,40 @@
 .login > button {width:50%; border:1px solid #0066b3; border-radius: 0; padding:10px 0; color:#0066b3}
 .login > button:hover {background-color: #0066b3; color:#FFF; transition: 0.2s;}
 .login input[type=text]:focus, .login input[type=password]:focus {border:1px solid #0066b3;}
+
+/* 달력 */
+.cal_box {width:100%;}
+.cal_box .cal {background: rgba(255,255,255,0.5); border:1px solid #DDD; border-radius: 5px; padding:20px; margin-bottom: 50px;}
+.cal_box .cal ul {font-size: 0;}
+.cal_box .month {padding: 10px 0; width: 100%; text-align: center; margin-bottom: 30px;}
+.cal_box .month ul {width:90%; margin: 0 auto; padding: 0;}
+.cal_box .month ul li {font-size: 20px; text-transform: uppercase; letter-spacing: 3px; text-align: center;}
+.cal_box .month ul li button {padding:0; position: relative;}
+.cal_box .month ul li button span {color:#999}
+.cal_box .month ul li button span:hover {color:#0066b3; transition: 0.5s;}
+.cal_box .month li:nth-child(1) {float: left;}
+.cal_box .month li:nth-child(2) {display: inline-block;}
+.cal_box .month li:nth-child(3) {float: right;}
+.cal_box .weekdays {display: grid; grid-template-columns: repeat(7,1fr);}
+.cal_box .weekdays li {display: inline-block; padding:10px 0; color: #666; text-align: center; font-size: 12px; }
+.cal_box .days {display: grid; grid-template-columns: repeat(7,1fr);}
+.cal_box .days li {display:inline-grid; padding:20px 0; text-align: center; position: relative;}
+.cal_box .days li span {font-size: 16px;}
+.cal_box .days li:hover {background-color: #d5e6f6; cursor: pointer;}
+.cal_box .days li.today span {font-weight: 600; color:#0066b3;}
+.cal_box .cal .data {position: absolute; bottom:0; left: 50%; transform: translate(-50%,0); color:red; font-size: 12px; cursor: pointer;}
+
+.chart {}
+.chart > h2 {margin-bottom: 20px;}
+.chart > h2 span {font-size: 20px;}
+.chart .date:after {content: "이용자수 : "; margin:0 5px}
+.chart .total {color:#0066b3}
+.chart .total:after {content: "명"; color:#000}
+.chart canvas {width:100%; max-height:400px}
+
+.chart50 {display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px; row-gap: 50px; margin-top:50px}
+.chart50 div {}
+.chart50 h2 {margin-bottom: 20px}
 
 /* 달력 */
 *{
@@ -79,11 +128,3 @@
     background-color: rgb(192, 192, 192);
     color: #fff;
 }
-
-.chart {}
-.chart > h2 {margin-bottom: 20px;}
-.chart > h2 span {font-size: 20px;}
-.chart .date:after {content: "이용자수 : "; margin:0 5px}
-.chart .total {color:#0066b3}
-.chart .total:after {content: "명"; color:#000}
-.chart canvas {width:100%; max-height:400px}

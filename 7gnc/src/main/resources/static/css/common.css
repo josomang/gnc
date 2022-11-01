@@ -85,10 +85,11 @@ select {min-width:200px; border:1px solid #CCC; border-radius:3px; height:32px; 
 .popup_box .search_box {padding:20px 20px 0}
 .popup_box .search_box select {height:33px;}
 .popup_box .search_box input {height:31px;}
-.popup_box .tablebox {padding:20px 20px 10px 20px; vertical-align: middle; max-height: 400px; overflow-y: auto; margin-bottom: 20px;}
+.popup_box .tablebox {padding:0 20px 10px 20px; vertical-align: middle; max-height: 400px; overflow-y: auto; margin: 20px 0;  }
 
-.popup_box table {width:100%}
-.popup_box thead {border-top:1px solid #DDD; border-bottom:1px solid #DDD; background-color: #EEE;}
+.popup_box table {width:100%; height: 200px; overflow-y: auto; border-top:1px solid #DDD;}
+.popup_box thead {border-bottom:1px solid #DDD; background-color: #EEE; position: sticky; top:-1px}
+.popup_box tbody {}
 .popup_box thead,.popup_box tbody {width:100%;}
 .popup_box th,.popup_box td {border-bottom:1px solid #DDD; border-left:1px solid #DDD; padding:5px; text-align: center; vertical-align: middle;}
 .popup_box th:first-child,.popup_box td:first-child {border-left: 0;}

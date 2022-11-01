@@ -23,23 +23,35 @@
 <body>
     <div class="nav">
         <div class="logo">ADMIN</div>
-        <ul>
-            <li>
-                <span class="material-symbols-outlined">list_alt</span>
-               <a th:href="@{/admin}">화상교육</a>
-            </li>
-            <li>
-                <span class="material-symbols-outlined">monitoring</span>
-                <a th:href="@{/ar}">AR 이용통계</a>
-            </li>
+         <ul>
             <li class="on">
-				<span class="material-symbols-outlined">touch_app</span>
-				<a th:href="@{/center}">돌봄센터관리</a>
-			</li>
-			<li>
-				<span class="material-symbols-outlined">group</span>
-				<a th:href="@{/satisfaction}">이용자 만족도</a>
-			</li>
+                <input type="checkbox" id="menu01">
+                <label for="menu01">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <p>화상 교육 참여 인원</p></label>
+                <ul class="submenu" style="display: block;">
+                    <li><a th:href="@{/admin}">수업목록</a></li>
+                    <li class="on"><a th:href="@{/center}">돌봄센터</a></li>
+                </ul>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">group</span>
+                <a th:href="@{/ar}">AR 공간 이용자 수</a>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">sentiment_satisfied</span>
+                <a th:href="@{/satisfaction}">이용자 만족도</a>
+            </li>
+            <li>
+                <input type="checkbox" id="menu04">
+                <label for="menu04">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    <p>성과지표통계</p></label>
+                <ul class="submenu">
+                   <li><a th:href="@{/statistics}">성과지표통계</a></li>
+                    <li><a th:href="@{/goals}">목표설정</a></li>
+                </ul>
+            </li>
         </ul>
     </div><!-- //nav -->
     <div class="section">
@@ -109,7 +121,7 @@
 
 						<span class="next" th:if="${pageMaker.next} == true and 
 					${pageMaker.endPage > 0}">
-							<a th:href="@{/admin(page=${pageMaker.endPage}+1,
+							<a th:href="@{/center(page=${pageMaker.endPage}+1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
 						</span>
 					</ul>

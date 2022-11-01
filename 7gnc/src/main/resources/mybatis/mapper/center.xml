@@ -42,5 +42,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="centerLessonsInsert">
      insert into TBL_LESSON_CENTER(LESSON_ID,CENTER_ID,NOPE) values(#{param1},#{param2},#{param3})
     </insert>
+    
+    	<select id="centerStatisticsSum" resultType="int">
+		select (sum(DGSTFN_SCORE)/SUM(NOPE)) as avg 
+		from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID 
+where END_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%')
+	</select>
+	
+	<select id="centerUseStatisticsSum" resultType="int">
+		select (sum(NOPE)/SUM(CENTER_MAX_NOPE))*100 from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID LEFT JOIN TBL_CENTERS ON 
+TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID where END_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%')
+	</select>
+	
+	
 
 </mapper>

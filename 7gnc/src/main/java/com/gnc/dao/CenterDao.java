@@ -34,5 +34,10 @@ public interface CenterDao {
 	
 	public void centerLessonsInsert(int LESSON_ID,String CENTER_ID,int NOPE);
 	
+	public Integer centerStatisticsSum(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	
+	public Integer centerUseStatisticsSum(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+
+	
 
 }

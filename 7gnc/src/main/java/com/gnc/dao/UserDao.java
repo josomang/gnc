@@ -1,9 +1,13 @@
 package com.gnc.dao;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import com.gnc.dto.LessonsDto;
+import com.gnc.dto.goalsDto;
 
 @Mapper
 public interface UserDao {
@@ -15,4 +19,8 @@ public interface UserDao {
     
     public void use_dtDao
     (@Param("UID")String UID,@Param("USE_DT")LocalDateTime USE_DT);
+    
+    public void goalRegisterDao(String a,String b ,String c ,String d,String e,int f,String year);
+    
+    public List<goalsDto> goalDao(@Param("year")String year);
 }

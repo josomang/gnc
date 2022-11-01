@@ -1,13 +1,17 @@
 package com.gnc.dao;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ArDao {
+	
 	public int getCount01 (@Param("year") String year);
 	
 	public int getCount02 (@Param("year") String year);
@@ -98,6 +102,12 @@ public interface ArDao {
 	public int getCountday29(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	public int getCountday30(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	public int getCountday31(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	
+	public Integer arStatisticsSum(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	
+	public ArrayList<String> arAllList();
+	
+
 	
 	
 	

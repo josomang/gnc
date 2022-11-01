@@ -13,4 +13,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <update id="use_dtDao">
         update TBL_ADMINS set USE_DT= #{USE_DT} where UID = #{UID}
         </update>  
+        
+        
+        <insert id="goalRegisterDao">
+      insert into TBL_LIBRARY_GOALS1(a,b,c,d,e,f,year)
+      values
+      (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+    </insert>
+    
+    <select id="goalDao" resultType="com.gnc.dto.goalsDto">
+        select * from TBL_LIBRARY_GOALS1 where year = #{year}  </select>
+        
 </mapper>

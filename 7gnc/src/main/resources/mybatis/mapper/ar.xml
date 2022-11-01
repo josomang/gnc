@@ -276,6 +276,16 @@ select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
 select count(USE_DT) from TBL_AR_LOGS where LOG_CRT_YMD = #{LOG_CRT_YMD}
 </select>
   
+<select id="arStatisticsSum" resultType="int">
+select sum(DGSTFN_SCORE)/count(DGSTFN_SCORE) from TBL_AR_LOGS where LOG_CRT_YMD LIKE CONCAT('%',#{LOG_CRT_YMD},'%')
+</select>  
+
+<select id="arAllList" resultType="map">
+select count(USE_DT) as title, LOG_CRT_YMD FROM TBL_AR_LOGS group by(LOG_CRT_YMD)
+</select>  
+
+
+
 
 
 

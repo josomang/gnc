@@ -1,0 +1,584 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 공공도서관 AR서비스</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/board.css" />
+    <link rel="stylesheet" type="text/css" href="css/color.css" />
+    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/date.js"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+</head>
+
+<body>
+    <div class="nav">
+        <div class="logo">ADMIN</div>
+        <ul>
+            <li>
+                <input type="checkbox" id="menu01">
+                <label for="menu01">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <p>화상 교육 참여 인원</p></label>
+                <ul class="submenu">
+                    <li><a th:href="@{/admin}">수업목록</a></li>
+                    <li><a th:href="@{/center}">돌봄센터</a></li>
+                </ul>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">group</span>
+                <a th:href="@{/ar}">AR 공간 이용자 수</a>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">sentiment_satisfied</span>
+                <a th:href="@{/satisfaction}">이용자 만족도</a>
+            </li>
+            <li class="on">
+                <input type="checkbox" id="menu04">
+                <label for="menu04">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    <p>성과지표통계</p></label>
+                <ul class="submenu" style="display: block;">
+                    <li class="on"><a th:href="@{/statistics}">성과지표통계</a></li>
+                    <li><a th:href="@{/goals}">목표설정</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- //nav -->
+    <div class="section">
+        <div class="header">
+            <button type="button">로그아웃</button>
+        </div>
+        <div class="inner">
+            <h1>성과 지표 통계</h1>
+
+            <div class="area_table">
+                <div class="tablehead">
+                    <div class="searchbox">
+                        <select id="type_value" name="type_value">
+                            <option value="0">년</option>
+                            <option value="1">월</option>
+                        </select>
+                        <span class="search_date">
+                            <div class="select">  
+                                <select id="start" name="start"><!-- 년 선택 -->
+                                      <option value="2022">2022</option>
+                                     <option value="2021">2021</option>
+                                    <option value="2023">2023</option>
+                                </select>
+                                <select id="typeDirect" name="typeDirect"><!-- 월 선택 -->
+                                   <option value="01">1월</option>
+                                    <option value="02">2월</option>
+                                    <option value="03">3월</option>
+                                    <option value="04">4월</option>
+                                    <option value="05">5월</option>
+                                    <option value="06">6월</option>
+                                    <option value="07">7월</option>
+                                    <option value="08">8월</option>
+                                    <option value="09">9월</option>
+                                    <option value="10">10월</option>
+                                    <option value="11">11월</option>
+                                    <option value="12">12월</option>
+                                </select>
+                            </div>
+                    <span> ~ </span>
+                            <div class="select">
+                                <select id="end" name="end"><!-- 년 선택 -->
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2023">2023</option>
+                                </select>
+                                <select id="typeDirect1" name="typeDirect1"><!-- 월 선택 -->
+                                         <option value="1">1월</option>
+                                       <option value="01">1월</option>
+                                    <option value="02">2월</option>
+                                    <option value="03">3월</option>
+                                    <option value="04">4월</option>
+                                    <option value="05">5월</option>
+                                    <option value="06">6월</option>
+                                    <option value="07">7월</option>
+                                    <option value="08">8월</option>
+                                    <option value="09">9월</option>
+                                    <option value="10">10월</option>
+                                    <option value="11">11월</option>
+                                    <option value="12">12월</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn_basic" onclick="lookup()">조회</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart50">
+                <div class="">
+                    <h2>AR공간서비스 이용만족도 차트</h2>
+                    <canvas id="myChart">
+                        <!-- 막대색상 #adcdec -->
+                    </canvas>
+                </div>
+                <div class="">
+                    <h2>돌봄센터 아동 화상교육 이용만족도</h2>
+                    <canvas id="myChart02">
+                        <!-- 막대색상 #adcdec -->
+                    </canvas>
+                </div>
+                <div class="">
+                    <h2>AR공간 서비스 이용율 차트</h2>
+                    <canvas id="myChart03">
+                        <!-- 막대색상 #adcdec -->
+                    </canvas>
+                </div>
+                <div class="">
+                    <h2>화상교육참여율 차트</h2>
+                    <canvas id="myChart04">
+                        <!-- 막대색상 #adcdec -->
+                    </canvas>
+                </div>
+                <div class="">
+                    <h2>도서관 이용증가율</h2>
+                    <canvas id="myChart05">
+                        <!-- 막대색상 #adcdec -->
+                    </canvas>
+                </div>
+            </div>
+
+         
+               
+        </div><!--// inner -->
+
+    </div><!-- //section -->
+</body>
+<script>
+$(function () {
+		$("#typeDirect").hide();
+$("#typeDirect1").hide();
+
+	$("#type_value").change(function () {
+
+			if ($("#type_value").val() == "1") {
+				$("#myChart05").hide();
+				
+				
+			} else {
+				$("#myChart05").show();
+			}
+
+		})
+
+		$("#type_value").change(function () {
+
+			if ($("#type_value").val() == "1") {
+				$("#typeDirect").show();
+				
+			} else {
+				$("#typeDirect").hide();
+			}
+
+		})
+		
+		$("#type_value").change(function () {
+
+			if ($("#type_value").val() == "1") {
+				$("#typeDirect1").show();
+				
+			} else {
+				$("#typeDirect1").hide();
+			}
+
+		})
+
+	});
+	
+	
+	
+	function lookup(){
+	var x = $("#type_value").val()
+	var start = $("#start").val()
+	var end = $("#end").val()
+	
+	var typeDirect = $("#typeDirect").val()
+	var typeDirect1 = $("#typeDirect1").val()
+
+
+
+	var result = JSON.stringify({
+				x:x,
+				start: start,
+				end: end,
+				typeDirect: typeDirect,
+				typeDirect1: typeDirect1
+			});
+$.ajax({
+				method: 'POST',
+				url: '/chartPost',
+				headers: {'Content-type': 'application/json'},
+				data: result
+			})
+
+location.href='graph'
+	
+	
+	
+	
+	
+}//lookup 함수
+
+	$(document).ready(function () {
+		getGraph1();
+	});
+
+	function getGraph1() {
+		
+		
+		let timeList = [];
+		let posList = [];
+
+
+		$.ajax({
+			type: "GET",
+			url: "/chart-get-ar-2022",
+			data: {},
+			
+			success: function (data) {
+					console.log(data)
+				console.log(data.month)
+			console.log(data.month[0])
+			console.log(data.point[1])
+				
+				
+			
+			if(data.month[0]>20){
+				for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"년");
+					posList.push(data.point[i]);
+				}
+				}
+				
+				else{
+					for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"월");
+					posList.push(data.point[i]);
+				}
+					
+					
+				}
+				
+				
+				
+			new Chart(document.getElementById("myChart"), {
+					type: 'bar',
+					data: {
+						labels: timeList, // X축 
+						datasets: [{
+							label:"만족도",
+							data: posList, // 값
+							backgroundColor: 'rgb(150,205,236)',
+							fill: false
+						}
+						]
+					},
+					options: {
+  scales: {
+            y: {
+               
+                  
+                    suggestedMax: 100
+                
+            }
+        }
+					}
+				}); //그래프
+			},
+		
+		}) // ajax	  
+	} // getGraph
+	
+	$(document).ready(function () {
+		getGraph2();
+	});
+
+	function getGraph2() {
+		
+		
+		let timeList = [];
+		let posList = [];
+
+
+		$.ajax({
+			type: "GET",
+			url: "/chart-get-center-2022",
+			data: {},
+			
+			success: function (data) {
+				
+			
+					if(data.month[0]>20){
+				for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"년");
+					posList.push(data.point[i]);
+				}
+				}
+				
+				else{
+					for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"월");
+					posList.push(data.point[i]);
+				}
+					
+					
+				}
+				
+			new Chart(document.getElementById("myChart02"), {
+					type: 'bar',
+					data: {
+						labels: timeList, // X축 
+						datasets: [{
+							label:"만족도",
+							data: posList, // 값
+							backgroundColor: 'rgb(150,205,236)',
+							fill: false
+						}
+						]
+					},
+					options: {
+						
+						scales: {
+            y: {
+               
+                  
+                    suggestedMax: 100
+                
+            }
+        }
+		}
+				}); //그래프
+			},
+		
+		}) // ajax	  
+	} // getGraph
+	
+	$(document).ready(function () {
+		getGraph3();
+	});
+
+	function getGraph3() {
+		
+		
+		let timeList = [];
+		let posList = [];
+
+
+		$.ajax({
+			type: "GET",
+			url: "/chart-get-ar-use-2022",
+			data: {},
+			
+			success: function (data) {
+			
+				if(data.month[0]>20){
+				for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"년");
+					posList.push(data.point[i]);
+				}
+				}
+				
+				else{
+					for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"월");
+					posList.push(data.point[i]);
+				}
+					
+					
+				}
+				
+				
+			new Chart(document.getElementById("myChart03"), {
+					type: 'bar',
+					data: {
+						labels: timeList, // X축 
+						datasets: [{
+							label:"이용률",
+							data: posList, // 값
+							backgroundColor: 'rgb(150,205,236)',
+							fill: false
+						}
+						]
+					},
+					options: {
+  scales: {
+            y: {
+               
+                  
+                    suggestedMax: 100
+                
+            }
+        }
+					}
+				}); //그래프
+			},
+		
+		}) // ajax	  
+	} // getGraph
+	
+	
+	$(document).ready(function () {
+		getGraph4();
+	});
+
+	function getGraph4() {
+		
+		
+		let timeList = [];
+		let posList = [];
+
+
+		$.ajax({
+			type: "GET",
+			url: "/chart-get-center-use-2022",
+			data: {},
+			
+			success: function (data) {
+			
+				
+				
+				
+					if(data.month[0]>20){
+				for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"년");
+					posList.push(data.point[i]);
+				}
+				}
+				
+				else{
+					for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"월");
+					posList.push(data.point[i]);
+				}
+					
+					
+				}
+				
+			new Chart(document.getElementById("myChart04"), {
+					type: 'bar',
+					data: {
+						labels: timeList, // X축 
+						datasets: [{
+							label:"참여율",
+							data: posList, // 값
+							backgroundColor: 'rgb(150,205,236)',
+							fill: false
+						}
+						]
+					},
+					options: {
+						
+		  scales: {
+            y: {
+               
+                  
+                    suggestedMax: 100
+                
+            }
+        }
+					}
+				}); //그래프
+			},
+		
+		}) // ajax	  
+	} // getGraph
+	
+	
+	$(document).ready(function () {
+		getGraph5();
+	});
+
+	function getGraph5() {
+		
+		
+		let timeList = [];
+		let posList = [];
+
+
+		$.ajax({
+			type: "GET",
+			url: "/chart-get-li-2022",
+			data: {},
+			
+			success: function (data) {
+			
+				
+		
+				for(let i=0; i<data.month.length; i++){
+					timeList.push(data.month[i]+"년");
+					posList.push(data.point[i]);
+				}
+				
+		
+			new Chart(document.getElementById("myChart05"), {
+					type: 'bar',
+					data: {
+						labels: timeList, // X축 
+						datasets: [{
+							label:"도서관이용률",
+							data: posList, // 값
+							backgroundColor: 'rgb(150,205,236)',
+						
+						}
+						
+			]
+					},
+					options: {
+						
+		  scales: {
+            y: {
+               
+                  
+                   // suggestedMax: 100
+                
+            }
+        }
+					}
+				}); //그래프
+			},
+		
+		}) // ajax	  
+	} // getGraph
+	
+	
+	
+	
+	
+	
+	
+
+
+	function logOut(){
+		var logout = confirm("로그아웃 하시겠습니까?");
+		if(logout){
+		$.ajax({
+				method: 'POST',
+				url: '/logout'
+				
+
+
+			})
+			location.replace('/login');
+		}
+		else {
+			location.reload();
+		}
+		
+	}
+</script>
+</html>

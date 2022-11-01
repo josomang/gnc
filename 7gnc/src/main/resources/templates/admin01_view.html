@@ -21,24 +21,36 @@
 <body>
 	<div class="nav">
 		<div class="logo">ADMIN</div>
-		<ul>
-			<li class="on">
-				<span class="material-symbols-outlined">list_alt</span>
-				<a th:href="@{/admin}">화상교육</a>
-			</li>
-			<li>
-				<span class="material-symbols-outlined">monitoring</span>
-				<a th:href="@{/ar}">AR 이용통계</a>
-			</li>
-			<li>
-				<span class="material-symbols-outlined">touch_app</span>
-				<a th:href="@{/center}">돌봄센터 관리</a>
-			</li>
-			<li>
-				<span class="material-symbols-outlined">group</span>
-				<a th:href="@{/satisfaction}">이용자 만족도</a>
-			</li>
-		</ul>
+		    <ul>
+            <li class="on">
+                <input type="checkbox" id="menu01">
+                <label for="menu01">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <p>화상 교육 참여 인원</p></label>
+                <ul class="submenu" style="display: block;">
+                    <li class="on"><a th:href="@{/admin}">수업목록</a></li>
+                    <li><a th:href="@{/center}">돌봄센터</a></li>
+                </ul>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">group</span>
+                <a th:href="@{/ar}">AR 공간 이용자 수</a>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">sentiment_satisfied</span>
+                <a th:href="@{/satisfaction}">이용자 만족도</a>
+            </li>
+            <li>
+                <input type="checkbox" id="menu04">
+                <label for="menu04">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    <p>성과지표통계</p></label>
+                <ul class="submenu">
+                    <li><a th:href="@{/statistics}">성과지표통계</a></li>
+                    <li><a th:href="@{/goals}">목표설정</a></li>
+                </ul>
+            </li>
+        </ul>
 	</div><!-- //nav -->
 	<div class="section">
 		<div class="header">
@@ -85,16 +97,15 @@
 						</tr>
 						<tr>
 							<th>참여 돌봄센터 수</th>
-							<td>0</td>
+							<td th:text="${center_count}+'개소'"></td>
 						</tr>
 						<tr>
 							<th>전체 참석인원</th>
 							<td>
-				<span >0</span>
+				<span th:text="${total_count}+'명'"></span>
 							<button type="button" class="btn_basic ml20"
 									onclick="document.getElementById('popup_detail').style.display='block'">상세보기</button>
 								<!-- #popup_detail display:block -->	
-							
 							</td>
 						</tr>
 						<tr>
@@ -141,27 +152,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>abc123</td>
-								<td>중구 돌봄센터</td>
-								<td>20</td>
-							</tr>
-							
-			
-							<tr>
-								<td>abc123</td>
-								<td>중구 돌봄센터</td>
-								<td>20</td>
-							</tr>
-							<tr>
-								<td>abc123</td>
-								<td>중구 돌봄센터</td>
-								<td>20</td>
-							</tr>
-							<tr>
-								<td>abc123</td>
-								<td>중구 돌봄센터</td>
-								<td>20</td>
+							<tr th:each="tt : ${list}">
+								<td th:text="${tt.CENTER_ID}"></td>
+								<td th:text="${tt.CENTER_TTL}"></td>
+								<td th:text="${tt.NOPE}"></td>
 							</tr>
 					
 						

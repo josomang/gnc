@@ -22,23 +22,35 @@
 <body>
     <div class="nav">
         <div class="logo">ADMIN</div>
-        <ul>
-           <li>
-                <span class="material-symbols-outlined">list_alt</span>
-               <a th:href="@{/admin}">화상교육</a>
+         <ul>
+            <li>
+                <input type="checkbox" id="menu01">
+                <label for="menu01">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <p>화상 교육 참여 인원</p></label>
+                <ul class="submenu">
+                    <li><a th:href="@{/admin}">수업목록</a></li>
+                    <li><a th:href="@{/center}">돌봄센터</a></li>
+                </ul>
             </li>
             <li>
-                <span class="material-symbols-outlined">monitoring</span>
-                <a th:href="@{/ar}">AR 이용통계</a>
+                <span class="material-symbols-outlined">group</span>
+                <a th:href="@{/ar}">AR 공간 이용자 수</a>
+            </li>
+            <li class="on">
+                <span class="material-symbols-outlined">sentiment_satisfied</span>
+                <a th:href="@{/satisfaction}">이용자 만족도</a>
             </li>
             <li>
-				<span class="material-symbols-outlined">touch_app</span>
-				<a th:href="@{/center}">돌봄센터 관리</a>
-			</li>
-			<li class="on">
-				<span class="material-symbols-outlined">group</span>
-				<a th:href="@{/satisfaction}">이용자 만족도</a>
-			</li>
+                <input type="checkbox" id="menu04">
+                <label for="menu04">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    <p>성과지표통계</p></label>
+                <ul class="submenu">
+                   <li><a th:href="@{/statistics}">성과지표통계</a></li>
+                    <li><a th:href="@{/goals}">목표설정</a></li>
+                </ul>
+            </li>
         </ul>
     </div><!-- //nav -->
     <div class="section">
@@ -51,12 +63,27 @@
             <div class="area_table">
                 <div class="tablehead">
                     <div class="searchbox">
-                        <select id="select_value" name="select_value">
-                            <option></option>
-                            <option>2022</option>
-                            <option>2023</option>
-                            <option>2024</option>
-                            <option>2025</option>
+                        <select id="select_value" name="select_value" th:value="${year}">
+                            <option th:selected="${year}==''"></option>
+                            <option th:selected="${year}=='2022'">2022</option>
+                            <option th:selected="${year}=='2023'">2023</option>
+                            <option th:selected="${year}=='2024'">2024</option>
+                            <option th:selected="${year}=='2025'">2025</option>
+                        </select>
+                <select id="month" name="month">
+                            <option value="">전체</option>
+                            <option value="-01">1월</option>
+                            <option value="-02">2월</option>
+                            <option value="-03">3월</option>
+                            <option value="-04">4월</option>
+                            <option value="-05">5월</option>
+                            <option value="-06">6월</option>
+                            <option value="-07">7월</option>
+                            <option value="-08">8월</option>
+                            <option value="-09">9월</option>
+                            <option value="-10">10월</option>
+                            <option value="-11">11월</option>
+                            <option value="-12">12월</option>
                         </select>
                         <button type="button" class="btn_basic" onclick="dataSend()">조회</button>
                     </div>
@@ -66,7 +93,7 @@
                 <table style="display: inline-table;">
                     <thead>
                         <tr>
-                            <th>구분</th>
+                        	<th>구분</th>
                             <th>설문 응답자 수</th>
                             <th>총 만족도 점수</th>
                             <th>평균 만족도 점수</th>
@@ -74,20 +101,96 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>인어공주 AR 뮤지컬</td>
-                            <td><span></span>명</td>
-                            <td><span></span>점</td>
-                            <td><span></span>점</td>
+                        <td>인어공주 AR 뮤지컬</td>
+                            <td th:text="${fish}+'명'"></td>
+                            <td th:text="${fishsum}+'점'"></td>
+                            <td th:text="${fishav}+'점'"></td>
+                        </tr>
+                        <tr>
+                        <td>어린왕자 AR 뮤지컬</td>
+                            <td th:text="${yg}+'명'"></td>
+                            <td th:text="${ygsum}+'점'"></td>
+                            <td th:text="${ygav}+'점'"></td>
+                        </tr>
+                        <tr>
+                        <td>인어공주 AR 게이미피케이션</td>
+                            <td th:text="${arfish}+'명'"></td>
+                            <td th:text="${arfishsum}+'점'"></td>
+                            <td th:text="${arfishav}+'점'"></td>
+                        </tr>
+                        <tr>
+                        <td>어린왕자 AR 게이미피케이션</td>
+                            <td th:text="${aryg}+'명'"></td>
+                            <td th:text="${arygsum}+'점'"></td>
+                            <td th:text="${arygav}+'점'">></td>
                         </tr>
                     </tbody>
                 </table>
-                <!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
-                <div class="data_null" style="display: none;">조회할 데이터가 존재하지 않습니다.</div>
+                
+                
+              
+               
 
                 <h2 class="mt50 mb10">돌봄센터 아동 화상교육 이용 만족도</h2>
-                <table style="display: none;">
+                <table th:style="${all== '0'? 'display:none':'display:bolck'}">
                     <thead>
                         <tr>
                             <th>설문 응답자 수</th>
                             <th>총 만족도 점수</th>
-                            <th>�0\r�m��
+                            <th>평균 만족도 점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td th:text="${all}+'명'"></td>
+                            <td th:text="${sumall}+'점'"></td>
+                            <td th:text="${avall}+'점'">></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
+                <div class="data_null" th:style="${all== '0'? 'display:bolck':'display:none'}">조회할 데이터가 존재하지 않습니다.</div>
+
+            </div><!-- //area_table -->
+        </div><!-- //inner -->
+
+
+    </div><!-- //section -->
+</body>
+<script>
+function dataSend(){
+	var s = document.getElementById("select_value")
+		var year = s.options[s.selectedIndex].text
+		
+var month = $("#month").val()
+			
+			location.href='dgs'+'?'+'year='+year+month
+			
+			
+}
+
+</script>
+
+
+
+
+<script>
+	function logOut(){
+		var logout = confirm("로그아웃 하시겠습니까?");
+		if(logout){
+		$.ajax({
+				method: 'POST',
+				url: '/logout'
+				
+
+
+			})
+			location.replace('/login');
+		}
+		else {
+			location.reload();
+		}
+		
+	}
+</script>
+</html>

@@ -33,6 +33,12 @@ public interface LessonsDao {
 	
 	public List<String> lessonsListDao(Criteria cri);
 	
+	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri);
+	
+	public List<String> centerLessonsListDao(@Param("LESSON_ID")int LESSON_ID);
+	
+	public List<String> centerTTListDao();
+	
 	public List<LessonsDto> lessonsDao(@Param("LESSON_ID")Object LESSON_ID);
 	
 	public int getCount ();
@@ -41,11 +47,15 @@ public interface LessonsDao {
 	
 	public int getIdDao(int LESSON_ID);
 	
-	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri);
+	
 	
 	public void deleteDao(@Param("LESSON_ID")int LESSON_ID);
 	
 	public List<String> test();
+	
+	public int totalCountDao(@Param("LESSON_ID")int LESSON_ID);
+	
+	public int centerCountDao(@Param("LESSON_ID")int LESSON_ID);
 	
 	public  List<lect_listDto> lect_listDao();
 	

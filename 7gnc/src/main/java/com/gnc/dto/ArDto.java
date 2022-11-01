@@ -1,5 +1,9 @@
 package com.gnc.dto;
 
-public class ArDto {
+import lombok.Data;
 
+@Data
+public class ArDto {
+	private String LOG_CRT_YMD ;
+	private int title;
 }

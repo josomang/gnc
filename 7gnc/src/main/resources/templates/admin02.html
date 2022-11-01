@@ -10,8 +10,10 @@
 	<link rel="stylesheet" type="text/css" href="css/layout.css" />
 	<link rel="stylesheet" type="text/css" href="css/board.css" />
 	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<link rel="stylesheet" type="text/css" href="css/datepicker.css" />
 	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
 
 	<!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -19,29 +21,170 @@
     <![endif]-->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+<script src='js/main.js'></script>
+<script>
+$.ajax({
+    		url: 'ar-list',
+    		type: 'GET',
+			dataType: "json",
+    		success: function(data){
+    			
+     			var calendarEl = document.getElementById('calendar');
+    			
+    			var events = data.map(function(item) {
+    				
+    				return {
+						title : item.title,
+						start : item.LOG_CRT_YMD,
+						color: "red"
+					} //return
+					
+    			});//events
+    			
+    			
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					events : events,
+					contentHeight: 600,
+					 headerToolbar: {
+    left: 'prev',
+    center: 'title',
+    right: 'next'
+  },//headerTollbar 
+					titleFormat: function (date) {
+      year = date.date.year;
+      month = date.date.month + 1;
+     var test= year+"-"+month
+     
+  
+
+	$(function getGraph() {
+		let timeList = ['1','','','','5','','','','',
+		'10','','','','','15','','','','','20','','','','','25'
+		,'','','','','30'];
+		let posList = [];
+		
+		$.ajax({
+			type: "POST",
+			url: "/monthAll",
+			data: test,
+			dataType: "json",
+			success: function (data) {
+				
+				
+				for(let i = 0; i< data.length;  i++){
+			posList.push(data[i]);		
+				}//for
+				
+	if(window.chartObj != undefined){
+		window.chartObj.destroy();
+	}
+				
+		window.chartObj  =		new Chart(
+					document.getElementById("myChart"), 
+					
+					{
+					type: 'bar',
+					data: {
+						labels: timeList, // X축 
+						datasets: [{
+							label:"이용자수",
+							data: posList, // 값
+							backgroundColor:  'rgb(150,205,236)',
+							fill: false
+						}]//datasets
+					},//data
+					options: {
+
+					}//option
+				}); //new chart
+				
+				
+			},
+		
+
+		}) // 그래프 ajax	  
+	}) // getGraph
+      
+      $.ajax({
+				method: 'POST',
+				url: '/month-sum',
+				data: test,
+				success: function (data) {
+					
+					  $(".year_mon2").text(year + "년 " + month + "월 이용자 수 : "+ data);
+				}
+			
+			})
+
+      
+      
+    
+      
+      
+      
+      return year + "년 " + month + "월";
+    }, //타이틀 포멧
+				dateClick: function(info)
+    	{//클릭이벤트 시작 
+console.log(info.dateStr);
+scr_width = screen.availWidth;
+					scr_height = screen.availHeight;
+
+    	window.open('popup'+'?'+'date='+info.dateStr, 'popup',
+						'top=300, left=500, width=1000, height=400, status=no, menubar=no, toolbar=no, resizable=no');
+    	}//클릭이벤트
+				
+				
+				
+				});//calendar
+				
+				calendar.render();
+    		
+    		
+    		},//success
+    	
+    	
+    	});//ajax
+
+
+
+</script>
 </head>
 
 <body>
 	<div class="nav">
 		<div class="logo">ADMIN</div>
-		<ul>
-			<li>
-				<span class="material-symbols-outlined">list_alt</span>
-				<a th:href="@{/admin}">화상교육</a>
-			</li>
-			<li class="on">
-				<span class="material-symbols-outlined">monitoring</span>
-				<a th:href="@{/ar}">AR 이용통계</a>
-			</li>
-			<li>
-				<span class="material-symbols-outlined">touch_app</span>
-				<a th:href="@{/center}">돌봄센터 관리</a>
-			</li>
-			<li>
-				<span class="material-symbols-outlined">group</span>
-				<a th:href="@{/satisfaction}">이용자 만족도</a>
-			</li>
-		</ul>
+		 <ul>
+            <li>
+                <input type="checkbox" id="menu01">
+                <label for="menu01">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <p>화상 교육 참여 인원</p></label>
+                <ul class="submenu">
+                    <li><a th:href="@{/admin}">수업목록</a></li>
+                    <li><a th:href="@{/center}">돌봄센터</a></li>
+                </ul>
+            </li>
+            <li class="on">
+                <span class="material-symbols-outlined">group</span>
+                <a th:href="@{/ar}">AR 공간 이용자 수</a>
+            </li>
+            <li>
+                <span class="material-symbols-outlined">sentiment_satisfied</span>
+                <a th:href="@{/satisfaction}">이용자 만족도</a>
+            </li>
+            <li>
+                <input type="checkbox" id="menu04">
+                <label for="menu04">
+                    <span class="material-symbols-outlined">monitoring</span>
+                    <p>성과지표통계</p></label>
+                <ul class="submenu">
+                   <li><a th:href="@{/statistics}">성과지표통계</a></li>
+                    <li><a th:href="@{/goals}">목표설정</a></li>
+                </ul>
+            </li>
+        </ul>
 	</div><!-- //nav -->
 
 
@@ -53,13 +196,13 @@
 			<h1>AR 이용 통계</h1>
 
 			<div class="cal_box">
-				<div id="calendarForm"></div>
+				<div id="calendar"></div>
 			</div><!-- //cal -->
 
 			<div class="chart">
 				<h2>
 					<span class="year_mon2"> </span>
-					<span class="total" th:text="${co}"></span>
+					<span class="total"></span>
 				</h2>
 
 
@@ -91,122 +234,7 @@
 
 
 </script>
-<script>
 
-	$(function () {
-		calendarMaker($("#calendarForm"), new Date());
-	});
-
-	var nowDate = new Date();
-	function calendarMaker(target, date) {
-		if (date == null || date == undefined) {
-			date = new Date();
-		}
-		nowDate = date;
-		if ($(target).length > 0) {
-			var year = nowDate.getFullYear();
-			var month = nowDate.getMonth() + 1;
-			$(target).empty().append(assembly(year, month));
-		} else {
-			console.error("custom_calendar Target is empty!!!");
-			return;
-		}
-
-		var thisMonth = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1);
-		var thisLastDay = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0);
-		var tag = "<tr>";
-		var cnt = 0;
-		//빈 공백 만들어주기
-		for (i = 0; i < thisMonth.getDay(); i++) {
-			tag += "<td></td>";
-			cnt++;
-		}
-
-		//날짜 채우기
-		for (i = 1; i <= thisLastDay.getDate(); i++) {
-			if (cnt % 7 == 0) {tag += "<tr>";}
-
-			tag += "<td>" + i+"</td>";
-			cnt++;
-			if (cnt % 7 == 0) {
-				tag += "</tr>";
-			}
-		}
-		$(target).find("#custom_set_date").append(tag);
-		calMoveEvtFn();
-
-		function assembly(year, month) {
-			var calendar_html_code =
-				"<table class='custom_calendar_table'>" +
-				"<colgroup>" +
-				"<col style='width:81px'/>" +
-				"<col style='width:81px'/>" +
-				"<col style='width:81px'/>" +
-				"<col style='width:81px'/>" +
-				"<col style='width:81px'/>" +
-				"<col style='width:81px'/>" +
-				"<col style='width:81px'/>" +
-				"</colgroup>" +
-				"<thead class='cal_date'>" +
-				"<th><button type='button' class='prev'><</button></th>" +
-				"<th colspan='5'><p style='font-size:30px;'><span style='font-size:30px;'>" + year + "</span>년 <span style='font-size:30px;'>" + month + "</span>월</p></th>" +
-				"<th><button type='button' class='next'>></button></th>" +
-				"</thead>" +
-				"<thead  class='cal_week'>" +
-				"<th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>" +
-				"</thead>" +
-				"<tbody id='custom_set_date'>" +
-				"</tbody>" +
-				"</table>";
-
-			return calendar_html_code;
-
-		}
-
-		function calMoveEvtFn() {
-			let modal = document.getElementsByClassName("popup_layer")[0];
-
-			//전달 클릭
-			$(".custom_calendar_table").on("click", ".prev", function () {
-				nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() - 1, nowDate.getDate());
-				calendarMaker($(target), nowDate);
-				//location.href='ar'+'?'+'date='+String(year)+'-'+String(month)
-				
-			});
-			//다음날 클릭
-			$(".custom_calendar_table").on("click", ".next", function () {
-				nowDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
-				calendarMaker($(target), nowDate);
-			});
-			//일자 선택 클릭
-			$(".custom_calendar_table").on("click", "td",
-				function () {
-					var x = $(this).text();
-					$(".custom_calendar_table .select_day").removeClass("select_day");
-					$(this).removeClass("select_day").addClass("select_day");
-					if (x < 10) {
-						x = String(0) + String(x);
-					}
-					const date = String(year) + "-" + String((month)) + "-" + String(x);
-					
-					scr_width = screen.availWidth;
-					scr_height = screen.availHeight;
-					
-					window.open('popup'+'?'+'date='+date, 'popup',
-						'top=300, left=500, width=1000, height=400, status=no, menubar=no, toolbar=no, resizable=no');
-				});
-				
-			const tt =String(year) + "-" + String((month));
-		
-					
-			$(".year_mon2").text(year + "년 " + (month) + "월 이용자 수 : ");
-
-		}
-
-
-	}
-
-</script>
 <script>
 	function logOut() {
 		var logout = confirm("로그아웃 하시겠습니까?");
@@ -229,63 +257,7 @@
 </script>
 <script type="text/javascript">
 
-	$(document).ready(function () {
-		getGraph();
-	});
-
-	function getGraph() {
-		let timeList = ['1','','','','5','','','','',
-		'10','','','','','15','','','','','20','','','','','25'
-		,'','','','','30'];
-		let posList = [];
-
-		$.ajax({
-			type: "GET",
-			url: "/monthAll",
-			data: {},
-			dataType: "json",
-			success: function (data) {
-				
-				
-				for(let i = 0; i< data.length;  i++){
-			posList.push(data[i]);		
-				}
-				
-				
- 			
- 			
-			//	for (let i = 0; i < data.length; i++) {
-			//		if(data[i].now=="2022-10-05"){
-					
-			//		}
-				//	else if(data[i].now=="2022-10-06"){
-						
-				//	}
-				//}
-				// console.log(timeList);
-				// console.log(posList);  	
-				// 그래프
-				new Chart(document.getElementById("myChart"), {
-					type: 'bar',
-					data: {
-						labels: timeList, // X축 
-						datasets: [{
-							label:"이용자수",
-							data: posList, // 값
-							backgroundColor: 'green',
-							fill: false
-						}
-						]
-					},
-					options: {
-
-					}
-				}); //그래프
-			},
-		
-
-		}) // ajax	  
-	} // getGraph
+	
 
 </script>
 
