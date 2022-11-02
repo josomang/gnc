@@ -5,7 +5,7 @@ import lombok.Data;
 public class Paging {
     
     private int totalCount; 
-    private int displayPageNum = 10; 
+    private int displayPageNum = 20; 
     
     private int startPage; 
     private int endPage;  

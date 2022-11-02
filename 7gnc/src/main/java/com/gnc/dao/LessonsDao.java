@@ -49,7 +49,7 @@ public interface LessonsDao {
 	
 	
 	
-	public void deleteDao(@Param("LESSON_ID")int LESSON_ID);
+	public void deleteDao(@Param("DEL_DT")LocalDateTime DEL_DT,@Param("LESSON_ID")int LESSON_ID);
 	
 	public List<String> test();
 	

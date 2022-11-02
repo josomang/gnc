@@ -1320,7 +1320,9 @@ public class MainController {
 
 	@PostMapping("/delete")
 	public String delete() {
-		lessonsDao.deleteDao(masterId);
+		LocalDateTime now = LocalDateTime.now();
+		
+		lessonsDao.deleteDao(now,masterId);
 
 		return "redirect:/admin";
 
