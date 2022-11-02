@@ -288,10 +288,18 @@ public class MainController {
 			return "redirect:/login";
 		}
 		model.addAttribute("view", lessonsDao.lessonsDao(LESSON_ID));
-
 		masterId = LESSON_ID;
-		model.addAttribute("total_count", lessonsDao.totalCountDao(LESSON_ID));
-		model.addAttribute("center_count", lessonsDao.centerCountDao(LESSON_ID));
+		if(lessonsDao.totalCountDao(LESSON_ID)==null || lessonsDao.centerCountDao(LESSON_ID)==null) {
+			model.addAttribute("total_count", 0);
+			model.addAttribute("center_count",0);
+		}
+		else {
+			model.addAttribute("total_count", lessonsDao.totalCountDao(LESSON_ID));
+			model.addAttribute("center_count", lessonsDao.centerCountDao(LESSON_ID));
+			
+		}
+		
+		
 		
 		model.addAttribute("list", lessonsDao.centerLessonsListDao(LESSON_ID));
 		// model.addAttribute("list", lessonsDao.centerTTListDao());

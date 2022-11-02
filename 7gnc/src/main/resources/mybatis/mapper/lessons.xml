@@ -66,10 +66,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="lect_listDao" resultType="com.gnc.dto.lect_listDto">
 		select LESSON_ID, date_format(BGNG_DT,'%Y%m%d%H%i') as BGNG_DT , date_format(END_DT,'%Y%m%d%H%i') as END_DT , ROOM_ID from TBL_LESSONS where END_DT &lt; NOW();
 	</select>
-<select id="totalCountDao" resultType="int">
+<select id="totalCountDao" resultType="integer">
 select sum(NOPE) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
 	</select>
-<select id="centerCountDao" resultType="int">
+<select id="centerCountDao" resultType="integer">
 select count(CENTER_ID) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
 	</select>	
 	

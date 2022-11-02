@@ -96,17 +96,21 @@
 							<td th:text="${view[0].LESSON_DESC}"></td>
 						</tr>
 						<tr>
-							<th>참여 돌봄센터 수</th>
-							<td th:text="${center_count}+'개소'"></td>
+							<th th:style="${center_count== 0? 'display:none':'display:bolck'}">참여 돌봄센터 수</th>
+							<td th:style="${total_count== 0? 'display:none':'display:bolck'}" th:text="${center_count}+'개소'"></td>
 						</tr>
 						<tr>
-							<th>전체 참석인원</th>
-							<td>
-				<span th:text="${total_count}+'명'"></span>
+							<th th:style="${total_count== 0? 'display:none':'display:bolck'}">전체 참석인원</th>
+							<td th:style="${total_count== 0? 'display:none':'display:bolck'}">
+				<span th:text="${total_count}+'명'" ></span>
 							<button type="button" class="btn_basic ml20"
 									onclick="document.getElementById('popup_detail').style.display='block'">상세보기</button>
 								<!-- #popup_detail display:block -->	
 							</td>
+						</tr>
+						<tr>
+							<th th:style="${total_count== 0? 'display:none':'display:bolck'}">만족도점수</th>
+							<td th:style="${total_count== 0? 'display:none':'display:bolck'}">100</td>
 						</tr>
 						<tr>
 

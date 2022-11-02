@@ -53,9 +53,9 @@ public interface LessonsDao {
 	
 	public List<String> test();
 	
-	public int totalCountDao(@Param("LESSON_ID")int LESSON_ID);
+	public Integer totalCountDao(@Param("LESSON_ID")int LESSON_ID);
 	
-	public int centerCountDao(@Param("LESSON_ID")int LESSON_ID);
+	public Integer centerCountDao(@Param("LESSON_ID")int LESSON_ID);
 	
 	public  List<lect_listDto> lect_listDao();
 	
