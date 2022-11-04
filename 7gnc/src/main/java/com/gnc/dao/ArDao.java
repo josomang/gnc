@@ -101,7 +101,7 @@ public interface ArDao {
 	public int getCountday28(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	public int getCountday29(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	public int getCountday30(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
-	public int getCountday31(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	public Integer getCountday31(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	
 	public Integer arStatisticsSum(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	

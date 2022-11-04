@@ -935,8 +935,22 @@ public class MainController {
 
 		LocalDate now = LocalDate.now();
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-		String day = now.format(formatter);
+	
+		String year="";
+		String month="";
+		String day;
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(test);
+		
+		year = element.getAsJsonObject().get("year").getAsString();
+		month = element.getAsJsonObject().get("month").getAsString();
+		int a = Integer.parseInt(month);
+		if( a==1 || a==2||a==3 || a==4 ||  a==5 || a==6 || a==7|| a==8 ||
+				a==9) {
+			month = "0" +month;
+			
+		}
+		day=year+"-"+month;
 
 		int m1 = arDao.getCount01_10("2022-10-20") + arDao.getCount02_10("2022-10-20")
 				+ arDao.getCount11_10("2022-10-20") + arDao.getCount12_10("2022-10-20")
@@ -955,39 +969,36 @@ public class MainController {
 				+ arDao.getCount01_17("2022-10-20") + arDao.getCount02_17("2022-10-20")
 				+ arDao.getCount11_17("2022-10-20") + arDao.getCount12_17("2022-10-20");
 
-		int n1 = arDao.getCountday01(test + "-01");
-		int n2 = arDao.getCountday02(test + "-02");
-		int n3 = arDao.getCountday03(test + "-03");
-		int n4 = arDao.getCountday04(test + "-04");
-		int n5 = arDao.getCountday05(test + "-05");
-		int n6 = arDao.getCountday06(test + "-06");
-		int n7 = arDao.getCountday07(test + "-07");
-		int n8 = arDao.getCountday08(test + "-08");
-		int n9 = arDao.getCountday09(test + "-09");
-		int n10 = arDao.getCountday10(test + "-10");
-		int n11 = arDao.getCountday11(test + "-11");
-		int n12 = arDao.getCountday12(test + "-12");
-		int n13 = arDao.getCountday13(test + "-13");
-		int n14 = arDao.getCountday14(test + "-14");
-		int n15 = arDao.getCountday15(test + "-15");
-		int n16 = arDao.getCountday16(test + "-16");
-		int n17 = arDao.getCountday17(test + "-17");
-		int n18 = arDao.getCountday18(test + "-18");
-		int n19 = arDao.getCountday19(test + "-19");
-		int n20 = arDao.getCountday20(test + "-20");
-		int n21 = arDao.getCountday21(test + "-21");
-		int n22 = arDao.getCountday22(test + "-22");
-		int n23 = arDao.getCountday23(test + "-23");
-		int n24 = arDao.getCountday24(test + "-24");
-		int n25 = arDao.getCountday25(test + "-25");
-		int n26 = arDao.getCountday26(test + "-26");
-		int n27 = arDao.getCountday27(test + "-27");
-		int n28 = arDao.getCountday28(test + "-28");
 		
-		//int n29 = arDao.getCountday29(test + "-29");
-		//int n30 = arDao.getCountday30(test + "-30");
-		//int n31 = arDao.getCountday31(day + "-31");
-
+		
+		int n1 = arDao.getCountday01(day + "-01");
+		int n2 = arDao.getCountday02(day + "-02");
+		int n3 = arDao.getCountday03(day + "-03");
+		int n4 = arDao.getCountday04(day + "-04");
+		int n5 = arDao.getCountday05(day + "-05");
+		int n6 = arDao.getCountday06(day + "-06");
+		int n7 = arDao.getCountday07(day + "-07");
+		int n8 = arDao.getCountday08(day + "-08");
+		int n9 = arDao.getCountday09(day + "-09");
+		int n10 = arDao.getCountday10(day + "-10");
+		int n11 = arDao.getCountday11(day + "-11");
+		int n12 = arDao.getCountday12(day + "-12");
+		int n13 = arDao.getCountday13(day + "-13");
+		int n14 = arDao.getCountday14(day + "-14");
+		int n15 = arDao.getCountday15(day + "-15");
+		int n16 = arDao.getCountday16(day + "-16");
+		int n17 = arDao.getCountday17(day + "-17");
+		int n18 = arDao.getCountday18(day + "-18");
+		int n19 = arDao.getCountday19(day + "-19");
+		int n20 = arDao.getCountday20(day + "-20");
+		int n21 = arDao.getCountday21(day + "-21");
+		int n22 = arDao.getCountday22(day + "-22");
+		int n23 = arDao.getCountday23(day + "-23");
+		int n24 = arDao.getCountday24(day + "-24");
+		int n25 = arDao.getCountday25(day + "-25");
+		int n26 = arDao.getCountday26(day + "-26");
+		int n27 = arDao.getCountday27(day + "-27");
+		int n28 = arDao.getCountday28(day + "-28");
 		n.add(n1);
 		n.add(n2);
 		n.add(n3);
@@ -1016,17 +1027,50 @@ public class MainController {
 		n.add(n26);
 		n.add(n27);
 		n.add(n28);
-		//n.add(n29);
-		//n.add(n30);
-		//n.add(n31);
+		
+	
+		if(a==4 || a==6 || a==9 || a==11 || a==1 || a==3 || a==5 || a==7|| a==8 ||
+				a==10|| a==12) {
+			int n29 = arDao.getCountday29(day + "-29");
+			int n30 = arDao.getCountday30(day + "-30");
+			n.add(n29);
+			n.add(n30);
+			
+		}
+		
+		if(a==1 || a==3 || a==5 || a==7|| a==8 ||
+				a==10|| a==12) 
+		{
+			int n31 = arDao.getCountday31(day + "-31");
+			n.add(n31);
+		}
+		
 
 		return n;
 	}
 	
 	
 	@RequestMapping("/month-sum")
-	public @ResponseBody int monthPeople(@RequestBody String day) {
+	public @ResponseBody int monthPeople(@RequestBody String test) {
+		
 		int sum = 0;
+		String year="";
+		String month="";
+		String day;
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(test);
+		
+		year = element.getAsJsonObject().get("year").getAsString();
+		month = element.getAsJsonObject().get("month").getAsString();
+		int a = Integer.parseInt(month);
+		if( a==1 || a==2||a==3 || a==4 ||  a==5 || a==6 || a==7|| a==8 ||
+				a==9) {
+			month = "0" +month;
+			
+		}
+		day=year+"-"+month;
+		
+		
 		
 		sum = arDao.getCountday01(day + "-01") + arDao.getCountday02(day + "-02") + arDao.getCountday03(day + "-03")
 		+ arDao.getCountday04(day + "-04") + arDao.getCountday05(day + "-05") + arDao.getCountday06(day + "-06")
@@ -1037,38 +1081,30 @@ public class MainController {
 		+ arDao.getCountday19(day + "-19") + arDao.getCountday20(day + "-20") + arDao.getCountday21(day + "-21")
 		+ arDao.getCountday22(day + "-22") + arDao.getCountday23(day + "-23") + arDao.getCountday24(day + "-24")
 		+ arDao.getCountday25(day + "-25") + arDao.getCountday26(day + "-26") + arDao.getCountday27(day + "-27")
-		+ arDao.getCountday28(day + "-28") + arDao.getCountday29(day + "-29") + arDao.getCountday30(day + "-30")
-		;
-		//+ arDao.getCountday31(day + "-31");
+		+ arDao.getCountday28(day + "-28") ;
+		
+		
+		if( a==1 || a==3 || a==4 ||  a==5 || a==6 || a==7|| a==8 ||
+				a==9 ||
+				a==10||  a==11 || a==12) {
+			
+			sum+=arDao.getCountday29(day + "-29");
+		 sum += arDao.getCountday30(day + "-30");
+		}
+		
+		if(a==1 || a==3 || a==5 || a==7|| a==8 ||
+				a==10|| a==12) 
+		{
+			sum+= arDao.getCountday31(day + "-31");
+		}
+		
+		//arDao.getCountday29(day + "-29") + arDao.getCountday30(day + "-30")
+		
+		
 	return	sum;
 	}
 	
 	
-	
-	
-
-	@GetMapping("/month-sum")
-	public @ResponseBody int monthSum() {
-		int sum = 0;
-		LocalDate now = LocalDate.now();
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-		String day = now.format(formatter);
-		sum = arDao.getCountday01(day + "-01") + arDao.getCountday02(day + "-02") + arDao.getCountday03(day + "-03")
-				+ arDao.getCountday04(day + "-04") + arDao.getCountday05(day + "-05") + arDao.getCountday06(day + "-06")
-				+ arDao.getCountday07(day + "-07") + arDao.getCountday08(day + "-08") + arDao.getCountday09(day + "-09")
-				+ arDao.getCountday10(day + "-10") + arDao.getCountday11(day + "-11") + arDao.getCountday12(day + "-12")
-				+ arDao.getCountday13(day + "-13") + arDao.getCountday14(day + "-14") + arDao.getCountday15(day + "-15")
-				+ arDao.getCountday16(day + "-16") + arDao.getCountday17(day + "-17") + arDao.getCountday18(day + "-18")
-				+ arDao.getCountday19(day + "-19") + arDao.getCountday20(day + "-20") + arDao.getCountday21(day + "-21")
-				+ arDao.getCountday22(day + "-22") + arDao.getCountday23(day + "-23") + arDao.getCountday24(day + "-24")
-				+ arDao.getCountday25(day + "-25") + arDao.getCountday26(day + "-26") + arDao.getCountday27(day + "-27")
-				+ arDao.getCountday28(day + "-28") + arDao.getCountday29(day + "-29") + arDao.getCountday30(day + "-30")
-				;
-				//+ arDao.getCountday31(day + "-31");
-
-		return sum;
-	}
 
 	@PostMapping("/ar_user_log")
 	public @ResponseBody String mistake(@RequestBody String result) {

@@ -24,6 +24,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 <script src='js/main.js'></script>
 <script>
+
 $.ajax({
     		url: 'ar-list',
     		type: 'GET',
@@ -54,19 +55,25 @@ $.ajax({
 					titleFormat: function (date) {
       year = date.date.year;
       month = date.date.month + 1;
-     var test= year+"-"+month
+     
+     var test =JSON.stringify({
+				year: year,
+				month: month,
+				
+			});
      
   
 
 	$(function getGraph() {
 		let timeList = ['1','','','','5','','','','',
 		'10','','','','','15','','','','','20','','','','','25'
-		,'','','','','30'];
+		,'','','','','30',''];
 		let posList = [];
 		
 		$.ajax({
 			type: "POST",
 			url: "/monthAll",
+			headers: {'Content-type': 'application/json'},
 			data: test,
 			dataType: "json",
 			success: function (data) {
@@ -109,6 +116,7 @@ $.ajax({
       $.ajax({
 				method: 'POST',
 				url: '/month-sum',
+				headers: {'Content-type': 'application/json'},
 				data: test,
 				success: function (data) {
 					

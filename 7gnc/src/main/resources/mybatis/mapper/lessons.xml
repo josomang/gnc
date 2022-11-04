@@ -24,12 +24,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 <select id="lessonsListDao" resultType="com.gnc.dto.LessonsDto" parameterType="string"> 
-		select TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center 
+select TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center ,(sum(DGSTFN_SCORE)/sum(NOPE)) as DGSTFN_SCORE
  from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID where DEL_DT IS NULL GROUP BY(TBL_LESSONS.LESSON_ID) order by TBL_LESSONS.BGNG_DT desc LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 		<select id="searchDao" resultType="com.gnc.dto.LessonsDto" parameterType="string">
-		select   TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center 
+		select   TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center, (sum(DGSTFN_SCORE)/sum(NOPE)) as DGSTFN_SCORE
  from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON
  TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID where LESSON_TTL LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL GROUP BY(TBL_LESSONS.LESSON_ID) order by TBL_LESSONS.BGNG_DT desc
 	</select>

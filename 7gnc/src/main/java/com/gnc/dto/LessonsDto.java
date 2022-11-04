@@ -19,6 +19,6 @@ public class LessonsDto {
 	private int LESSON_TM;
 	private int NOPE;
 	private int center;
-
+	private int DGSTFN_SCORE;
 	
 }
