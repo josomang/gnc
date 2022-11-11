@@ -277,6 +277,8 @@ public class MainController {
 		model.addAttribute("arsum_17", arDao.getCount01_17(date) + arDao.getCount02_17(date) + arDao.getCount11_17(date)
 				+ arDao.getCount12_17(date));
 
+		model.addAttribute("time",date);
+		
 		return "popup";
 
 	}
