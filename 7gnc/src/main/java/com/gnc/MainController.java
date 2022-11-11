@@ -232,7 +232,7 @@ public class MainController {
 		model.addAttribute("ar01_15", arDao.getCount01_15(date));
 		model.addAttribute("ar01_16", arDao.getCount01_16(date));
 		model.addAttribute("ar01_17", arDao.getCount01_17(date));
-
+		
 		model.addAttribute("ar02_10", arDao.getCount02_10(date));
 		model.addAttribute("ar02_11", arDao.getCount02_11(date));
 		model.addAttribute("ar02_12", arDao.getCount02_12(date));
@@ -377,10 +377,6 @@ public class MainController {
 		String tt;
 		tt=gson.toJson(arDao.arAllList());
 	
-		
-
-	
-		
 		
 		
 		return tt;
