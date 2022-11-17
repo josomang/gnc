@@ -12,6 +12,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
    
    
+    <update id="surveyUpdateDao">
+    update TBL_LESSON_CENTER set DGSTFN_SCORE=#{DGSTFN_SCORE} where LESSON_CENTER_ID = #{LESSON_CENTER_ID}
+    </update>
+    
     <update id="updateDao">
     update TBL_LESSONS set LESSON_TTL = #{LESSON_TTL}, BGNG_DT = #{BGNG_DT}, 
     END_DT = #{END_DT},ROOM_ID = #{ROOM_ID}, LESSON_TM = #{LESSON_TM} , 
@@ -19,23 +23,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     LESSON_DESC=#{LESSON_DESC},UPDT_DT=#{UPDT_DT} where LESSON_ID = #{LESSON_ID}
     </update>
     
+    
     <update id="deleteDao" >
 		 update TBL_LESSONS set DEL_DT= #{DEL_DT} where LESSON_ID = #{LESSON_ID}
 	</update>
 
 <select id="lessonsListDao" resultType="com.gnc.dto.LessonsDto" parameterType="string"> 
-select TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center ,(sum(DGSTFN_SCORE)/sum(NOPE)) as DGSTFN_SCORE
+select TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center ,(sum(DGSTFN_SCORE)/count(DGSTFN_SCORE)) as DGSTFN_SCORE
  from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID where DEL_DT IS NULL GROUP BY(TBL_LESSONS.LESSON_ID) order by TBL_LESSONS.BGNG_DT desc LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
+	<select id="surveyLessonsListDao" resultType="com.gnc.dto.LessonsDto" parameterType="string"> 
+select * from TBL_LESSON_CENTER LEFT JOIN TBL_LESSONS ON TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where CENTER_ID = #{CENTER_ID} and DGSTFN_SCORE is null
+	</select>
+	
+
+	
 		<select id="searchDao" resultType="com.gnc.dto.LessonsDto" parameterType="string">
-		select   TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center, (sum(DGSTFN_SCORE)/sum(NOPE)) as DGSTFN_SCORE
+		select   TBL_LESSONS.LESSON_ID,BGNG_DT,sum(NOPE) as NOPE, LESSON_TTL, INSTR_NM , LESSON_TYPE,count(CENTER_ID) as center, (sum(DGSTFN_SCORE)/count(DGSTFN_SCORE)) as DGSTFN_SCORE
  from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON
  TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID where LESSON_TTL LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL GROUP BY(TBL_LESSONS.LESSON_ID) order by TBL_LESSONS.BGNG_DT desc
 	</select>
 
 	<select id="centerLessonsListDao" resultType="com.gnc.dto.CenterDto"> 
 		select * from TBL_LESSON_CENTER LEFT JOIN TBL_CENTERS ON TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID where LESSON_ID = #{LESSON_ID}
+	</select>
+	
+			<select id="TtlDao" resultType="com.gnc.dto.LessonsDto">
+select LESSON_TTL,date_format(BGNG_DT,'%Y-%m-%d') as BGNG_DT  from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID where LESSON_CENTER_ID = #{LESSON_CENTER_ID}
 	</select>
 	
 	
@@ -72,6 +87,17 @@ select sum(NOPE) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
 <select id="centerCountDao" resultType="integer">
 select count(CENTER_ID) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
 	</select>	
+<select id="surveyDao" resultType="integer">
+select sum(DGSTFN_SCORE)/count(DGSTFN_SCORE) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
+	</select>	
+	<select id="getCountAll" resultType="int">
+select  count(DGSTFN_SCORE) from TBL_LESSON_CENTER LEFT JOIN TBL_LESSONS ON
+ TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where TBL_LESSONS.BGNG_DT LIKE CONCAT('%',#{year},'%')
+	</select>	
+	<select id="sumAll" resultType="int">
+select sum(DGSTFN_SCORE) from TBL_LESSON_CENTER LEFT JOIN TBL_LESSONS ON
+ TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where TBL_LESSONS.BGNG_DT LIKE CONCAT('%',#{year},'%')
+	</select>		
 	
 
  

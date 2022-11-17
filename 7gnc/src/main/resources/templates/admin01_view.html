@@ -110,7 +110,8 @@
 						</tr>
 						<tr>
 							<th th:style="${total_count== 0? 'display:none':'display:bolck'}">만족도점수</th>
-							<td th:style="${total_count== 0? 'display:none':'display:bolck'}">100</td>
+							<td th:style="${total_count== 0? 'display:none':'display:bolck'}" >
+							<span th:text="${DGSTFN_SCORE}+'점'" ></span></td>
 						</tr>
 						<tr>
 
@@ -389,7 +390,6 @@
 				url: '/delete',
 				headers: {'Content-type': 'application/json'},
 				data: id
-
 
 			})
 			setTimeout("location.replace('/admin')", 1000);

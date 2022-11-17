@@ -14,6 +14,11 @@ public interface UserDao {
 	// 로그인
     public String getUserAccount(@Param("UID")String UID,@Param("PSWD") String PSWD);
     
+    public String suerveyGetUserAccount(@Param("UID")String UID,@Param("PSWD") String PSWD);
+    
+    public String suerveyCenterId(@Param("UID")String UID,@Param("PSWD") String PSWD);
+    
+    
     public void last_lgn_dtDao
     (@Param("UID")String UID,@Param("LAST_LGN_DT")LocalDateTime last_lgn_dt);
     

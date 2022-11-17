@@ -32,7 +32,7 @@ public interface ArDao {
 	
 	public int sumAll (@Param("year") String year);
 	
-	public void arRegisterDao(String USE_DT, String AR_CONTENT_TYPE,String AR_USER_CATEGORY, int DGSTFN_SCORE,LocalDate lOG_CRT_YMD);
+	public void arRegisterDao(String USE_DT, String AR_CONTENT_TYPE,String AR_USER_CATEGORY, Integer DGSTFN_SCORE,LocalDate lOG_CRT_YMD);
 	
 	public int getCount01_10(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	public int getCount01_11(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
@@ -104,6 +104,8 @@ public interface ArDao {
 	public Integer getCountday31(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	
 	public Integer arStatisticsSum(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
+	
+	public Integer arUseStatisticsSum(@Param("n")int n,@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	
 	public ArrayList<String> arAllList();
 	

@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 돌봄센터 설문조사</title>
+    <meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="css/board.css" />
+	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+
+	<!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+</head>
+<body>
+    <div class="login_box">
+        <div class="login">
+            <h1>돌봄센터 아동 화상교육<br>이용 만족도 설문조사</h1>
+            <ul>
+                <li><label for="login_id">아이디</label>
+                    <input type="text" id="login_id" placeholder="아이디를 입력하세요."></li>
+                <li><label for="login_pw">비밀번호</label>
+                    <input type="password" id="login_pw" placeholder="비밀번호를 입력하세요."></li>
+                </ul>
+            <button type="submit" class="btn btn-primary" onclick = "dataSend()">로그인</button>
+        </div>
+    </div>
+</body>
+<script>
+	
+
+	function dataSend() {
+		var UID = $("#login_id").val();
+		var PSWD = $("#login_pw").val();
+		
+		
+		
+		if (UID == "" || PSWD=="") {
+			alert("아이디 또는 비밀 번호를 입력해주세요")
+		}
+		
+		
+			var LoginDto = JSON.stringify({
+				UID : UID,
+				PSWD : PSWD
+			});
+
+
+			$.ajax({
+				method: 'POST',
+				url: '/survey-login',
+				headers: {'Content-type': 'application/json'},
+				data: LoginDto			
+				});
+				setTimeout("location.href='/survey_list'", 1000);
+				
+		}
+			
+
+</script>
+
+</html>

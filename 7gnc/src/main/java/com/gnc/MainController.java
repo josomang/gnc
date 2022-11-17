@@ -50,6 +50,8 @@ public class MainController {
 	String key;
 	int masterId;
 	String masterResult;
+	String masterCenterId;
+	int masterLessonCenterId;
 	@Autowired
 	UserDao userDao;
 
@@ -61,7 +63,7 @@ public class MainController {
 
 	@Autowired
 	ArDao arDao;
-	
+
 	@Autowired
 	LibraryDao libraryDao;
 
@@ -74,6 +76,11 @@ public class MainController {
 	@GetMapping("/login")
 	public String loginForm() {
 		return "login";
+	}
+
+	@GetMapping("/survey-login")
+	public String surveyLoginForm() {
+		return "surveyLogin";
 	}
 
 	@PostMapping("/login")
@@ -102,6 +109,32 @@ public class MainController {
 
 	}
 
+	@PostMapping("/survey-login")
+	public String surveyLogin(@RequestBody String result, BindingResult bindingResult, HttpServletRequest request) {
+		LocalDateTime now = LocalDateTime.now();
+		String UID = "";
+		String PSWD = "";
+
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(result);
+		UID = element.getAsJsonObject().get("UID").getAsString();
+		PSWD = element.getAsJsonObject().get("PSWD").getAsString();
+
+		String check = userDao.suerveyGetUserAccount(UID, PSWD);
+		masterCenterId = userDao.suerveyCenterId(UID, PSWD);
+		System.out.println(masterCenterId);
+		if (check == null) {
+			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+			return "surveyLogin";
+		} else {
+			HttpSession session = request.getSession();
+			session.setAttribute(SessionConstants.LOGIN_MEMBER2, check);
+
+			return "redirect:/survey_list";
+		}
+
+	}
+
 	@PostMapping("/logout")
 	public String logout(HttpServletRequest request,
 			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
@@ -109,16 +142,33 @@ public class MainController {
 		LocalDateTime now = LocalDateTime.now();
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			session.invalidate();
+			session.removeAttribute(SessionConstants.LOGIN_MEMBER);
+
+			// sesssion.invalidate();
+
 		}
 		userDao.use_dtDao(check, now);
 		return "redirect:/login";
 
 	}
 
+	@PostMapping("/survey-logout")
+	public String surveyLogout(HttpServletRequest request1,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER2, required = false) String check) {
+
+		LocalDateTime now = LocalDateTime.now();
+		HttpSession session1 = request1.getSession(false);
+		if (session1 != null) {
+			session1.removeAttribute(SessionConstants.LOGIN_MEMBER2);
+		}
+
+		return "redirect:/survey-login";
+
+	}
+
 	@GetMapping("/admin")
 	public String home(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
-			@ModelAttribute("cri") Criteria cri, Model model, LessonsDto lessonsDto) {
+			@ModelAttribute("cri") Criteria cri, Model model) {
 		if (check == null) {
 			return "redirect:/login";
 		}
@@ -135,6 +185,56 @@ public class MainController {
 
 		return "admin01_list";
 	}
+
+	@GetMapping("/survey_list")
+	public String survey_list(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER2, required = false) String check,
+			@ModelAttribute("cri") Criteria cri, Model model) {
+		if (check == null) {
+			return "redirect:/survey-login";
+		}
+		if (lessonsDao.surveyLessonsListDao(cri, masterCenterId).isEmpty()) {
+			model.addAttribute("all", 0);
+			model.addAttribute("center", centerDao.centerNameDao(masterCenterId));
+		} else {
+			model.addAttribute("list", lessonsDao.surveyLessonsListDao(cri, masterCenterId));
+			model.addAttribute("center", centerDao.centerNameDao(masterCenterId));
+		}
+
+		return "survey_list";
+	}
+
+	@GetMapping("/survey_form")
+	public String survey_form(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER2, required = false) String check,
+			Model model,int LESSON_CENTER_ID) {
+		if (check == null) {
+			return "redirect:/survey-login";
+		}
+
+		masterLessonCenterId=LESSON_CENTER_ID;
+		model.addAttribute("ttl", lessonsDao.TtlDao(LESSON_CENTER_ID));
+		
+		return "survey_form";
+	}
+	
+	@PostMapping("/survey-post")
+	public String surveyPost(@RequestBody String result) {
+	
+		int sum;
+		int ee;
+		
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(result);
+		
+		sum = element.getAsJsonObject().get("sum").getAsInt();
+		ee = element.getAsJsonObject().get("answer06").getAsInt();
+	
+		lessonsDao.surveyUpdateDao(sum,masterLessonCenterId);
+		
+		
+		return "redirect:/survey_list";
+	}
+	
+	
 
 	@GetMapping("/search")
 	public String search(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
@@ -232,7 +332,7 @@ public class MainController {
 		model.addAttribute("ar01_15", arDao.getCount01_15(date));
 		model.addAttribute("ar01_16", arDao.getCount01_16(date));
 		model.addAttribute("ar01_17", arDao.getCount01_17(date));
-		
+
 		model.addAttribute("ar02_10", arDao.getCount02_10(date));
 		model.addAttribute("ar02_11", arDao.getCount02_11(date));
 		model.addAttribute("ar02_12", arDao.getCount02_12(date));
@@ -277,8 +377,8 @@ public class MainController {
 		model.addAttribute("arsum_17", arDao.getCount01_17(date) + arDao.getCount02_17(date) + arDao.getCount11_17(date)
 				+ arDao.getCount12_17(date));
 
-		model.addAttribute("time",date);
-		
+		model.addAttribute("time", date);
+
 		return "popup";
 
 	}
@@ -291,18 +391,15 @@ public class MainController {
 		}
 		model.addAttribute("view", lessonsDao.lessonsDao(LESSON_ID));
 		masterId = LESSON_ID;
-		if(lessonsDao.totalCountDao(LESSON_ID)==null || lessonsDao.centerCountDao(LESSON_ID)==null) {
+		if (lessonsDao.totalCountDao(LESSON_ID) == null || lessonsDao.centerCountDao(LESSON_ID) == null) {
 			model.addAttribute("total_count", 0);
-			model.addAttribute("center_count",0);
-		}
-		else {
+			model.addAttribute("center_count", 0);
+		} else {
 			model.addAttribute("total_count", lessonsDao.totalCountDao(LESSON_ID));
 			model.addAttribute("center_count", lessonsDao.centerCountDao(LESSON_ID));
-			
+			model.addAttribute("DGSTFN_SCORE", lessonsDao.surveyDao(LESSON_ID));
 		}
-		
-		
-		
+
 		model.addAttribute("list", lessonsDao.centerLessonsListDao(LESSON_ID));
 		// model.addAttribute("list", lessonsDao.centerTTListDao());
 		return "admin01_view";
@@ -334,7 +431,7 @@ public class MainController {
 			JsonObject object = (JsonObject) memberArray.get(i);
 			String a = object.get("center_id").getAsString();
 			int b = object.get("count").getAsInt();
-			System.out.println("센터아이디 : " + a);
+			
 			centerDao.centerLessonsInsert(LESSON_ID, a, b);
 		}
 		if (LESSON_ID != 0) {
@@ -358,32 +455,23 @@ public class MainController {
 		if (check == null) {
 			return "redirect:/login";
 		}
-		
-		
-		//model.addAttribute("co", monthSum());
-		
+
+		// model.addAttribute("co", monthSum());
+
 		return "admin02";
 	}
-	
+
 	@GetMapping("/ar-list")
 	public @ResponseBody String arList() {
-		
-		
-		
-		HashMap<String,String> map= new HashMap<>(); 
+
+		HashMap<String, String> map = new HashMap<>();
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		
 
 		String tt;
-		tt=gson.toJson(arDao.arAllList());
-	
-		
-		
+		tt = gson.toJson(arDao.arAllList());
+
 		return tt;
 	}
-	
-	
-	
 
 	@GetMapping("/ardate")
 	public String ardate(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
@@ -394,9 +482,6 @@ public class MainController {
 
 		return "date";
 	}
-
-	
-	
 
 	@PostMapping("/chartPost")
 	public @ResponseBody HashMap<Integer, Integer> chart(@RequestBody String result) {
@@ -492,42 +577,39 @@ public class MainController {
 
 					// map.put(a+i,arDao.arStatisticsSum(start+"-"+month_start));
 				}
-			} 
-			
+			}
+
 			else {
-				base=(b+12)-a;
+				base = (b + 12) - a;
 				cal1.add(Calendar.MONTH, 0);
 				String aa = transFormat.format(cal1.getTime());
 
 				list2.add(arDao.arStatisticsSum(aa));
-				
-				for(int i=0; i<base+1;i++) {
-					if(a>12) {
-						a=1;
+
+				for (int i = 0; i < base + 1; i++) {
+					if (a > 12) {
+						a = 1;
 						list.add(a);
 						cal1.add(Calendar.MONTH, 1);
-						 aa = transFormat.format(cal1.getTime());
+						aa = transFormat.format(cal1.getTime());
+
+						list2.add(arDao.arStatisticsSum(aa));
+						a++;
+					} else {
+						list.add(a);
+						cal1.add(Calendar.MONTH, 1);
+						aa = transFormat.format(cal1.getTime());
 
 						list2.add(arDao.arStatisticsSum(aa));
 						a++;
 					}
-					else {	
-					list.add(a);
-					cal1.add(Calendar.MONTH, 1);
-					aa = transFormat.format(cal1.getTime());
 
-					list2.add(arDao.arStatisticsSum(aa));
-					a++;
-					}
-					
 				}
 				dd.put("month", list);
 				dd.put("point", list2);
-				
-				
+
 				// base = 12+month_end;
-			
-			
+
 			}
 		} // x가 1일때 if
 
@@ -607,37 +689,35 @@ public class MainController {
 
 				}
 			} else {
-				
-				base=(b+12)-a;
-				
+
+				base = (b + 12) - a;
+
 				cal1.add(Calendar.MONTH, 0);
 				String aa = transFormat.format(cal1.getTime());
 
 				list2.add(centerDao.centerStatisticsSum(aa));
-				for(int i=0; i<base+1;i++) {
-					if(a>12) {
-						a=1;
+				for (int i = 0; i < base + 1; i++) {
+					if (a > 12) {
+						a = 1;
 						list.add(a);
 						cal1.add(Calendar.MONTH, 1);
-						 aa = transFormat.format(cal1.getTime());
+						aa = transFormat.format(cal1.getTime());
+
+						list2.add(centerDao.centerStatisticsSum(aa));
+						a++;
+					} else {
+						list.add(a);
+						cal1.add(Calendar.MONTH, 1);
+						aa = transFormat.format(cal1.getTime());
 
 						list2.add(centerDao.centerStatisticsSum(aa));
 						a++;
 					}
-					else {	
-					list.add(a);
-					cal1.add(Calendar.MONTH, 1);
-					 aa = transFormat.format(cal1.getTime());
 
-					list2.add(centerDao.centerStatisticsSum(aa));
-					a++;
-					}
-					
 				}
 				dd.put("month", list);
 				dd.put("point", list2);
-				
-				
+
 			}
 
 		} // x가 월 일 때
@@ -680,7 +760,7 @@ public class MainController {
 		if (x == 0) {
 			if (start == end) {
 				list.add(start);
-				list2.add(arDao.arStatisticsSum(Integer.toString(start)));
+				list2.add(arDao.arUseStatisticsSum(56*21*12,Integer.toString(start)));
 				dd.put("month", list);
 				dd.put("point", list2);
 			}
@@ -689,7 +769,7 @@ public class MainController {
 			else {
 				for (int i = start; i < end + 1; i++) {
 					list.add(i);
-					list2.add(arDao.arStatisticsSum(Integer.toString(i)));
+					list2.add(arDao.arUseStatisticsSum(56*21*12,Integer.toString(i)));
 				}
 				dd.put("month", list);
 				dd.put("point", list2);
@@ -709,12 +789,12 @@ public class MainController {
 						cal1.add(Calendar.MONTH, 0);
 						String aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arStatisticsSum(aa));
+						list2.add(arDao.arUseStatisticsSum(56*21,aa));
 					} else {
 						cal1.add(Calendar.MONTH, 1);
 						String aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arStatisticsSum(aa));
+						list2.add(arDao.arUseStatisticsSum(56*21,aa));
 					}
 
 					dd.put("month", list);
@@ -723,39 +803,36 @@ public class MainController {
 					// map.put(a+i,arDao.arStatisticsSum(start+"-"+month_start));
 				}
 			} else {
-				
-				base=(b+12)-a;
-				
+
+				base = (b + 12) - a;
+
 				cal1.add(Calendar.MONTH, 0);
 				String aa = transFormat.format(cal1.getTime());
 
-				list2.add(arDao.arStatisticsSum(aa));
-				
-				
-				for(int i=0; i<base+1;i++) {
-					if(a>12) {
-						a=1;
+				list2.add(arDao.arUseStatisticsSum(56*21,aa));
+
+				for (int i = 0; i < base + 1; i++) {
+					if (a > 12) {
+						a = 1;
 						list.add(a);
 						cal1.add(Calendar.MONTH, 1);
-						 aa = transFormat.format(cal1.getTime());
+						aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arStatisticsSum(aa));
+						list2.add(arDao.arUseStatisticsSum(56*21,aa));
+						a++;
+					} else {
+						list.add(a);
+						cal1.add(Calendar.MONTH, 1);
+						aa = transFormat.format(cal1.getTime());
+
+						list2.add(arDao.arUseStatisticsSum(56*21,aa));
 						a++;
 					}
-					else {	
-					list.add(a);
-					cal1.add(Calendar.MONTH, 1);
-					 aa = transFormat.format(cal1.getTime());
 
-					list2.add(arDao.arStatisticsSum(aa));
-					a++;
-					}
-					
 				}
 				dd.put("month", list);
 				dd.put("point", list2);
-				
-				
+
 			}
 		} // x가 1일때 if
 
@@ -846,37 +923,35 @@ public class MainController {
 
 				}
 			} else {
-				
-				base=(b+12)-a;
-				
+
+				base = (b + 12) - a;
+
 				cal1.add(Calendar.MONTH, 0);
 				String aa = transFormat.format(cal1.getTime());
 
 				list2.add(centerDao.centerUseStatisticsSum(aa));
-				for(int i=0; i<base+1;i++) {
-					if(a>12) {
-						a=1;
+				for (int i = 0; i < base + 1; i++) {
+					if (a > 12) {
+						a = 1;
 						list.add(a);
 						cal1.add(Calendar.MONTH, 1);
-						 aa = transFormat.format(cal1.getTime());
+						aa = transFormat.format(cal1.getTime());
+
+						list2.add(centerDao.centerUseStatisticsSum(aa));
+						a++;
+					} else {
+						list.add(a);
+						cal1.add(Calendar.MONTH, 1);
+						aa = transFormat.format(cal1.getTime());
 
 						list2.add(centerDao.centerUseStatisticsSum(aa));
 						a++;
 					}
-					else {	
-					list.add(a);
-					cal1.add(Calendar.MONTH, 1);
-					 aa = transFormat.format(cal1.getTime());
 
-					list2.add(centerDao.centerUseStatisticsSum(aa));
-					a++;
-					}
-					
 				}
 				dd.put("month", list);
 				dd.put("point", list2);
-				
-				
+
 				// base = 12+month_end;
 			}
 
@@ -884,6 +959,7 @@ public class MainController {
 
 		return dd;
 	}
+
 	@RequestMapping("/chart-get-li")
 	public @ResponseBody HashMap<String, List<Integer>> chartGetLi() throws ParseException {
 
@@ -896,59 +972,53 @@ public class MainController {
 		int x;
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(masterResult);
-		x=element.getAsJsonObject().get("x").getAsInt();
+		x = element.getAsJsonObject().get("x").getAsInt();
 		start = element.getAsJsonObject().get("start").getAsInt();
 		end = element.getAsJsonObject().get("end").getAsInt();
-		
-			if (start == end) {
-				list.add(start);
-				list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(start)));
-				dd.put("month", list);
-				dd.put("point", list2);
-			}
 
-			// 여기서부터 해야함 년으로 받았을 때 같은 년도는 해결
-			else {
-				for (int i = start; i < end + 1; i++) {
-					list.add(i);
-					list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(i)));
-				}
-				dd.put("month", list);
-				dd.put("point", list2);
+		if (start == end) {
+			list.add(start);
+			list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(start)));
+			dd.put("month", list);
+			dd.put("point", list2);
+		}
+
+		// 여기서부터 해야함 년으로 받았을 때 같은 년도는 해결
+		else {
+			for (int i = start; i < end + 1; i++) {
+				list.add(i);
+				list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(i)));
 			}
-			if(x==1) {
-				return dd2;
-			}
-			
-			
+			dd.put("month", list);
+			dd.put("point", list2);
+		}
+		if (x == 1) {
+			return dd2;
+		}
 
 		return dd;
 	}
-	
-	
-	
+
 	@RequestMapping("/monthAll")
 	public @ResponseBody ArrayList<Integer> test12(@RequestBody String test) {
 		ArrayList<Integer> n = new ArrayList<>();
 
 		LocalDate now = LocalDate.now();
 
-	
-		String year="";
-		String month="";
+		String year = "";
+		String month = "";
 		String day;
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(test);
-		
+
 		year = element.getAsJsonObject().get("year").getAsString();
 		month = element.getAsJsonObject().get("month").getAsString();
 		int a = Integer.parseInt(month);
-		if( a==1 || a==2||a==3 || a==4 ||  a==5 || a==6 || a==7|| a==8 ||
-				a==9) {
-			month = "0" +month;
-			
+		if (a == 1 || a == 2 || a == 3 || a == 4 || a == 5 || a == 6 || a == 7 || a == 8 || a == 9) {
+			month = "0" + month;
+
 		}
-		day=year+"-"+month;
+		day = year + "-" + month;
 
 		int m1 = arDao.getCount01_10("2022-10-20") + arDao.getCount02_10("2022-10-20")
 				+ arDao.getCount11_10("2022-10-20") + arDao.getCount12_10("2022-10-20")
@@ -967,8 +1037,6 @@ public class MainController {
 				+ arDao.getCount01_17("2022-10-20") + arDao.getCount02_17("2022-10-20")
 				+ arDao.getCount11_17("2022-10-20") + arDao.getCount12_17("2022-10-20");
 
-		
-		
 		int n1 = arDao.getCountday01(day + "-01");
 		int n2 = arDao.getCountday02(day + "-02");
 		int n3 = arDao.getCountday03(day + "-03");
@@ -1025,84 +1093,69 @@ public class MainController {
 		n.add(n26);
 		n.add(n27);
 		n.add(n28);
-		
-	
-		if(a==4 || a==6 || a==9 || a==11 || a==1 || a==3 || a==5 || a==7|| a==8 ||
-				a==10|| a==12) {
+
+		if (a == 4 || a == 6 || a == 9 || a == 11 || a == 1 || a == 3 || a == 5 || a == 7 || a == 8 || a == 10
+				|| a == 12) {
 			int n29 = arDao.getCountday29(day + "-29");
 			int n30 = arDao.getCountday30(day + "-30");
 			n.add(n29);
 			n.add(n30);
-			
+
 		}
-		
-		if(a==1 || a==3 || a==5 || a==7|| a==8 ||
-				a==10|| a==12) 
-		{
+
+		if (a == 1 || a == 3 || a == 5 || a == 7 || a == 8 || a == 10 || a == 12) {
 			int n31 = arDao.getCountday31(day + "-31");
 			n.add(n31);
 		}
-		
 
 		return n;
 	}
-	
-	
+
 	@RequestMapping("/month-sum")
 	public @ResponseBody int monthPeople(@RequestBody String test) {
-		
+
 		int sum = 0;
-		String year="";
-		String month="";
+		String year = "";
+		String month = "";
 		String day;
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(test);
-		
+
 		year = element.getAsJsonObject().get("year").getAsString();
 		month = element.getAsJsonObject().get("month").getAsString();
 		int a = Integer.parseInt(month);
-		if( a==1 || a==2||a==3 || a==4 ||  a==5 || a==6 || a==7|| a==8 ||
-				a==9) {
-			month = "0" +month;
-			
+		if (a == 1 || a == 2 || a == 3 || a == 4 || a == 5 || a == 6 || a == 7 || a == 8 || a == 9) {
+			month = "0" + month;
+
 		}
-		day=year+"-"+month;
-		
-		
-		
+		day = year + "-" + month;
+
 		sum = arDao.getCountday01(day + "-01") + arDao.getCountday02(day + "-02") + arDao.getCountday03(day + "-03")
-		+ arDao.getCountday04(day + "-04") + arDao.getCountday05(day + "-05") + arDao.getCountday06(day + "-06")
-		+ arDao.getCountday07(day + "-07") + arDao.getCountday08(day + "-08") + arDao.getCountday09(day + "-09")
-		+ arDao.getCountday10(day + "-10") + arDao.getCountday11(day + "-11") + arDao.getCountday12(day + "-12")
-		+ arDao.getCountday13(day + "-13") + arDao.getCountday14(day + "-14") + arDao.getCountday15(day + "-15")
-		+ arDao.getCountday16(day + "-16") + arDao.getCountday17(day + "-17") + arDao.getCountday18(day + "-18")
-		+ arDao.getCountday19(day + "-19") + arDao.getCountday20(day + "-20") + arDao.getCountday21(day + "-21")
-		+ arDao.getCountday22(day + "-22") + arDao.getCountday23(day + "-23") + arDao.getCountday24(day + "-24")
-		+ arDao.getCountday25(day + "-25") + arDao.getCountday26(day + "-26") + arDao.getCountday27(day + "-27")
-		+ arDao.getCountday28(day + "-28") ;
-		
-		
-		if( a==1 || a==3 || a==4 ||  a==5 || a==6 || a==7|| a==8 ||
-				a==9 ||
-				a==10||  a==11 || a==12) {
-			
-			sum+=arDao.getCountday29(day + "-29");
-		 sum += arDao.getCountday30(day + "-30");
+				+ arDao.getCountday04(day + "-04") + arDao.getCountday05(day + "-05") + arDao.getCountday06(day + "-06")
+				+ arDao.getCountday07(day + "-07") + arDao.getCountday08(day + "-08") + arDao.getCountday09(day + "-09")
+				+ arDao.getCountday10(day + "-10") + arDao.getCountday11(day + "-11") + arDao.getCountday12(day + "-12")
+				+ arDao.getCountday13(day + "-13") + arDao.getCountday14(day + "-14") + arDao.getCountday15(day + "-15")
+				+ arDao.getCountday16(day + "-16") + arDao.getCountday17(day + "-17") + arDao.getCountday18(day + "-18")
+				+ arDao.getCountday19(day + "-19") + arDao.getCountday20(day + "-20") + arDao.getCountday21(day + "-21")
+				+ arDao.getCountday22(day + "-22") + arDao.getCountday23(day + "-23") + arDao.getCountday24(day + "-24")
+				+ arDao.getCountday25(day + "-25") + arDao.getCountday26(day + "-26") + arDao.getCountday27(day + "-27")
+				+ arDao.getCountday28(day + "-28");
+
+		if (a == 1 || a == 3 || a == 4 || a == 5 || a == 6 || a == 7 || a == 8 || a == 9 || a == 10 || a == 11
+				|| a == 12) {
+
+			sum += arDao.getCountday29(day + "-29");
+			sum += arDao.getCountday30(day + "-30");
 		}
-		
-		if(a==1 || a==3 || a==5 || a==7|| a==8 ||
-				a==10|| a==12) 
-		{
-			sum+= arDao.getCountday31(day + "-31");
+
+		if (a == 1 || a == 3 || a == 5 || a == 7 || a == 8 || a == 10 || a == 12) {
+			sum += arDao.getCountday31(day + "-31");
 		}
-		
-		//arDao.getCountday29(day + "-29") + arDao.getCountday30(day + "-30")
-		
-		
-	return	sum;
+
+		// arDao.getCountday29(day + "-29") + arDao.getCountday30(day + "-30")
+
+		return sum;
 	}
-	
-	
 
 	@PostMapping("/ar_user_log")
 	public @ResponseBody String mistake(@RequestBody String result) {
@@ -1110,14 +1163,22 @@ public class MainController {
 		String USE_DT = "";
 		String AR_CONTENT_TYPE = "";
 		String AR_USER_CATEGORY = "";
-		int DGSTFN_SCORE;
+		Integer DGSTFN_SCORE;
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
 		USE_DT = element.getAsJsonObject().get("datetime").getAsString();
 		AR_CONTENT_TYPE = element.getAsJsonObject().get("content_type").getAsString();
 		AR_USER_CATEGORY = element.getAsJsonObject().get("user_category").getAsString();
+		
+		if(element.getAsJsonObject().get("dgstfn_score").isJsonNull()) {
+			
+			DGSTFN_SCORE= null;	
+		}
+		else {
 		DGSTFN_SCORE = element.getAsJsonObject().get("dgstfn_score").getAsInt();
+		
+		}		
 
 		arDao.arRegisterDao(USE_DT, AR_CONTENT_TYPE, AR_USER_CATEGORY, DGSTFN_SCORE, now);
 
@@ -1131,7 +1192,9 @@ public class MainController {
 			return "redirect:/login";
 		}
 		model.addAttribute("center", centerDao.centerListDao(cri));
-
+			
+	
+		
 		Paging pageMaker = new Paging();
 
 		pageMaker.setCri(cri);
@@ -1273,10 +1336,10 @@ public class MainController {
 			model.addAttribute("arygav", 0);
 		}
 
-		if (arDao.getCountAll(year) != 0) {
-			model.addAttribute("all", arDao.getCountAll(year));
-			model.addAttribute("sumall", arDao.sumAll(year));
-			float a = arDao.sumAll(year) / arDao.getCountAll(year);
+		if (lessonsDao.getCountAll(year) != 0) {
+			model.addAttribute("all", lessonsDao.getCountAll(year));
+			model.addAttribute("sumall", lessonsDao.sumAll(year));
+			float a = lessonsDao.sumAll(year) / lessonsDao.getCountAll(year);
 			model.addAttribute("avall", a);
 		} else {
 
@@ -1334,14 +1397,12 @@ public class MainController {
 			model.addAttribute("arygav", 0);
 		}
 
-		if (arDao.getCountAll(year) != 0) {
-			model.addAttribute("all", arDao.getCountAll(year));
-			model.addAttribute("sumall", arDao.sumAll(year));
-			float a = arDao.sumAll(year) / arDao.getCountAll(year);
+		if (lessonsDao.getCountAll(year) != 0) {
+			model.addAttribute("all", lessonsDao.getCountAll(year));
+			model.addAttribute("sumall", lessonsDao.sumAll(year));
+			float a = lessonsDao.sumAll(year) / lessonsDao.getCountAll(year);
 			model.addAttribute("avall", a);
-		}
-
-		else {
+		} else {
 
 			model.addAttribute("all", 0);
 			model.addAttribute("sumall", 0);
@@ -1355,8 +1416,8 @@ public class MainController {
 	@PostMapping("/delete")
 	public String delete() {
 		LocalDateTime now = LocalDateTime.now();
-		
-		lessonsDao.deleteDao(now,masterId);
+
+		lessonsDao.deleteDao(now, masterId);
 
 		return "redirect:/admin";
 
@@ -1407,7 +1468,8 @@ public class MainController {
 		List<Integer> list2 = new ArrayList<>();
 
 		list.add(2022);
-		list2.add(arDao.arStatisticsSum(Integer.toString(2022)));
+		list2.add(arDao.arUseStatisticsSum(56*21*12,Integer.toString(2022)));
+		
 		dd.put("month", list);
 		dd.put("point", list2);
 
@@ -1429,21 +1491,18 @@ public class MainController {
 
 		return dd;
 	}
+
 	@RequestMapping("/chart-get-li-2022")
 	public @ResponseBody HashMap<String, List<Integer>> chartGetLi2022() throws ParseException {
 
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
-	
-		
-				list.add(2022);
-				list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(2022)));
-				dd.put("month", list);
-				dd.put("point", list2);
-			
 
-			
+		list.add(2022);
+		list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(2022)));
+		dd.put("month", list);
+		dd.put("point", list2);
 
 		return dd;
 	}

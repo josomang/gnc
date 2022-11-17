@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class CenterDto {
+	int num;
 	String CENTER_ID;
 	String CENTER_TTL;
 	String CENTER_UID;

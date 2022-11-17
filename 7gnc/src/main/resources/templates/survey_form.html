@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>성남시 돌봄센터 설문조사</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/common1.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+
+<body>
+	<header>
+		<button type="button" class="prev"><span class="material-symbols-outlined" onclick="back()">arrow_back_ios</span></button>
+		<h1><span class="name" th:text="${ttl[0].LESSON_TTL}"></span><span class="date" th:text="${ttl[0].BGNG_DT}"></span></h1>
+	</header>
+	<section>
+		<div class="quest">
+			<ul class="operate">
+				<li>
+					<h3>교육강좌 서비스에 전반적으로 만족하십니까?</h3>
+					<ol>
+						<li><input type="radio" id="answer0101" name="answer01" value=50><label
+								for="answer0101">매우만족</label></li>
+						<li><input type="radio" id="answer0102" name="answer01" value=45><label
+								for="answer0102">만족</label></li>
+						<li><input type="radio" id="answer0103" name="answer01" value=40><label
+								for="answer0103">보통</label></li>
+						<li><input type="radio" id="answer0104" name="answer01" value=35><label
+								for="answer0104">불만족</label></li>
+						<li><input type="radio" id="answer0105" name="answer01" value=30><label
+								for="answer0105">매우불만족</label></li>
+					</ol>
+				</li>
+				<li>
+					<h3>장비의 품질(영상/음성)에 만족하십니까?</h3>
+					<ol>
+						<li><input type="radio" id="answer0201" name="answer02" value=10><label
+								for="answer0201">매우만족</label></li>
+						<li><input type="radio" id="answer0202" name="answer02" value=9><label
+								for="answer0202">만족</label></li>
+						<li><input type="radio" id="answer0203" name="answer02" value=8><label
+								for="answer0203">보통</label></li>
+						<li><input type="radio" id="answer0204" name="answer02" value=7><label
+								for="answer0204">불만족</label></li>
+						<li><input type="radio" id="answer0205" name="answer02" value=6><label
+								for="answer0205">매우불만족</label></li>
+					</ol>
+				</li>
+				<li>
+					<h3>장비 사용 편의성에 만족하십니까?</h3>
+					<ol>
+						<li><input type="radio" id="answer0301" name="answer03" value=10><label
+								for="answer0301">매우만족</label></li>
+						<li><input type="radio" id="answer0302" name="answer03" value=9><label
+								for="answer0302">만족</label></li>
+						<li><input type="radio" id="answer0303" name="answer03" value=8<label
+								for="answer0303">보통</label></li>
+						<li><input type="radio" id="answer0304" name="answer03" value=7><label
+								for="answer0304">불만족</label></li>
+						<li><input type="radio" id="answer0305" name="answer03" value=6><label
+								for="answer0305">매우불만족</label></li>
+					</ol>
+				</li>
+				<li>
+					<h3>강의 내용에 만족하십니까?</h3>
+					<ol>
+						<li><input type="radio" id="answer0401" name="answer04" value=10><label
+								for="answer0401">매우만족</label></li>
+						<li><input type="radio" id="answer0402" name="answer04" value=9><label
+								for="answer0402">만족</label></li>
+						<li><input type="radio" id="answer0403" name="answer04" value=8><label
+								for="answer0403">보통</label></li>
+						<li><input type="radio" id="answer0404" name="answer04" value=7><label
+								for="answer0404">불만족</label></li>
+						<li><input type="radio" id="answer0405" name="answer04" value=6><label
+								for="answer0405">매우불만족</label></li>
+					</ol>
+				</li>
+				<li>
+					<h3>강사님의 강의 방식에 만족하십니까?</h3>
+					<ol>
+						<li><input type="radio" id="answer0501" name="answer05" value=10><label
+								for="answer0501">매우만족</label></li>
+						<li><input type="radio" id="answer0502" name="answer05" value=9><label
+								for="answer0502">만족</label></li>
+						<li><input type="radio" id="answer0503" name="answer05" value=8><label
+								for="answer0503">보통</label></li>
+						<li><input type="radio" id="answer0504" name="answer05" value=7><label
+								for="answer0504">불만족</label></li>
+						<li><input type="radio" id="answer0505" name="answer05" value=6><label
+								for="answer0505">매우불만족</label></li>
+					</ol>
+				</li>
+				<li>
+					<h3>강의 편성 및 운영 방식에 만족하십니까?</h3>
+					<ol>
+						<li><input type="radio" id="answer0601" name="answer06" value=10><label
+								for="answer0601">매우만족</label></li>
+						<li><input type="radio" id="answer0602" name="answer06" value=9><label
+								for="answer0602">만족</label></li>
+						<li><input type="radio" id="answer0603" name="answer06" value=8><label
+								for="answer0603">보통</label></li>
+						<li><input type="radio" id="answer0604" name="answer06" value=7><label
+								for="answer0604">불만족</label></li>
+						<li><input type="radio" id="answer0605" name="answer06" value=6><label
+								for="answer0605">매우불만족</label></li>
+					</ol>
+				</li>
+			</ul>
+		</div>
+		<div class="btn_area">
+			<button type="button" class="btn_save" onclick="dataSend()">제출</button>
+		</div>
+	</section>
+
+	<div class="alert_wrap" style="display:none">
+		<div class="alert">
+			<div class="msg">
+				설문내용이 저장되지 않았습니다.<br>
+				목록으로 이동하시겠습니까?
+			</div>
+			<div class="btn_area">
+				<button type="button" class="btn_grey">취소</button>
+				<button type="button" class="btn_save">이동</button>
+			</div>
+		</div>
+		<!--// alert -->
+	</div>
+	<!--// alert_wrap -->
+
+	<div class="alert_wrap" style="display:none">
+		<div class="alert">
+			<div class="msg">
+				설문에 답하지 않은 문항이 존재합니다.
+			</div>
+			<div class="btn_area">
+				<button type="button" class="btn_save">확인</button>
+			</div>
+		</div>
+		<!--// alert -->
+	</div>
+	<!--// alert_wrap -->
+
+	<div class="alert_wrap" style="display:none">
+		<div class="alert">
+			<div class="msg">
+				설문이 제출 완료되었습니다.
+			</div>
+			<div class="btn_area">
+				<button type="button" class="btn_save">확인</button>
+			</div>
+		</div>
+		<!--// alert -->
+	</div>
+	<!--// alert_wrap -->
+
+</body>
+<script>
+function back(){
+	var con = confirm("설문 조사가 제출되지 않았습니다. 목록으로 이동하시겠습니까?");
+	if(con){
+		location.replace('/survey_list');
+	}
+	
+	
+}
+
+	function dataSend() {
+		var answer01;
+		var answer02;
+		var answer03;
+		var answer04;
+		var answer05;
+		var answer06;
+var sum;
+
+		const genderNodeList
+			= document.getElementsByName('answer01');
+		const genderNodeList2
+			= document.getElementsByName('answer02');
+		const genderNodeList3
+			= document.getElementsByName('answer03');
+		const genderNodeList4
+			= document.getElementsByName('answer04');
+		const genderNodeList5
+			= document.getElementsByName('answer05');
+		const genderNodeList6
+			= document.getElementsByName('answer06');
+
+
+		genderNodeList.forEach((node) => {
+			if (node.checked) {
+				answer01 = node.value;
+
+			}
+		})
+
+		genderNodeList2.forEach((node) => {
+			if (node.checked) {
+				answer02 = node.value;
+
+			}
+		})
+
+		genderNodeList3.forEach((node) => {
+			if (node.checked) {
+				answer03 = node.value;
+
+			}
+		})
+
+		genderNodeList4.forEach((node) => {
+			if (node.checked) {
+				answer04 = node.value;
+
+			}
+		})
+
+		genderNodeList5.forEach((node) => {
+			if (node.checked) {
+				answer05 = node.value;
+
+			}
+		})
+
+		genderNodeList6.forEach((node) => {
+
+
+			if (node.checked) {
+				answer06 = node.value;
+
+			}
+
+		})
+
+
+
+
+		sum = parseInt(answer01) + parseInt(answer02) + parseInt(answer03) + parseInt(answer04) + parseInt(answer05) + parseInt(answer06);
+		
+		if (isNaN(sum)) {
+			alert("체크하지 않은 항목이있습니다.")
+		}
+
+		else {
+			
+		var result = JSON.stringify({
+				answer06: answer06,
+				sum: sum,
+			});
+		
+		
+		$.ajax({
+				method: 'POST',
+				url: '/survey-post',
+				headers: {'Content-type': 'application/json'},
+				data: result
+			});
+		alert("설문제출이 완료 되었습니다.")
+		setTimeout("location.href='/survey_list'", 1000);
+		
+
+		}
+
+
+
+
+	}
+
+
+</script>
+
+</html>

@@ -24,6 +24,8 @@ public interface CenterDao {
 	
 	public List<CenterDto> centerDao(@Param("CENTER_ID")Object CENTER_ID);
 	
+	public List<String> centerNameDao(@Param("CENTER_ID")Object CENTER_ID);
+	
 	public int getCount ();
 	
 	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri);

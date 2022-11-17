@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 돌봄센터 설문조사</title>
+    <meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common1.css" />
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="css/board.css" />
+	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+</head>
+<body>
+    <header>
+        <h1 class="main">돌봄센터 아동 화상교육 이용 만족도 설문조사</h1>
+    </header>
+    <section>
+        <h2>
+            <span class="material-symbols-outlined">account_circle</span>
+            <span class="name" th:text="'센터명: '+${center[0].CENTER_TTL}"></span>
+            <span class="id" th:text="'관리자ID: '+${center[0].CENTER_UID}"></span>
+        </h2>
+        <div class="area_table">
+            <table style="display: inline-table;">
+                <thead>
+                    <tr>
+                        <th>수업일시</th>
+                        <th>수업명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 <tr th:each="tt : ${list}">
+							<td><span th:text="${tt.BGNG_DT}"></span></td>
+							<td class="link txtleft"><a th:href="@{/survey_form(LESSON_CENTER_ID=${tt.LESSON_CENTER_ID})}">
+									<span th:text="${tt.LESSON_TTL}"></span></td>
+						</tr>
+                  
+                </tbody>
+            </table>
+
+            <!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
+            <div class="data_null" th:style="${all== 0? 'display:bolck':'display:none'}">
+                설문조사를 진행할 수업이 없습니다.
+            </div>
+        </div>
+        <div class="btn_area">
+            <button type="button" class="btn_grey" onclick="logOut()">로그아웃</button>
+        </div>
+    </section>
+</body>
+<script>
+	function logOut(){
+		var logout = confirm("로그아웃 하시겠습니까?");
+		if(logout){
+		$.ajax({
+				method: 'POST',
+				url: '/survey-logout'
+				
+
+			})
+			location.replace('/survey-login');
+		}
+		else {
+			location.reload();
+		}
+		
+	}
+</script>
+</html>

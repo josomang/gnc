@@ -91,8 +91,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="tt, i : ${center}">
-                            <td><span th:text="${i.count}"></span></td>
+                        <tr th:each="tt: ${center}">
+                            <td><span th:text="${tt.num}"></span></td>
                             <td><span th:text="${tt.CENTER_TTL}"></span></td>
                              <td ><span th:text="${tt.CENTER_ID}"></span></td>
                             <td><span th:text="${tt.CENTER_UID}"></span></td>

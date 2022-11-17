@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class LessonsDto {
 	private int LESSON_ID;
+	private int LESSON_CENTER_ID;
 	private String LESSON_TTL;
 	private String ROOM_ID;
 	private String INSTR_NM;

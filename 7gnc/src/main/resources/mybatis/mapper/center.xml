@@ -16,11 +16,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <select id="centerListDao" resultType="com.gnc.dto.CenterDto" parameterType="string"> 
-		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
+		select @num:=@num+1 AS num,CENTER_TTL,CENTER_ID,CENTER_UID from (SELECT @num:=0) AS n ,TBL_CENTERS order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	<select id="centerDao" resultType="com.gnc.dto.CenterDto">
 		select CENTER_TTL,CENTER_ID,CENTER_UID,CENTER_PSWD,CENTER_MAX_NOPE from TBL_CENTERS where CENTER_ID = #{CENTER_ID}
+	</select>
+	
+		<select id="centerNameDao" resultType="com.gnc.dto.CenterDto">
+		select CENTER_TTL,CENTER_UID from TBL_CENTERS where CENTER_ID = #{CENTER_ID}
 	</select>
 	
 	
@@ -44,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
     
     	<select id="centerStatisticsSum" resultType="int">
-		select (sum(DGSTFN_SCORE)/SUM(NOPE)) as avg 
+		select (sum(DGSTFN_SCORE)/count(DGSTFN_SCORE)) as avg 
 		from TBL_LESSONS LEFT JOIN TBL_LESSON_CENTER ON TBL_LESSONS.LESSON_ID = TBL_LESSON_CENTER.LESSON_ID 
 where END_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%')
 	</select>

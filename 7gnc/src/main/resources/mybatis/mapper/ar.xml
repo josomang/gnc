@@ -280,6 +280,11 @@ select count(USE_DT) from TBL_AR_LOGS where USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD
 select sum(DGSTFN_SCORE)/count(DGSTFN_SCORE) from TBL_AR_LOGS where USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%')
 </select>  
 
+<select id="arUseStatisticsSum" resultType="int">
+select (count(AR_LOG_ID)/#{n})*100 from TBL_AR_LOGS where USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%')
+</select>  
+
+
 <select id="arAllList" resultType="map">
 select count(USE_DT) as title, date_format(USE_DT,'%Y-%m-%d') as dd FROM TBL_AR_LOGS group by(date_format(USE_DT,'%Y-%m-%d'))
 </select>  

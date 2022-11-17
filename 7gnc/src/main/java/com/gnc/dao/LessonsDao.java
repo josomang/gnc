@@ -31,7 +31,13 @@ public interface LessonsDao {
 	String LESSON_DESC
 			,@Param("UPDT_DT")LocalDateTime UPDT_DT);
 	
+	public void surveyUpdateDao(@Param("DGSTFN_SCORE")int DGSTFN_SCORE,@Param("LESSON_CENTER_ID")
+	int LESSON_CENTER_ID);
+	
 	public List<String> lessonsListDao(Criteria cri);
+	
+	public List<String> surveyLessonsListDao(Criteria cri,@Param("CENTER_ID")Object CENTER_ID);
+	
 	
 	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri);
 	
@@ -47,7 +53,7 @@ public interface LessonsDao {
 	
 	public int getIdDao(int LESSON_ID);
 	
-	
+	public List<String> TtlDao(@Param("LESSON_CENTER_ID") int LESSON_CENTER_ID);
 	
 	public void deleteDao(@Param("DEL_DT")LocalDateTime DEL_DT,@Param("LESSON_ID")int LESSON_ID);
 	
@@ -56,6 +62,8 @@ public interface LessonsDao {
 	public Integer totalCountDao(@Param("LESSON_ID")int LESSON_ID);
 	
 	public Integer centerCountDao(@Param("LESSON_ID")int LESSON_ID);
+	
+	public Integer surveyDao(@Param("LESSON_ID")int LESSON_ID);
 	
 	public  List<lect_listDto> lect_listDao();
 	
@@ -66,5 +74,10 @@ public interface LessonsDao {
     public List<ArDto> arDayDao(@Param("day")String day);
     
     public int arMonthCountDao(@Param("month") String month);
+    
+    public int getCountAll (@Param("year") String year);
+    
+    public int sumAll (@Param("year") String year);
+    
 }
 
