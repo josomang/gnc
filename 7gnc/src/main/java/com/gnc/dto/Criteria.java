@@ -8,6 +8,10 @@ public class Criteria {
     private int page;
     private int perPageNum; 
     
+    private Paging paging;
+    
+    
+    
     public int getPageStart() {
        
         return (this.page -1) * perPageNum;
@@ -42,7 +46,7 @@ public class Criteria {
         int cnt = this.perPageNum;
         
         if(perPageNum != cnt) {
-            this.perPageNum = cnt;    
+          
         } else {
             this.perPageNum = perPageNum;
         }

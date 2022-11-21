@@ -3,34 +3,37 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gnc.dao.UserDao">
-    <select id="getUserAccount" resultType="string">
-        select * from TBL_ADMINS where UID = #{UID} and PSWD = #{PSWD} </select>
-        
-         <select id="suerveyGetUserAccount" resultType="string">
-        select * from TBL_CENTERS where CENTER_UID = #{UID} and CENTER_PSWD = #{PSWD} </select>
-        
-        <select id="suerveyCenterId" resultType="string">
-        select CENTER_ID from TBL_CENTERS where CENTER_UID = #{UID} and CENTER_PSWD = #{PSWD} </select>
-        
-        
-        
-      
-      <update id="last_lgn_dtDao">
-        update TBL_ADMINS set LAST_LGN_DT= #{LAST_LGN_DT} where UID = #{UID}
-        </update>  
-       
-        <update id="use_dtDao">
-        update TBL_ADMINS set USE_DT= #{USE_DT} where UID = #{UID}
-        </update>  
-        
-        
-        <insert id="goalRegisterDao">
-      insert into TBL_LIBRARY_GOALS1(a,b,c,d,e,f,year)
-      values
-      (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
-    </insert>
-    
-    <select id="goalDao" resultType="com.gnc.dto.goalsDto">
-        select * from TBL_LIBRARY_GOALS1 where year = #{year}  </select>
-        
+	<select id="getUserAccount" resultType="string">
+		select * from TBL_ADMINS where UID = #{UID} and PSWD = #{PSWD}
+	</select>
+
+	<select id="suerveyGetUserAccount" resultType="string">
+		select * from TBL_CENTERS where CENTER_UID = #{UID} and CENTER_PSWD =
+		#{PSWD}
+	</select>
+
+	<select id="suerveyCenterId" resultType="string">
+		select CENTER_ID from TBL_CENTERS where CENTER_UID = #{UID} and CENTER_PSWD
+		= #{PSWD}
+	</select>
+
+	<update id="last_lgn_dtDao">
+		update TBL_ADMINS set LAST_LGN_DT= #{LAST_LGN_DT} where UID = #{UID}
+	</update>
+
+	<update id="use_dtDao">
+		update TBL_ADMINS set USE_DT= #{USE_DT} where UID = #{UID}
+	</update>
+
+
+	<insert id="goalRegisterDao">
+		insert into TBL_LIBRARY_GOALS1(a,b,c,d,e,f,year)
+		values
+		(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+	</insert>
+
+	<select id="goalDao" resultType="com.gnc.dto.goalsDto">
+		select * from TBL_LIBRARY_GOALS1 where year = #{year}
+	</select>
+
 </mapper>

@@ -39,7 +39,7 @@ public interface LessonsDao {
 	public List<String> surveyLessonsListDao(Criteria cri,@Param("CENTER_ID")Object CENTER_ID);
 	
 	
-	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri);
+	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri,@Param("pageStart")int pageStart,@Param("perPageNum")int perPageNum );
 	
 	public List<String> centerLessonsListDao(@Param("LESSON_ID")int LESSON_ID);
 	

@@ -38,6 +38,10 @@
                 <span class="material-symbols-outlined">group</span>
                 <a th:href="@{/ar}">AR 공간 이용자 수</a>
             </li>
+              <li>
+                <span class="material-symbols-outlined">tablet_android</span>
+                <a th:href="@{/device}">AR 디바이스현황</a>
+            </li>
             <li>
                 <span class="material-symbols-outlined">sentiment_satisfied</span>
                 <a th:href="@{/satisfaction}">이용자 만족도</a>
@@ -100,22 +104,22 @@
 					</tbody>
 				</table>
 
-				<div class="paging">
+				<div class="paging" th:style="${check== 0? 'display:none':'display:block'}">
 					<ul class="pagination pagination-sm no-margin pull-right">
 						<span class="before" th:if="${pageMaker.prev} == true">
-							<a th:href="@{/search(page=${pageMaker.startPage}-1,
+							<a th:href="@{/search(keyword=${keyword},page=${pageMaker.startPage}-1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
 						</span>
 						<span class="current" th:each="idx,iterStat : 
 					${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
 							th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
-							<a th:href="@{/search(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+							<a th:href="@{/search(keyword=${keyword},page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
 								th:text="${idx}"></a>
 						</span>
 
 						<span class="next" th:if="${pageMaker.next} == true and 
 					${pageMaker.endPage > 0}">
-							<a th:href="@{/search(page=${pageMaker.endPage}+1,
+							<a th:href="@{/search(keyword=${keyword},page=${pageMaker.endPage}+1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
 						</span>
 					</ul>
@@ -311,7 +315,7 @@
 		}
 
 		modal.style.display = "none";
-		setTimeout("location.reload()", 1000);
+		setTimeout("location.href='/admin'", 1000);
 		}
 		
 	}

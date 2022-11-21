@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <select id="centerListDao" resultType="com.gnc.dto.CenterDto" parameterType="string"> 
-		select @num:=@num+1 AS num,CENTER_TTL,CENTER_ID,CENTER_UID from (SELECT @num:=0) AS n ,TBL_CENTERS order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	<select id="centerDao" resultType="com.gnc.dto.CenterDto">
@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 	<select id="searchDao" resultType="com.gnc.dto.CenterDto">
-		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%')
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%') LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	<delete id="deleteDao" >

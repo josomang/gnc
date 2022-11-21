@@ -14,7 +14,7 @@ public class Paging {
     
     private Criteria cri;
  
-    
+   
     public int getTotalCount() {
         return totalCount;
     }

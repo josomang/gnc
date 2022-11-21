@@ -39,6 +39,10 @@
                 <span class="material-symbols-outlined">group</span>
                 <a th:href="@{/ar}">AR 공간 이용자 수</a>
             </li>
+              <li>
+                <span class="material-symbols-outlined">tablet_android</span>
+                <a th:href="@{/device}">AR 디바이스현황</a>
+            </li>
             <li>
                 <span class="material-symbols-outlined">sentiment_satisfied</span>
                 <a th:href="@{/satisfaction}">이용자 만족도</a>
@@ -57,7 +61,7 @@
     </div><!-- //nav -->
     <div class="section">
         <div class="header">
-            <button type="button">로그아웃</button>
+            <button type="button" onclick="logOut()">로그아웃</button>
         </div>
         <div class="inner">
             <h1>성과 지표 통계</h1>
@@ -73,9 +77,10 @@
                             <div class="select">  
                                 <select id="start" name="start"><!-- 년 선택 -->
                                     
-                                    <option value="2022" >2022</option>
-                                     <option value="2021" >2021</option>
-                                    <option value="2023">2023</option>
+                                    <option th:selected="${year}=='2022'" value="2022">2022</option>
+                                    <option th:selected="${year}=='2023'" value="2023">2023</option>
+                                     <option th:selected="${year}=='2024'" value="2024">2024</option>
+                                     <option th:selected="${year}=='2025'" value="2025">2025</option>
                                 </select>
                                 <select id="typeDirect" name="typeDirect"><!-- 월 선택 -->
                                    <option value="01">1월</option>
@@ -96,9 +101,10 @@
                             <div class="select">
                                 <select id="end" name="end"><!-- 년 선택 -->
                                    
-                                    <option value="2022" >2022</option>
-                                    <option value="2021" >2021</option>
-                                    <option value="2023">2023</option>
+                                    <option th:selected="${year}=='2022'" value="2022">2022</option>
+                                    <option th:selected="${year}=='2023'" value="2023">2023</option>
+                                     <option th:selected="${year}=='2024'" value="2024">2024</option>
+                                     <option th:selected="${year}=='2025'" value="2025">2025</option>
                                 </select>
                                 <select id="typeDirect1" name="typeDirect1"><!-- 월 선택 -->
                                          <option value="01">1월</option>

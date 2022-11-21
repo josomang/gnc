@@ -38,6 +38,11 @@
                 <span class="material-symbols-outlined">group</span>
                 <a th:href="@{/ar}">AR 공간 이용자 수</a>
             </li>
+             <li>
+                <span class="material-symbols-outlined">tablet_android</span>
+                <a th:href="@{/device}">AR 디바이스현황</a>
+            </li>
+            
             <li>
                 <span class="material-symbols-outlined">sentiment_satisfied</span>
                 <a th:href="@{/satisfaction}">이용자 만족도</a>
@@ -100,7 +105,7 @@
 					</tbody>
 				</table>
 
-				<div class="paging">
+				<div class="paging" th:style="${check== 0? 'display:none':'display:block'}">
 					<ul class="pagination pagination-sm no-margin pull-right">
 						<span class="before" th:if="${pageMaker.prev} == true">
 							<a th:href="@{/admin(page=${pageMaker.startPage}-1,
@@ -284,8 +289,8 @@
 		}
 		
 
-		if (LESSON_TTL == "") {
-			alert("������ �ʼ��� �Է��ϼ���")
+		if (LESSON_TTL == "" || BGNG_DT == ""||END_DT == "" || ROOM_ID== ""||INSTR_NM==""||LESSON_TM=="") {
+			alert("모두 입력해주세요")
 		}
 		else {
 			var LessonsDto = JSON.stringify({
@@ -307,11 +312,11 @@
 				data: LessonsDto
 			
 			})
-
-		}
-
 		modal.style.display = "none";
 		setTimeout("location.reload()", 1000);
+		}
+
+		
 		}
 		
 	}

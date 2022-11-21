@@ -38,6 +38,10 @@
                 <span class="material-symbols-outlined">group</span>
                 <a th:href="@{/ar}">AR 공간 이용자 수</a>
             </li>
+              <li>
+                <span class="material-symbols-outlined">tablet_android</span>
+               <a th:href="@{/device}">AR 디바이스현황</a>
+            </li>
             <li>
                 <span class="material-symbols-outlined">sentiment_satisfied</span>
                 <a th:href="@{/satisfaction}">이용자 만족도</a>
@@ -91,8 +95,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="tt, i : ${center}">
-                            <td><span th:text="${i.count}"></span></td>
+                        <tr th:each="tt,iterator : ${center}">
+                            <td th:text="${pageDTO.totalCount - (((pageDTO.page-1) * pageDTO.rowPerPage)+iterator.index)}"></td>
                             <td><span th:text="${tt.CENTER_TTL}"></span></td>
                              <td ><span th:text="${tt.CENTER_ID}"></span></td>
                             <td><span th:text="${tt.CENTER_UID}"></span></td>
@@ -106,22 +110,22 @@
                     </tbody>
                 </table>
 
-                <div class="paging">
+                <div class="paging" th:style="${check== 0? 'display:none':'display:block'}">
                    <ul class="pagination pagination-sm no-margin pull-right">
 						<span class="before" th:if="${pageMaker.prev} == true">
-							<a th:href="@{/center-search(page=${pageMaker.startPage}-1,
+							<a th:href="@{/center-search(keyword=${keyword},page=${pageMaker.startPage}-1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
 						</span>
 						<span class="current" th:each="idx,iterStat : 
 					${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
 							th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
-							<a th:href="@{/center-search(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+							<a th:href="@{/center-search(keyword=${keyword},page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
 								th:text="${idx}"></a>
 						</span>
 
 						<span class="next" th:if="${pageMaker.next} == true and 
 					${pageMaker.endPage > 0}">
-							<a th:href="@{/center-search(page=${pageMaker.endPage}+1,
+							<a th:href="@{/center-search(keyword=${keyword},page=${pageMaker.endPage}+1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
 						</span>
 					</ul>
@@ -166,7 +170,7 @@
                             </tr>
                             <tr>
                                 <th>돌봄 아동 수</th>
-                                <td><input type="number" id="CENTER_MAX_NOPE" class="input_100per"></td>
+                                <td><input type="number" id="CENTER_MAX_NOPE" class="input_200">명</td>
                             </tr>
                             
                         </tbody>
@@ -246,7 +250,7 @@
 
 			})
         modal.style.display = "none";
-		setTimeout("location.reload()", 1000);
+		setTimeout("location.href='/center'", 1000);
 		}
      }
 	}

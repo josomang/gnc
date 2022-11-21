@@ -1,0 +1,141 @@
+ <!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>성남시 공공도서관 AR서비스</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="css/board.css" />
+	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
+
+<body>
+	
+ 
+ <!-- 디바이스 등록/수정 -->
+        <div class="popup_layer">
+            <div class="popup_box">
+                <h1>디바이스 등록
+                    <button type="button" class="btn_close"><span class="material-symbols-outlined">close</span></button>
+                </h1>
+                <div class="tablebox">
+                    <table class="table_listview">
+                        <colgroup>
+                            <col width="120px">
+                            <col width="auto">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th>시리얼번호</th>
+                                <td><input type="text" th:value="${view[0].a}" class="input_200" id="number"> </td>
+                            </tr>
+                            <tr>
+                                <th>타입</th>
+                                <td>
+                                    <select id="type_value" name="type_value" th:value="${view[0].b}">
+                                        <option th:selected="${view[0].b}=='유형'">유형</option>
+                                        <option th:selected="${view[0].b}=='서피스'">서피스</option>
+                                        <option th:selected="${view[0].b}=='갤럭시탭'">갤럭시탭</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>상태</th>
+                                <td>
+                                    <select id="condition" name="condition" th:value="${view[0].c}">
+                                        <option th:selected="${view[0].c}=='상태'">상태</option>
+                                        <option th:selected="${view[0].c}=='정상'">정상</option>
+                                        <option th:selected="${view[0].c}=='분실'">분실</option>
+                                        <option th:selected="${view[0].c}=='고장'">고장</option>
+                                        <option th:selected="${view[0].c}=='수리중'">수리중</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>디바이스설명(메모)</th>
+                                <td><textarea th:text="${view[0].d}"  id="memo"></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn">
+                    <button type="button" class="btn_delete">취소</button>
+                    <button type="button" class="btn_save" onclick="dataSend()">확인</button>
+                </div>
+            </div>
+        </div><!--// popup -->
+        
+</body>
+<script>
+	let modal = document.getElementsByClassName("popup_layer")[0];
+	
+	let btn_close = document.getElementsByClassName("btn_delete")[0];
+
+	btn_close.onclick = function () {
+		window.close();
+
+	}
+
+
+
+</script>
+<script>
+function dataSend() {
+		var result = confirm("수정겠습니까?");
+		if(result){
+		var number = $("#number").val();
+		
+	var t = document.getElementById("type_value")
+		var type = t.options[t.selectedIndex].text
+		
+		var c = document.getElementById("condition")
+		var condition = c.options[c.selectedIndex].text
+		
+		var memo = $("#memo").val();
+		
+		
+
+		if (number == "") {
+			alert("시리얼 넘버를 입력하세요")
+		}
+		else {
+			var CenterDto = JSON.stringify({
+				number: number,
+				type: type,
+				condition: condition,
+				memo: memo,
+			
+			});
+
+
+			$.ajax({
+				method: 'POST',
+				url: '/device-update',
+				headers: {'Content-type': 'application/json'},
+				data: CenterDto,
+				success: function (data) {
+		
+					opener.location.reload();
+
+           window.close();
+
+        }
+
+			})
+       
+		}
+     }
+	}
+
+</script>
+
+
+
+</html>
