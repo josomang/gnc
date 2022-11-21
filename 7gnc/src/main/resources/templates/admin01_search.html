@@ -288,8 +288,8 @@
 		}
 		
 
-		if (LESSON_TTL == "") {
-			alert("������ �ʼ��� �Է��ϼ���")
+		if (LESSON_TTL == "" || BGNG_DT == ""||END_DT == "" || ROOM_ID== ""||INSTR_NM==""||LESSON_TM=="") {
+			alert("모두 입력해주세요")
 		}
 		else {
 			var LessonsDto = JSON.stringify({
@@ -311,11 +311,11 @@
 				data: LessonsDto
 			
 			})
-
+	modal.style.display = "none";
+		setTimeout("location.href='/admin'", 1000);
 		}
 
-		modal.style.display = "none";
-		setTimeout("location.href='/admin'", 1000);
+	
 		}
 		
 	}

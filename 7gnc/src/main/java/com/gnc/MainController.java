@@ -99,7 +99,7 @@ public class MainController {
 		PSWD = element.getAsJsonObject().get("PSWD").getAsString();
 
 		String check = userDao.getUserAccount(UID, PSWD);
-
+		
 		if (check == null) {
 			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
 			return "login";
@@ -126,7 +126,7 @@ public class MainController {
 
 		String check = userDao.suerveyGetUserAccount(UID, PSWD);
 		masterCenterId = userDao.suerveyCenterId(UID, PSWD);
-		System.out.println(masterCenterId);
+		
 		if (check == null) {
 			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
 			return "surveyLogin";

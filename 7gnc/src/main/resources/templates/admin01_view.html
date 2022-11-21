@@ -285,10 +285,11 @@
 			LESSON_TYPE = $("#typeDirect").val();
 			
 		}
+if (LESSON_TTL == "" || BGNG_DT == ""||END_DT == "" || ROOM_ID== ""||INSTR_NM==""||LESSON_TM=="") {
+			alert("모두 입력해주세요")
+		}
 
-
-		
-		
+else{
 			var LessonsDto = JSON.stringify({
 				LESSON_TTL: LESSON_TTL,
 				BGNG_DT: BGNG_DT,
@@ -308,13 +309,10 @@
 			})
 			modal.style.display = "none";
 		setTimeout("location.reload()", 1000);
-
 	}
-	else{
-		location.reload()
-	}	
+		
 	}
-	
+	}
 
 
 

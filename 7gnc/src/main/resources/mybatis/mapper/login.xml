@@ -4,11 +4,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gnc.dao.UserDao">
 	<select id="getUserAccount" resultType="string">
-		select * from TBL_ADMINS where UID = #{UID} and PSWD = #{PSWD}
+		select ADMIN_ID from TBL_ADMINS where UID = #{UID} and PSWD = #{PSWD}
 	</select>
 
 	<select id="suerveyGetUserAccount" resultType="string">
-		select * from TBL_CENTERS where CENTER_UID = #{UID} and CENTER_PSWD =
+		select CENTER_ID from TBL_CENTERS where CENTER_UID = #{UID} and CENTER_PSWD =
 		#{PSWD}
 	</select>
 
