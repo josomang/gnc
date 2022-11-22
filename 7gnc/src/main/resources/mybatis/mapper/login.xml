@@ -27,13 +27,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<insert id="goalRegisterDao">
-		insert into TBL_LIBRARY_GOALS1(a,b,c,d,e,f,year)
+		insert into TBL_RST_GOAL(AR_DGSTFN_GOAL,LESSON_DGSTFN_GOAL,AR_RTOFUT_GOAL,LESSON_RTOFUT_GOAL,LIBRARY_USER_RTOFINC_GOAL,LIBRARY_NUOFUS,TRGT_YR)
 		values
 		(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
 	</insert>
+	
+	<update id="goalUpdateDao">
+		update TBL_RST_GOAL set AR_DGSTFN_GOAL= #{AR_DGSTFN_GOAL},
+		LESSON_DGSTFN_GOAL = #{LESSON_DGSTFN_GOAL} ,AR_RTOFUT_GOAL = #{AR_RTOFUT_GOAL},LESSON_RTOFUT_GOAL = #{LESSON_RTOFUT_GOAL},LIBRARY_USER_RTOFINC_GOAL = #{LIBRARY_USER_RTOFINC_GOAL},LIBRARY_NUOFUS = #{LIBRARY_NUOFUS} where TRGT_YR = #{TRGT_YR}
+	</update>
 
 	<select id="goalDao" resultType="com.gnc.dto.goalsDto">
-		select * from TBL_LIBRARY_GOALS1 where year = #{year}
+		select * from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 
 </mapper>

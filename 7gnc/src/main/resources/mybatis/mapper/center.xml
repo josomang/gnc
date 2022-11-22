@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     
     <select id="centerListDao" resultType="com.gnc.dto.CenterDto" parameterType="string"> 
-		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where DEL_DT IS NULL order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	<select id="centerDao" resultType="com.gnc.dto.CenterDto">
@@ -29,20 +29,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 <select id="getCount" resultType="int">
-    SELECT count(*) FROM TBL_CENTERS
+    SELECT count(*) FROM TBL_CENTERS where DEL_DT IS NULL
 </select>
 
 <select id="getSearchCount" resultType="int">
-    SELECT count(*) FROM TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%')
+    SELECT count(*) FROM TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL
 </select>
 
 	<select id="searchDao" resultType="com.gnc.dto.CenterDto">
-		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%') LIMIT ${pageStart}, ${perPageNum}
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
-	<delete id="deleteDao" >
-		 delete from TBL_CENTERS where CENTER_ID = #{CENTER_ID}
-	</delete>
+	<update id="deleteDao" >
+		 update TBL_CENTERS set DEL_DT = #{DEL_DT} where CENTER_ID = #{CENTER_ID}
+	</update>
+	
 	<insert id="centerLessonsInsert">
      insert into TBL_LESSON_CENTER(LESSON_ID,CENTER_ID,NOPE) values(#{param1},#{param2},#{param3})
     </insert>

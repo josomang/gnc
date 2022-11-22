@@ -12,7 +12,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
     font-size: 16px;
     color:#282828;
     word-break: keep-all;
-    line-height: 1.4;
+    line-height: 1.2;
 }
 html{
     height: 100%;
@@ -116,11 +116,13 @@ section h2 span.id:after {content: ")";}
 header h1.main {background: url(../images/logo.png) no-repeat; background-position: center 5px;  background-size: auto 35px; padding-top:50px;}
 
 /* 테이블 */
+table .link {text-decoration: underline; cursor: pointer;}
 .area_table table {width:100%}
 .area_table thead {border-top:1px solid #DDD; border-bottom:1px solid #DDD; background-color: #EEE;}
 .area_table thead,.area_table tbody {width:100%;}
 .area_table th,.area_table td {border-bottom:1px solid #DDD; border-left:1px solid #DDD; padding:10px; font-size: 14px; line-height: 1.2; text-align: center; vertical-align: middle;}
 .area_table th:first-child,.area_table td:first-child {border-left: 0;}
+
 
 /* 데이터 없음 */
 .data_null {padding:30px 0; text-align:center; background-color: #EEE;}

@@ -7,31 +7,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 <select id="getCount01" resultType="int">
-    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="01" and USE_DT LIKE CONCAT('%',#{year},'%');
+    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="01" and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 
 <select id="getCount02" resultType="int">
-    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="02" and USE_DT LIKE CONCAT('%',#{year},'%');
+    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="02" and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 
 <select id="getCount11" resultType="int">
-    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="11" and USE_DT LIKE CONCAT('%',#{year},'%');
+    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="11" and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 
 <select id="getCount12" resultType="int">
-    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="12" and USE_DT LIKE CONCAT('%',#{year},'%');
+    select count(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="12" and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 <select id="sum01" resultType="int">
-select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="01"and USE_DT LIKE CONCAT('%',#{year},'%');
+select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="01"and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 <select id="sum02" resultType="int">
-select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="02"and USE_DT LIKE CONCAT('%',#{year},'%');
+select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="02"and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 <select id="sum11" resultType="int">
-select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="11"and USE_DT LIKE CONCAT('%',#{year},'%');
+select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="11"and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 <select id="sum12" resultType="int">
-select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CONTENT_TYPE="12"and USE_DT LIKE CONCAT('%',#{year},'%');
+select sum(DGSTFN_SCORE) from TBL_AR_LOGS where AR_CN_TYPE="12"and USE_DT LIKE CONCAT('%',#{year},'%');
 </select>
 
 <select id="getCountAll" resultType="int">
@@ -43,141 +43,141 @@ select sum(DGSTFN_SCORE) from TBL_AR_LOGS where USE_DT LIKE CONCAT('%',#{year},'
 </select>
 
 <insert id="arRegisterDao">
-      insert into TBL_AR_LOGS(USE_DT,AR_CONTENT_TYPE,AR_USER_CATEGORY,DGSTFN_SCORE,lOG_CRT_YMD)
+      insert into TBL_AR_LOGS(USE_DT,AR_CN_TYPE,AR_USER_CAT,DGSTFN_SCORE,lOG_CRT_YMD)
       values
       (#{param1},#{param2},#{param3},#{param4},#{param5})
     </insert>
     
   <select id="getCount01_10" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','10:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_11" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','11:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_12" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','12:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_13" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','13:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_14" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','14:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_15" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','15:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_16" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','16:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 <select id="getCount01_17" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','17:','%') and 
-AR_CONTENT_TYPE="01"
+AR_CN_TYPE="01"
 </select>  
 
  <select id="getCount02_10" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','10:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_11" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','11:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_12" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','12:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_13" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','13:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_14" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','14:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_15" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','15:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_16" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','16:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 <select id="getCount02_17" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','17:','%') and 
-AR_CONTENT_TYPE="02"
+AR_CN_TYPE="02"
 </select>  
 
 <select id="getCount11_10" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','10:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_11" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','11:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_12" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','12:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_13" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','13:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_14" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','14:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_15" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','15:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_16" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','16:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 <select id="getCount11_17" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','17:','%') and 
-AR_CONTENT_TYPE="11"
+AR_CN_TYPE="11"
 </select>  
 
 <select id="getCount12_10" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','10:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_11" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','11:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_12" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','12:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_13" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','13:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_14" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','14:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_15" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','15:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_16" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','16:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 </select>  
 <select id="getCount12_17" resultType="int">
 select count(USE_DT) from TBL_AR_LOGS where  USE_DT LIKE CONCAT('%',#{LOG_CRT_YMD},'%') and USE_DT LIKE CONCAT('%','17:','%') and 
-AR_CONTENT_TYPE="12"
+AR_CN_TYPE="12"
 
 
 </select>  

@@ -31,7 +31,7 @@ public interface CenterDao {
 	
 	public List<String> searchDao(@Param("keyword")Object keyword,Criteria cri,PageDTO pageDTO,@Param("pageStart")int pageStart,@Param("perPageNum")int perPageNum);
 	
-	public void deleteDao(@Param("CENTER_ID")String CENTER_ID);
+	public void deleteDao(@Param("DEL_DT")LocalDateTime DEL_DT,@Param("CENTER_ID")String CENTER_ID);
 	
 	public int getSearchCount (@Param("keyword")Object keyword);
 	

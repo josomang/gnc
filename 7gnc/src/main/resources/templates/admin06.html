@@ -86,29 +86,29 @@
                     <tbody>
                         <tr>
                             <th>AR공간 이용 만족도 목표</th>
-                <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_100per" id="a"></td>
-                <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].a}" class="input_100per" id="a"></td> 
+                <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="a">%</td>
+                <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">%</td> 
                         </tr>
                         <tr>
                             <th>돌봄센터 아동 화상교육 이용만족도 목표</th>
                             
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text"  class="input_100per" id="b"></td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].b}" class="input_100per" id="b"></td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="text"  class="input_200" id="b">%</td>
+                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">%</td>
                         </tr>
                         <tr>
                             <th>AR공간 서비스 이용률 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_100per" id="c"></td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].c}" class="input_100per" id="c"></td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="c">%</td>
+                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].AR_RTOFUT_GOAL}" class="input_200" id="c">%</td>
                         </tr>
                         <tr>
                             <th>돌봄센터 아동 화상교육 참여율 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_100per" id="d"></td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].d}" class="input_100per" id="d"></td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="d">%</td>
+                            <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LESSON_RTOFUT_GOAL}" class="input_200" id="d">%</td>
                         </tr>
                         <tr>
                             <th>도서관 이용 증가율 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_100per" id="e"></td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].e}" class="input_100per" id="e"></td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="e">%</td>
+                            <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LIBRARY_USER_RTOFINC_GOAL}" class="input_200" id="e">%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -125,7 +125,7 @@
                         <tr>
                             <th>당해년도 도서관 이용자 수</th>
                             <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="f">명</td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].f}" class="input_200" id="f">명</td>
+                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LIBRARY_NUOFUS}" class="input_200" id="f">명</td>
                         </tr>
                     </tbody>
                 </table>
@@ -166,23 +166,48 @@ function dataSend() {
 				b: b,
 				c: c,
 				d: d,
-				e:e,
+				e: e,
 				f: f,
 			year:year,
 			});
-
-
+			
 			$.ajax({
-				method: 'POST',
+				method: 'post',
+				url: '/goals-info',
+				headers: {'Content-type': 'application/json'},
+				data: year,
+				success: function (data) {
+					
+					if(data==1){
+						
+						$.ajax({
+				method: 'post',
 				url: '/goal-register',
 				headers: {'Content-type': 'application/json'},
 				data: LessonsDto
 			
 			})
-
+					}
+					
+					
+					else{
+					
+						$.ajax({
+				method: 'post',
+				url: '/goal-update',
+				headers: {'Content-type': 'application/json'},
+				data: LessonsDto
+			})	
+						
+					}
+					
+				}
+			
+			})
+			
+			
 		}
 
-		
 		setTimeout("location.reload()", 1000);
 		
 	}

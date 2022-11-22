@@ -1,5 +1,6 @@
 package com.gnc.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -15,9 +16,9 @@ public interface DeviceDao {
 			String condition,String memo);
 	
 	public void updateDao(@Param("a")String a,@Param("b")String b,
-			@Param("c")String c,@Param("d")String d);
+			@Param("c")String c,@Param("d")String d,@Param("AR_DEVICE_ID")int AR_DEVICE_ID);
 	
-	public List<DeviceDto> deviceDao(@Param("a")Object a);
+	public List<DeviceDto> deviceDao(@Param("AR_DEVICE_ID")int AR_DEVICE_ID);
 	
 	public List<String> deviceListDao(Criteria cri,PageDTO pageDTO,@Param("pageStart")int start,@Param("perPageNum")int perPageNum);
 	
@@ -27,7 +28,7 @@ public interface DeviceDao {
 	
 	public List<String> searchDao(@Param("keyword")Object keyword,PageDTO pageDTO,@Param("pageStart") int start,@Param("perPageNum")int perPageNum,Criteria cri);
 	
-	public void deleteDao(@Param("a")String number);
+	public void deleteDao(@Param("DEL_DT")LocalDateTime DEL_DT,@Param("AR_DEVICE_ID")int AR_DEVICE_ID);
 	
 	
 }

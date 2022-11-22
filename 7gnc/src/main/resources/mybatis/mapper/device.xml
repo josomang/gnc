@@ -4,39 +4,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gnc.dao.DeviceDao">
     <insert id="registerDao">
-      insert into TBL_device(a,b,c,d)
+      insert into TBL_AR_DEVICE_INFO(AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO)
       values
       (#{param1},#{param2},#{param3},#{param4})
     </insert>
        
         <select id="deviceListDao" resultType="com.gnc.dto.DeviceDto" parameterType="string"> 
-select a,b,c,d from TBL_device order by a LIMIT ${pageStart}, ${perPageNum}</select>
+select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where DEL_DT IS NULL order by AR_DEVICE_ID LIMIT ${pageStart}, ${perPageNum}</select>
 	
 	
 	<select id="getCount" resultType="int">
-    SELECT count(*) FROM TBL_device
+    SELECT count(*) FROM TBL_AR_DEVICE_INFO where DEL_DT IS NULL
 </select>
 
 <update id="updateDao">
-    update TBL_device set a = #{a}, b = #{b}, c = #{c},
-     d = #{d} where a = #{a}
+    update TBL_AR_DEVICE_INFO set AR_DEVICE_SN = #{a}, AR_DEVICE_TYPE = #{b}, AR_DEVICE_STTS = #{c},
+     AR_DEVICE_MEMO = #{d} where AR_DEVICE_ID = #{AR_DEVICE_ID}
     </update>
       
     <select id="deviceDao" resultType="com.gnc.dto.DeviceDto">
-		select a,b,c,d from TBL_device where a = #{a}
+		select AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where AR_DEVICE_ID = #{AR_DEVICE_ID}
 	</select>
 	
 		<select id="searchDao" resultType="com.gnc.dto.DeviceDto">
-		select a,b,c,d from TBL_device where a LIKE CONCAT('%',#{keyword},'%') LIMIT ${pageStart}, ${perPageNum}
+		select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where AR_DEVICE_SN LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL order by AR_DEVICE_ID LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	
 <select id="getSearchCount" resultType="int">
-    SELECT count(*) FROM TBL_device where a LIKE CONCAT('%',#{keyword},'%')
+    SELECT count(*) FROM TBL_AR_DEVICE_INFO where AR_DEVICE_SN LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL
 </select>
 	
-	<delete id="deleteDao" >
-		 delete from TBL_device where a = #{a}
-	</delete>
+	<update id="deleteDao" >
+		 update TBL_AR_DEVICE_INFO set DEL_DT = #{DEL_DT} where AR_DEVICE_ID = #{AR_DEVICE_ID}
+	</update>
 	
 </mapper>

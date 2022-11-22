@@ -25,7 +25,11 @@ public interface UserDao {
     public void use_dtDao
     (@Param("UID")String UID,@Param("USE_DT")LocalDateTime USE_DT);
     
-    public void goalRegisterDao(String a,String b ,String c ,String d,String e,int f,String year);
+    public void goalRegisterDao(String a,String b ,String c ,String d,String e,int f,int year);
+    
+    public void goalUpdateDao(@Param("AR_DGSTFN_GOAL")String a,@Param("LESSON_DGSTFN_GOAL")String b ,
+    		@Param("AR_RTOFUT_GOAL")String c ,@Param("LESSON_RTOFUT_GOAL")String d,@Param("LIBRARY_USER_RTOFINC_GOAL")String e,@Param("LIBRARY_NUOFUS")int f,
+    		@Param("TRGT_YR")int year);
     
     public List<goalsDto> goalDao(@Param("year")String year);
 }

@@ -5,6 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.gnc.dao.LibraryDao">
     <select id="getLibraryPeopleDao" resultType="int">
        
-        select NOPE from TBL_LIBRARY_LOGS where REG_DT LIKE CONCAT('%',#{REG_DT},'%')</select>
+        select LIBRARY_NUOFUS from TBL_RST_GOAL where TRGT_YR = #{TRGT_YR}</select>
         
 </mapper>

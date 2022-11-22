@@ -52,6 +52,7 @@ public class MainController {
 	String masterCenterId;
 	int masterLessonCenterId;
 	String testKeyword;
+	int masterArDeviceId;
 	@Autowired
 	UserDao userDao;
 
@@ -1342,7 +1343,8 @@ public class MainController {
 
 	@PostMapping("/center-delete")
 	public String centerDelete(@RequestBody String CENTER_ID) {
-		centerDao.deleteDao(CENTER_ID);
+		LocalDateTime now = LocalDateTime.now();
+		centerDao.deleteDao(now,CENTER_ID);
 
 		return "redirect:/center";
 
@@ -1480,7 +1482,6 @@ public class MainController {
 		lessonsDao.deleteDao(now, masterId);
 
 		return "redirect:/admin";
-
 	}
 
 	@GetMapping("/statistics")
@@ -1505,7 +1506,7 @@ public class MainController {
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
-		list.add(2022);
+		list.add(Integer.parseInt(year));
 		list2.add(arDao.arStatisticsSum(year));
 		dd.put("month", list);
 		dd.put("point", list2);
@@ -1524,7 +1525,7 @@ public class MainController {
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
-		list.add(2022);
+		list.add(Integer.parseInt(year));
 		list2.add(centerDao.centerStatisticsSum(year));
 		dd.put("month", list);
 		dd.put("point", list2);
@@ -1543,7 +1544,7 @@ public class MainController {
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
-		list.add(2022);
+		list.add(Integer.parseInt(year));
 		list2.add(arDao.arUseStatisticsSum(56*21*12,year));
 		
 		dd.put("month", list);
@@ -1562,10 +1563,12 @@ public class MainController {
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
-
-		list.add(2022);
+		
+		
+		list.add(Integer.parseInt(year));
 
 		list2.add(centerDao.centerUseStatisticsSum(year));
+		
 		dd.put("month", list);
 		dd.put("point", list2);
 
@@ -1573,7 +1576,7 @@ public class MainController {
 	}
 
 	@RequestMapping("/chart-get-li-2022")
-	public @ResponseBody HashMap<String, List<Integer>> chartGetLi2022() throws ParseException {
+	public @ResponseBody HashMap<String, List<Integer>> chartGetLi2022(Model model) throws ParseException {
 		LocalDate now = LocalDate.now();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
@@ -1583,8 +1586,9 @@ public class MainController {
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
-		list.add(2022);
+		list.add(Integer.parseInt(year));
 		list2.add(libraryDao.getLibraryPeopleDao(year));
+		model.addAttribute("year",year);
 		dd.put("month", list);
 		dd.put("point", list2);
 
@@ -1604,6 +1608,8 @@ public class MainController {
 		} else {
 			model.addAttribute("view", userDao.goalDao(year));
 		}
+		
+		
 
 		return "admin06";
 
@@ -1622,8 +1628,27 @@ public class MainController {
 		return "admin06";
 
 	}
+	
+	@RequestMapping("/goals-info")
+	public @ResponseBody int goalsInfo(@RequestBody String year) {
+		int dd=1;
+		if (userDao.goalDao(year).isEmpty()) {
+			dd=1;
+			
+		}
+		else {
+			
+			dd=2;
+		}
+		
 
-	@PostMapping("/goal-register")
+		return dd;
+
+	}
+	
+	
+
+	@RequestMapping("/goal-register")
 	public String goal_register(@RequestBody String result) {
 
 		String a = "";
@@ -1632,7 +1657,7 @@ public class MainController {
 		String d = "";
 		String e = "";
 		int f;
-		String year = "";
+		int year;
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
@@ -1642,11 +1667,40 @@ public class MainController {
 		d = element.getAsJsonObject().get("d").getAsString();
 		e = element.getAsJsonObject().get("e").getAsString();
 		f = element.getAsJsonObject().get("f").getAsInt();
-		year = element.getAsJsonObject().get("year").getAsString();
+		year = element.getAsJsonObject().get("year").getAsInt();
+		
+		
 		userDao.goalRegisterDao(a, b, c, d, e, f, year);
 
 		return "redirect:/goals";
 	}
+	
+	@RequestMapping("/goal-update")
+	public String goal_update(@RequestBody String result) {
+
+		String a = "";
+		String b = "";
+		String c = "";
+		String d = "";
+		String e = "";
+		int f;
+		int year;
+
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(result);
+		a = element.getAsJsonObject().get("a").getAsString();
+		b = element.getAsJsonObject().get("b").getAsString();
+		c = element.getAsJsonObject().get("c").getAsString();
+		d = element.getAsJsonObject().get("d").getAsString();
+		e = element.getAsJsonObject().get("e").getAsString();
+		f = element.getAsJsonObject().get("f").getAsInt();
+		year = element.getAsJsonObject().get("year").getAsInt();
+		userDao.goalUpdateDao(a, b, c, d, e, f, year);
+
+		return "redirect:/goals";
+	}
+	
+	
 	@GetMapping("/device")
 	public String device(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
 			PageDTO pageDTO,@ModelAttribute("cri") Criteria cri, Model model) {
@@ -1705,11 +1759,11 @@ public class MainController {
 	}
 	
 	@GetMapping("/device-update-modal")
-	public String deviceupdatemodal(String number, Model model) {
+	public String deviceupdatemodal(int number, Model model) {
 
 		
 		model.addAttribute("view", deviceDao.deviceDao(number));
-
+		masterArDeviceId = number;
 		
 		return "update_device";
 	}
@@ -1732,14 +1786,17 @@ public class MainController {
 		d = element.getAsJsonObject().get("memo").getAsString();
 		
 
-		deviceDao.updateDao(a, b, c, d);
+		deviceDao.updateDao(a, b, c, d,masterArDeviceId);
 
 		return "redirect:/device";
 	}
 
 	@PostMapping("/device-delete")
-	public String deviceDelete(@RequestBody String number) {
-		deviceDao.deleteDao(number);
+	public String deviceDelete(@RequestBody int number) {
+		LocalDateTime now = LocalDateTime.now();
+
+		
+		deviceDao.deleteDao(now,number);
 
 		return "redirect:/device";
 

@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class goalsDto {
-private String a;
-private String b;
-private String c;
-private String d;
-private String e;
-private int f;
+private double AR_DGSTFN_GOAL;
+private double LESSON_DGSTFN_GOAL;
+private double AR_RTOFUT_GOAL;
+private double LESSON_RTOFUT_GOAL;
+private double LIBRARY_USER_RTOFINC_GOAL;
+private int LIBRARY_NUOFUS;
 private String year;
 
 }

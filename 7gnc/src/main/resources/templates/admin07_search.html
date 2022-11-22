@@ -98,14 +98,14 @@
                     <tbody>
                         <tr th:each="tt,iterator : ${list}">
                             <td th:text="${pageDTO.totalCount - (((pageDTO.page-1) * pageDTO.rowPerPage)+iterator.index)}"></td>
-                            <td><span th:text="${tt.a}"></span></td>
-                            <td><span th:text="${tt.b}"></span></td>
-                            <td><span th:text="${tt.c}"></span></td>
-                            <td><span th:text="${tt.d}"></span></td>
+                            <td><span th:text="${tt.AR_DEVICE_SN}"></span></td>
+                            <td><span th:text="${tt.AR_DEVICE_TYPE}"></span></td>
+                            <td><span th:text="${tt.AR_DEVICE_STTS}"></span></td>
+                            <td><span th:text="${tt.AR_DEVICE_MEMO}"></span></td>
                             <td>
-                                <button type="button" class="btn_basic" th:myName="${tt.a}"
+                                <button type="button" class="btn_basic" th:myName="${tt.AR_DEVICE_ID}"
                                 onclick="idSend(this.getAttribute('myName'))">수정</button>
-                                <button type="button" class="btn_basic" th:myName="${tt.a}"
+                                <button type="button" class="btn_basic" th:myName="${tt.AR_DEVICE_ID}"
                                 onclick="deleteSend(this.getAttribute('myName'))">삭제</button>
                             </td>
                         </tr>

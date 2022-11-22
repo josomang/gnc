@@ -34,33 +34,33 @@
                         <tbody>
                             <tr>
                                 <th>시리얼번호</th>
-                                <td><input type="text" th:value="${view[0].a}" class="input_200" id="number"> </td>
+                                <td><input type="text" th:value="${view[0].AR_DEVICE_SN}" class="input_200" id="number"> </td>
                             </tr>
                             <tr>
                                 <th>타입</th>
                                 <td>
-                                    <select id="type_value" name="type_value" th:value="${view[0].b}">
-                                        <option th:selected="${view[0].b}=='유형'">유형</option>
-                                        <option th:selected="${view[0].b}=='서피스'">서피스</option>
-                                        <option th:selected="${view[0].b}=='갤럭시탭'">갤럭시탭</option>
+                                    <select id="type_value" name="type_value" th:value="${view[0].AR_DEVICE_TYPE}">
+                                        <option th:selected="${view[0].AR_DEVICE_TYPE}=='유형'">유형</option>
+                                        <option th:selected="${view[0].AR_DEVICE_TYPE}=='서피스'">서피스</option>
+                                        <option th:selected="${view[0].AR_DEVICE_TYPE}=='갤럭시탭'">갤럭시탭</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <th>상태</th>
                                 <td>
-                                    <select id="condition" name="condition" th:value="${view[0].c}">
-                                        <option th:selected="${view[0].c}=='상태'">상태</option>
-                                        <option th:selected="${view[0].c}=='정상'">정상</option>
-                                        <option th:selected="${view[0].c}=='분실'">분실</option>
-                                        <option th:selected="${view[0].c}=='고장'">고장</option>
-                                        <option th:selected="${view[0].c}=='수리중'">수리중</option>
+                                    <select id="condition" name="condition" th:value="${view[0].AR_DEVICE_STTS}">
+                                        <option th:selected="${view[0].AR_DEVICE_STTS}=='상태'">상태</option>
+                                        <option th:selected="${view[0].AR_DEVICE_STTS}=='정상'">정상</option>
+                                        <option th:selected="${view[0].AR_DEVICE_STTS}=='분실'">분실</option>
+                                        <option th:selected="${view[0].AR_DEVICE_STTS}=='고장'">고장</option>
+                                        <option th:selected="${view[0].AR_DEVICE_STTS}=='수리중'">수리중</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
                                 <th>디바이스설명(메모)</th>
-                                <td><textarea th:text="${view[0].d}"  id="memo"></textarea></td>
+                                <td><textarea th:text="${view[0].AR_DEVICE_MEMO}"  id="memo"></textarea></td>
                             </tr>
                         </tbody>
                     </table>
