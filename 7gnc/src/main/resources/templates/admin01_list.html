@@ -155,9 +155,6 @@
 										<input type="datetime-local" id="BGNG_DT">
 										<span class="material-symbols-outlined"></span>
 
-
-										<input type="datetime-local" id="END_DT">
-										<span class="material-symbols-outlined"></span>
 									</div>
 
 								</td>
@@ -269,18 +266,27 @@
 		var result = confirm("등록하시겠습니까?");
 		if(result){
 		var LESSON_TTL = $("#LESSON_TTL").val();
+		
+		
 		var BGNG_DT = $("#BGNG_DT").val();
-		var END_DT = $("#END_DT").val();
+		
+		
 		var ROOM_ID = $("#ROOM_ID").val();
 		var INSTR_NM = $("#INSTR_NM").val();
 		var LESSON_DESC = $("#LESSON_DESC").val();
 		var LESSON_TM = $("#LESSON_TM").val();
+		let END_DT = new Date(BGNG_DT);
+		
 	
+		END_DT.setMonth(END_DT.getMonth() + 1);
+		END_DT.setMinutes(END_DT.getMinutes() + parseInt(LESSON_TM));
+	    
+	    END_DT = END_DT.getFullYear()+"-"+END_DT.getMonth()+"-"+END_DT.getDate()+"T"+END_DT.getHours()+":"+
+	    END_DT.getMinutes();
+		
 		var t = document.getElementById("type_value")
 		var LESSON_TYPE = t.options[t.selectedIndex].text
-	
 		
-			
 		
 		
 		if ($("#type_value").val() == "direct"){
@@ -313,7 +319,7 @@
 			
 			})
 		modal.style.display = "none";
-		setTimeout("location.reload()", 1000);
+		//setTimeout("location.reload()", 1000);
 		}
 
 		

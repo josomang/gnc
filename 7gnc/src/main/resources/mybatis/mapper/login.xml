@@ -18,11 +18,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<update id="last_lgn_dtDao">
-		update TBL_ADMINS set LAST_LGN_DT= #{LAST_LGN_DT} where UID = #{UID}
+		update TBL_ADMINS set LAST_LGN_DT= #{LAST_LGN_DT} where ADMIN_ID = #{ADMIN_ID}
 	</update>
 
 	<update id="use_dtDao">
-		update TBL_ADMINS set USE_DT= #{USE_DT} where UID = #{UID}
+		update TBL_ADMINS set USE_DT= #{USE_DT} where ADMIN_ID = #{ADMIN_ID}
 	</update>
 
 

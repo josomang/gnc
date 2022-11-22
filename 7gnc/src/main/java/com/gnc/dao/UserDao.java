@@ -20,10 +20,10 @@ public interface UserDao {
     
     
     public void last_lgn_dtDao
-    (@Param("UID")String UID,@Param("LAST_LGN_DT")LocalDateTime last_lgn_dt);
+    (@Param("ADMIN_ID")String ADMIN_ID,@Param("LAST_LGN_DT")LocalDateTime last_lgn_dt);
     
     public void use_dtDao
-    (@Param("UID")String UID,@Param("USE_DT")LocalDateTime USE_DT);
+    (@Param("ADMIN_ID")String ADMIN_ID,@Param("USE_DT")LocalDateTime USE_DT);
     
     public void goalRegisterDao(String a,String b ,String c ,String d,String e,int f,int year);
     
