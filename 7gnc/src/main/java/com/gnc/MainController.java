@@ -32,9 +32,12 @@ import com.gnc.dao.DeviceDao;
 import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
+import com.gnc.service.kpiService;
 import com.gnc.dto.Criteria;
+
 import com.gnc.dto.PageDTO;
 import com.gnc.dto.Paging;
+import com.gnc.dto.goalsDto;
 import com.gnc.dto.lect_listDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -70,6 +73,11 @@ public class MainController {
 	
 	@Autowired
 	DeviceDao deviceDao;
+	
+	@Autowired
+	kpiService kpiService;
+	
+	
 	
 
 	@GetMapping("/")
@@ -1834,6 +1842,28 @@ public class MainController {
 		
 		return "admin07_search";
 	}
+	@PostMapping("/dd")
+	String kp3i(@RequestBody String result){
+		System.out.println("실행");
+		JsonParser parser = new JsonParser();
+		JsonElement element = parser.parse(result);
+		System.out.println(result);
+		
+		return result;
+	}
+	
+	
+	@GetMapping("/ee")
+	public @ResponseBody String kpi(){
+		
+	String obj=kpiService.kpi();
+		 
+		 
+		
+
+		return obj.toString();
+	}
+	
 
 
 }

@@ -32,4 +32,17 @@ public interface UserDao {
     		@Param("TRGT_YR")int year);
     
     public List<goalsDto> goalDao(@Param("year")String year);
+    
+    
+    public double arStatisticsSum(@Param("year")String year);
+    
+    public double centerStatisticsSum(@Param("year")String year);
+    
+    public double getLibraryPeopleDao(@Param("year")String year);
+    
+    public double arUseStatisticsSum(@Param("year")String year);
+    
+    public double centerUseStatisticsSum(@Param("year")String year);
+    
+    
 }
