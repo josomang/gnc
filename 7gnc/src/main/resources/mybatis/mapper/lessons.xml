@@ -74,7 +74,7 @@ select LESSON_TTL,date_format(BGNG_DT,'%Y-%m-%d') as BGNG_DT  from TBL_LESSONS L
 	
 	
 <select id="lect_listDao" resultType="com.gnc.dto.lect_listDto">
-		select LESSON_ID as lecture_id , date_format(BGNG_DT,'%Y%m%d%H%i') as bgng_dt , date_format(END_DT,'%Y%m%d%H%i') as end_dt , ROOM_ID as room_id from TBL_LESSONS where END_DT &lt; NOW();
+		select LESSON_ID as lecture_id , date_format(BGNG_DT,'%Y%m%d%H%i') as bgng_dt , date_format(END_DT,'%Y%m%d%H%i') as end_dt , ROOM_ID as room_id from TBL_LESSONS where END_DT &lt; NOW() and DEL_DT IS NULL 
 	</select>
 <select id="totalCountDao" resultType="integer">
 select sum(NOPE) from TBL_LESSON_CENTER where LESSON_ID = #{LESSON_ID}
@@ -87,11 +87,11 @@ select sum(DGSTFN_SCORE)/count(DGSTFN_SCORE) from TBL_LESSON_CENTER where LESSON
 	</select>	
 	<select id="getCountAll" resultType="int">
 select  count(DGSTFN_SCORE) from TBL_LESSON_CENTER LEFT JOIN TBL_LESSONS ON
- TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where TBL_LESSONS.BGNG_DT LIKE CONCAT('%',#{year},'%')
+ TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where TBL_LESSONS.BGNG_DT LIKE CONCAT('%',#{year},'%') and TBL_LESSONS.DEL_DT IS NULL 
 	</select>	
 	<select id="sumAll" resultType="int">
 select sum(DGSTFN_SCORE) from TBL_LESSON_CENTER LEFT JOIN TBL_LESSONS ON
- TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where TBL_LESSONS.BGNG_DT LIKE CONCAT('%',#{year},'%')
+ TBL_LESSON_CENTER.LESSON_ID = TBL_LESSONS.LESSON_ID where TBL_LESSONS.BGNG_DT LIKE CONCAT('%',#{year},'%') and TBL_LESSONS.DEL_DT IS NULL 
 	</select>		
 	
 

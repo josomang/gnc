@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,9 @@ import com.gnc.dao.DeviceDao;
 import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
+
 import com.gnc.service.kpiService;
+
 import com.gnc.dto.Criteria;
 
 import com.gnc.dto.PageDTO;
@@ -76,6 +79,7 @@ public class MainController {
 
 	@Autowired
 	kpiService kpiService;
+	
 
 	@GetMapping("/")
 	public String root(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
@@ -161,6 +165,8 @@ public class MainController {
 		return "redirect:/login";
 
 	}
+	
+	
 
 	@PostMapping("/survey-logout")
 	public String surveyLogout(HttpServletRequest request1,
@@ -1849,12 +1855,14 @@ public class MainController {
 	}
 
 	@GetMapping("/ee")
-	public @ResponseBody String kpi() {
+	public @ResponseBody String kpi(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,HttpServletRequest request) {
 
 		kpiService.kpi();
-
+		
 		return "redirect:/admin";
 	}
+	
+	
 
 	@GetMapping("/test")
 	public @ResponseBody Object testService() {

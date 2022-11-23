@@ -3,14 +3,19 @@ package com.gnc.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.client.RestTemplate;
 
+import com.gnc.SessionConstants;
 import com.gnc.dao.ArDao;
 import com.gnc.dao.CenterDao;
 import com.gnc.dao.DeviceDao;
@@ -39,6 +44,7 @@ public class kpiService {
 	
 	@Autowired
 	DeviceDao deviceDao;
+	
 	
 @Scheduled(cron = "0 30 22 31 12 ?")
 public String kpi(){
@@ -172,5 +178,6 @@ public String kpi(){
 
 		return obj.toString();
 	}
+
 	
 }
