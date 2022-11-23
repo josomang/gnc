@@ -452,7 +452,7 @@ public class MainController {
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
-
+		
 		LESSON_ID = element.getAsJsonObject().get("lecture_id").getAsInt();
 		total_count = element.getAsJsonObject().get("total_count").getAsInt();
 		// center_count =
@@ -461,6 +461,8 @@ public class MainController {
 		JsonObject jsonObj = (JsonObject) parser.parse(result);
 
 		JsonArray memberArray = (JsonArray) jsonObj.get("center_count");
+		
+		System.out.println(result);
 
 		for (int i = 0; i < memberArray.size(); i++) {
 			JsonObject object = (JsonObject) memberArray.get(i);
@@ -470,9 +472,9 @@ public class MainController {
 			centerDao.centerLessonsInsert(LESSON_ID, "050400"+a, b);
 		}
 		if (LESSON_ID != 0) {
-			return "성공";
+			return result;
 		} else {
-			return "실패";
+			return result;
 		}
 
 	}
