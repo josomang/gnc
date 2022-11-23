@@ -1849,19 +1849,17 @@ public class MainController {
 		JsonElement element = parser.parse(result);
 		System.out.println(result);
 		
-		return result;
+		return "성공";
 	}
 	
 	
 	@GetMapping("/ee")
 	public @ResponseBody String kpi(){
 		
-	String obj=kpiService.kpi();
+	kpiService.kpi();
 		 
-		 
-		
 
-		return obj.toString();
+		return "상공2";
 	}
 	
 
