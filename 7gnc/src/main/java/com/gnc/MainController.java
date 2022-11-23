@@ -70,15 +70,12 @@ public class MainController {
 
 	@Autowired
 	LibraryDao libraryDao;
-	
+
 	@Autowired
 	DeviceDao deviceDao;
-	
+
 	@Autowired
 	kpiService kpiService;
-	
-	
-	
 
 	@GetMapping("/")
 	public String root(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
@@ -108,7 +105,7 @@ public class MainController {
 		PSWD = element.getAsJsonObject().get("PSWD").getAsString();
 
 		String check = userDao.getUserAccount(UID, PSWD);
-		
+
 		if (check == null) {
 			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
 			return "login";
@@ -135,7 +132,7 @@ public class MainController {
 
 		String check = userDao.suerveyGetUserAccount(UID, PSWD);
 		masterCenterId = userDao.suerveyCenterId(UID, PSWD);
-		
+
 		if (check == null) {
 			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
 			return "surveyLogin";
@@ -195,14 +192,12 @@ public class MainController {
 		pageMaker.setTotalCount(lessonsDao.getCount());
 
 		model.addAttribute("pageMaker", pageMaker);
-		
-		if(lessonsDao.getCount()==0) {
+
+		if (lessonsDao.getCount() == 0) {
 			model.addAttribute("check", 0);
-		}
-		else {
+		} else {
 			model.addAttribute("check", 1);
 		}
-		
 
 		return "admin01_list";
 	}
@@ -226,36 +221,33 @@ public class MainController {
 
 	@GetMapping("/survey_form")
 	public String survey_form(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER2, required = false) String check,
-			Model model,int LESSON_CENTER_ID) {
+			Model model, int LESSON_CENTER_ID) {
 		if (check == null) {
 			return "redirect:/survey-login";
 		}
 
-		masterLessonCenterId=LESSON_CENTER_ID;
+		masterLessonCenterId = LESSON_CENTER_ID;
 		model.addAttribute("ttl", lessonsDao.TtlDao(LESSON_CENTER_ID));
-		
+
 		return "survey_form";
 	}
-	
+
 	@PostMapping("/survey-post")
 	public String surveyPost(@RequestBody String result) {
-	
+
 		int sum;
 		int ee;
-		
+
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
-		
+
 		sum = element.getAsJsonObject().get("sum").getAsInt();
 		ee = element.getAsJsonObject().get("answer06").getAsInt();
-	
-		lessonsDao.surveyUpdateDao(sum,masterLessonCenterId);
-		
-		
+
+		lessonsDao.surveyUpdateDao(sum, masterLessonCenterId);
+
 		return "redirect:/survey_list";
 	}
-	
-	
 
 	@GetMapping("/search")
 	public String search(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
@@ -264,11 +256,11 @@ public class MainController {
 		if (check == null) {
 			return "redirect:/login";
 		}
-		
+
 		int pageStart = cri.getPageStart();
-		int perPageNum=cri.getPerPageNum();
-		
-		model.addAttribute("list", lessonsDao.searchDao(keyword, cri,pageStart,perPageNum));
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", lessonsDao.searchDao(keyword, cri, pageStart, perPageNum));
 
 		Paging pageMaker = new Paging();
 		pageMaker.setCri(cri);
@@ -277,13 +269,11 @@ public class MainController {
 
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("keyword", keyword);
-		if(lessonsDao.getSearchCount(keyword)==0) {
+		if (lessonsDao.getSearchCount(keyword) == 0) {
 			model.addAttribute("check", 0);
-		}
-		else {
+		} else {
 			model.addAttribute("check", 1);
 		}
-		
 
 		return "admin01_search";
 	}
@@ -430,14 +420,13 @@ public class MainController {
 		} else {
 			model.addAttribute("total_count", lessonsDao.totalCountDao(LESSON_ID));
 			model.addAttribute("center_count", lessonsDao.centerCountDao(LESSON_ID));
-			
-			if(lessonsDao.surveyDao(LESSON_ID)==null) {
+
+			if (lessonsDao.surveyDao(LESSON_ID) == null) {
 				model.addAttribute("DGSTFN_SCORE", "아직 설문조사를 한 기관이 없습니다.");
+			} else {
+				model.addAttribute("DGSTFN_SCORE", lessonsDao.surveyDao(LESSON_ID) + "점");
 			}
-			else {
-				model.addAttribute("DGSTFN_SCORE", lessonsDao.surveyDao(LESSON_ID)+"점");	
-			}
-			
+
 		}
 
 		model.addAttribute("list", lessonsDao.centerLessonsListDao(LESSON_ID));
@@ -471,7 +460,7 @@ public class MainController {
 			JsonObject object = (JsonObject) memberArray.get(i);
 			String a = object.get("center_id").getAsString();
 			int b = object.get("count").getAsInt();
-			
+
 			centerDao.centerLessonsInsert(LESSON_ID, a, b);
 		}
 		if (LESSON_ID != 0) {
@@ -504,7 +493,6 @@ public class MainController {
 	@GetMapping("/ar-list")
 	public @ResponseBody String arList() {
 
-	
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
 		String tt;
@@ -534,7 +522,12 @@ public class MainController {
 	}
 
 	@RequestMapping("/graph")
-	public String graph(Model model) {
+	public String graph(Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
@@ -548,7 +541,7 @@ public class MainController {
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
-		
+
 		int start;
 		int end;
 		String month_start = "";
@@ -802,7 +795,7 @@ public class MainController {
 		if (x == 0) {
 			if (start == end) {
 				list.add(start);
-				list2.add(arDao.arUseStatisticsSum(56*21*12,Integer.toString(start)));
+				list2.add(arDao.arUseStatisticsSum(56 * 21 * 12, Integer.toString(start)));
 				dd.put("month", list);
 				dd.put("point", list2);
 			}
@@ -811,7 +804,7 @@ public class MainController {
 			else {
 				for (int i = start; i < end + 1; i++) {
 					list.add(i);
-					list2.add(arDao.arUseStatisticsSum(56*21*12,Integer.toString(i)));
+					list2.add(arDao.arUseStatisticsSum(56 * 21 * 12, Integer.toString(i)));
 				}
 				dd.put("month", list);
 				dd.put("point", list2);
@@ -831,12 +824,12 @@ public class MainController {
 						cal1.add(Calendar.MONTH, 0);
 						String aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arUseStatisticsSum(56*21,aa));
+						list2.add(arDao.arUseStatisticsSum(56 * 21, aa));
 					} else {
 						cal1.add(Calendar.MONTH, 1);
 						String aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arUseStatisticsSum(56*21,aa));
+						list2.add(arDao.arUseStatisticsSum(56 * 21, aa));
 					}
 
 					dd.put("month", list);
@@ -851,7 +844,7 @@ public class MainController {
 				cal1.add(Calendar.MONTH, 0);
 				String aa = transFormat.format(cal1.getTime());
 
-				list2.add(arDao.arUseStatisticsSum(56*21,aa));
+				list2.add(arDao.arUseStatisticsSum(56 * 21, aa));
 
 				for (int i = 0; i < base + 1; i++) {
 					if (a > 12) {
@@ -860,14 +853,14 @@ public class MainController {
 						cal1.add(Calendar.MONTH, 1);
 						aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arUseStatisticsSum(56*21,aa));
+						list2.add(arDao.arUseStatisticsSum(56 * 21, aa));
 						a++;
 					} else {
 						list.add(a);
 						cal1.add(Calendar.MONTH, 1);
 						aa = transFormat.format(cal1.getTime());
 
-						list2.add(arDao.arUseStatisticsSum(56*21,aa));
+						list2.add(arDao.arUseStatisticsSum(56 * 21, aa));
 						a++;
 					}
 
@@ -1212,15 +1205,14 @@ public class MainController {
 		USE_DT = element.getAsJsonObject().get("datetime").getAsString();
 		AR_CONTENT_TYPE = element.getAsJsonObject().get("content_type").getAsString();
 		AR_USER_CATEGORY = element.getAsJsonObject().get("user_category").getAsString();
-		
-		if(element.getAsJsonObject().get("dgstfn_score").isJsonNull()) {
-			
-			DGSTFN_SCORE= null;	
+
+		if (element.getAsJsonObject().get("dgstfn_score").isJsonNull()) {
+
+			DGSTFN_SCORE = null;
+		} else {
+			DGSTFN_SCORE = element.getAsJsonObject().get("dgstfn_score").getAsInt();
+
 		}
-		else {
-		DGSTFN_SCORE = element.getAsJsonObject().get("dgstfn_score").getAsInt();
-		
-		}		
 
 		arDao.arRegisterDao(USE_DT, AR_CONTENT_TYPE, AR_USER_CATEGORY, DGSTFN_SCORE, now);
 
@@ -1229,31 +1221,27 @@ public class MainController {
 
 	@GetMapping("/center")
 	public String center(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
-			@ModelAttribute("cri") Criteria cri, Model model,PageDTO pageDTO) {
+			@ModelAttribute("cri") Criteria cri, Model model, PageDTO pageDTO) {
 		if (check == null) {
 			return "redirect:/login";
 		}
-		
+
 		pageDTO.setTotalCount(centerDao.getCount());
 		int start = cri.getPageStart();
-		int perPageNum=cri.getPerPageNum();
-		model.addAttribute("center", centerDao.centerListDao(cri,pageDTO,start,perPageNum));
-			
+		int perPageNum = cri.getPerPageNum();
+		model.addAttribute("center", centerDao.centerListDao(cri, pageDTO, start, perPageNum));
+
 		Paging pageMaker = new Paging();
 
 		pageMaker.setCri(cri);
 
 		pageMaker.setTotalCount(centerDao.getCount());
 
-		
-	
-		
 		model.addAttribute("pageMaker", pageMaker);
-		
-		if(centerDao.getCount()==0) {
+
+		if (centerDao.getCount() == 0) {
 			model.addAttribute("check", 0);
-		}
-		else {
+		} else {
 			model.addAttribute("check", 1);
 		}
 
@@ -1285,7 +1273,12 @@ public class MainController {
 	}
 
 	@GetMapping("/center-update-modal")
-	public String centerupdatemodal(String CENTER_ID, Model model) {
+	public String centerupdatemodal(String CENTER_ID, Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
 
 		model.addAttribute("view", centerDao.centerDao(CENTER_ID));
 
@@ -1317,18 +1310,17 @@ public class MainController {
 
 	@GetMapping("/center-search")
 	public String centersearch(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
-			String CENTER_ID, Model model, @ModelAttribute("cri") Criteria cri, String keyword,PageDTO pageDTO) {
+			String CENTER_ID, Model model, @ModelAttribute("cri") Criteria cri, String keyword, PageDTO pageDTO) {
 
 		if (check == null) {
 			return "redirect:/login";
-			
+
 		}
 		pageDTO.setTotalCount(centerDao.getSearchCount(keyword));
-		
+
 		int start = cri.getPageStart();
-		int perPageNum=cri.getPerPageNum();
-		model.addAttribute("center", centerDao.searchDao(keyword,cri,pageDTO,start,perPageNum));
-		
+		int perPageNum = cri.getPerPageNum();
+		model.addAttribute("center", centerDao.searchDao(keyword, cri, pageDTO, start, perPageNum));
 
 		Paging pageMaker = new Paging();
 		pageMaker.setCri(cri);
@@ -1336,13 +1328,12 @@ public class MainController {
 		pageMaker.setTotalCount(centerDao.getSearchCount(keyword));
 
 		model.addAttribute("pageMaker", pageMaker);
-		
+
 		model.addAttribute("keyword", keyword);
-		
-		if(centerDao.getSearchCount(keyword)==0) {
+
+		if (centerDao.getSearchCount(keyword) == 0) {
 			model.addAttribute("check", 0);
-		}
-		else {
+		} else {
 			model.addAttribute("check", 1);
 		}
 
@@ -1352,14 +1343,19 @@ public class MainController {
 	@PostMapping("/center-delete")
 	public String centerDelete(@RequestBody String CENTER_ID) {
 		LocalDateTime now = LocalDateTime.now();
-		centerDao.deleteDao(now,CENTER_ID);
+		centerDao.deleteDao(now, CENTER_ID);
 
 		return "redirect:/center";
 
 	}
 
 	@GetMapping("/satisfaction")
-	public String satisfaction(Model model) {
+	public String satisfaction(Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
 		LocalDate now = LocalDate.now();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
@@ -1423,7 +1419,12 @@ public class MainController {
 	}
 
 	@GetMapping("/dgs")
-	public String dgs(String year, Model model) {
+	public String dgs(String year, Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
 
 		model.addAttribute("year", year);
 		if (arDao.getCount01(year) != 0) {
@@ -1493,7 +1494,13 @@ public class MainController {
 	}
 
 	@GetMapping("/statistics")
-	public String statistics(Model model) {
+	public String statistics(Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
+
 		LocalDate now = LocalDate.now();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
@@ -1509,7 +1516,7 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-		
+
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
@@ -1528,7 +1535,7 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-		
+
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
@@ -1547,14 +1554,14 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-		
+
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
 		list.add(Integer.parseInt(year));
-		list2.add(arDao.arUseStatisticsSum(56*21*12,year));
-		
+		list2.add(arDao.arUseStatisticsSum(56 * 21 * 12, year));
+
 		dd.put("month", list);
 		dd.put("point", list2);
 
@@ -1567,16 +1574,15 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-		
+
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
-		
-		
+
 		list.add(Integer.parseInt(year));
 
 		list2.add(centerDao.centerUseStatisticsSum(year));
-		
+
 		dd.put("month", list);
 		dd.put("point", list2);
 
@@ -1589,14 +1595,14 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-		
+
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
 		list.add(Integer.parseInt(year));
 		list2.add(libraryDao.getLibraryPeopleDao(year));
-		model.addAttribute("year",year);
+		model.addAttribute("year", year);
 		dd.put("month", list);
 		dd.put("point", list2);
 
@@ -1604,7 +1610,12 @@ public class MainController {
 	}
 
 	@GetMapping("/goals")
-	public String goals(Model model) {
+	public String goals(Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
 		LocalDate now = LocalDate.now();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
@@ -1616,15 +1627,19 @@ public class MainController {
 		} else {
 			model.addAttribute("view", userDao.goalDao(year));
 		}
-		
-		
 
 		return "admin06";
 
 	}
 
 	@GetMapping("/goals-lookup")
-	public String goals2(Model model, String year) {
+	public String goals2(Model model, String year,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
+
 		model.addAttribute("year", year);
 
 		if (userDao.goalDao(year).isEmpty()) {
@@ -1636,25 +1651,21 @@ public class MainController {
 		return "admin06";
 
 	}
-	
+
 	@RequestMapping("/goals-info")
 	public @ResponseBody int goalsInfo(@RequestBody String year) {
-		int dd=1;
+		int dd = 1;
 		if (userDao.goalDao(year).isEmpty()) {
-			dd=1;
-			
+			dd = 1;
+
+		} else {
+
+			dd = 2;
 		}
-		else {
-			
-			dd=2;
-		}
-		
 
 		return dd;
 
 	}
-	
-	
 
 	@RequestMapping("/goal-register")
 	public String goal_register(@RequestBody String result) {
@@ -1676,13 +1687,12 @@ public class MainController {
 		e = element.getAsJsonObject().get("e").getAsString();
 		f = element.getAsJsonObject().get("f").getAsInt();
 		year = element.getAsJsonObject().get("year").getAsInt();
-		
-		
+
 		userDao.goalRegisterDao(a, b, c, d, e, f, year);
 
 		return "redirect:/goals";
 	}
-	
+
 	@RequestMapping("/goal-update")
 	public String goal_update(@RequestBody String result) {
 
@@ -1707,51 +1717,47 @@ public class MainController {
 
 		return "redirect:/goals";
 	}
-	
-	
+
 	@GetMapping("/device")
 	public String device(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
-			PageDTO pageDTO,@ModelAttribute("cri") Criteria cri, Model model) {
-		
+			PageDTO pageDTO, @ModelAttribute("cri") Criteria cri, Model model) {
+
 		if (check == null) {
 			return "redirect:/login";
 		}
 		pageDTO.setTotalCount(deviceDao.getCount());
-		
+
 		int start = cri.getPageStart();
-		int perPageNum=cri.getPerPageNum();
-		model.addAttribute("device", deviceDao.deviceListDao(cri,pageDTO,start,perPageNum));
-			
+		int perPageNum = cri.getPerPageNum();
+		model.addAttribute("device", deviceDao.deviceListDao(cri, pageDTO, start, perPageNum));
+
 		Paging pageMaker = new Paging();
 
 		pageMaker.setCri(cri);
 
 		pageMaker.setTotalCount(deviceDao.getCount());
 
-		
 		model.addAttribute("pageMaker", pageMaker);
-		
-		if(deviceDao.getCount()==0) {
+
+		if (deviceDao.getCount() == 0) {
 			model.addAttribute("all", 0);
-		}
-		else {
+		} else {
 			model.addAttribute("all", 1);
 		}
 
 		return "admin07";
 
 	}
-	
+
 	@PostMapping("/device-register")
 	public String deviceRegister(@RequestBody String result) {
-		
+
 		LocalDateTime now = LocalDateTime.now();
 
 		String number = "";
 		String type = "";
 		String memo = "";
 		String condition = "";
-		
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
@@ -1759,20 +1765,23 @@ public class MainController {
 		type = element.getAsJsonObject().get("type").getAsString();
 		condition = element.getAsJsonObject().get("condition").getAsString();
 		memo = element.getAsJsonObject().get("memo").getAsString();
-	
 
 		deviceDao.registerDao(number, type, condition, memo);
 		return "redirect:/device";
 
 	}
-	
-	@GetMapping("/device-update-modal")
-	public String deviceupdatemodal(int number, Model model) {
 
-		
+	@GetMapping("/device-update-modal")
+	public String deviceupdatemodal(int number, Model model,
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
+
+		if (check == null) {
+			return "redirect:/login";
+		}
+
 		model.addAttribute("view", deviceDao.deviceDao(number));
 		masterArDeviceId = number;
-		
+
 		return "update_device";
 	}
 
@@ -1784,7 +1793,6 @@ public class MainController {
 		String b = "";
 		String c = "";
 		String d = "";
-		
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
@@ -1792,9 +1800,8 @@ public class MainController {
 		b = element.getAsJsonObject().get("type").getAsString();
 		c = element.getAsJsonObject().get("condition").getAsString();
 		d = element.getAsJsonObject().get("memo").getAsString();
-		
 
-		deviceDao.updateDao(a, b, c, d,masterArDeviceId);
+		deviceDao.updateDao(a, b, c, d, masterArDeviceId);
 
 		return "redirect:/device";
 	}
@@ -1803,25 +1810,25 @@ public class MainController {
 	public String deviceDelete(@RequestBody int number) {
 		LocalDateTime now = LocalDateTime.now();
 
-		
-		deviceDao.deleteDao(now,number);
+		deviceDao.deleteDao(now, number);
 
 		return "redirect:/device";
 
 	}
+
 	@GetMapping("/device-search")
 	public String deviceSearch(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
-			PageDTO pageDTO, String keyword,Model model,@ModelAttribute("cri") Criteria cri) {
+			PageDTO pageDTO, String keyword, Model model, @ModelAttribute("cri") Criteria cri) {
 
 		if (check == null) {
 			return "redirect:/login";
 		}
-		
+
 		pageDTO.setTotalCount(deviceDao.getSearchCount(keyword));
-	
+
 		int start = cri.getPageStart();
-		int perPagenum=cri.getPerPageNum();
-		model.addAttribute("list", deviceDao.searchDao(keyword, pageDTO,start,perPagenum,cri));
+		int perPagenum = cri.getPerPageNum();
+		model.addAttribute("list", deviceDao.searchDao(keyword, pageDTO, start, perPagenum, cri));
 
 		Paging pageMaker = new Paging();
 
@@ -1829,39 +1836,33 @@ public class MainController {
 
 		pageMaker.setTotalCount(deviceDao.getSearchCount(keyword));
 
-	
 		model.addAttribute("pageMaker", pageMaker);
 		model.addAttribute("keyword", keyword);
-		
-		if(deviceDao.getSearchCount(keyword)==0) {
+
+		if (deviceDao.getSearchCount(keyword) == 0) {
 			model.addAttribute("all", 0);
-		}
-		else {
+		} else {
 			model.addAttribute("all", 1);
 		}
-		
+
 		return "admin07_search";
 	}
-	@PostMapping("/dd")
-	String kp3i(@RequestBody String result){
-		System.out.println("실행");
-		JsonParser parser = new JsonParser();
-		JsonElement element = parser.parse(result);
-		System.out.println(result);
-		
-		return "redirect:/admin";
-	}
-	
-	
+
 	@GetMapping("/ee")
-	public @ResponseBody String kpi(){
-		
-	kpiService.kpi();
-		 
+	public @ResponseBody String kpi() {
+
+		kpiService.kpi();
 
 		return "redirect:/admin";
 	}
-	
 
+	@GetMapping("/test")
+	public @ResponseBody Object testService() {
+		Object a = null;
+		JsonObject obj = new JsonObject();
+		Object dw = null;
+		obj.add("class_utztn_rate", (JsonElement) dw);
+		return obj.toString();
+	}
 
 }

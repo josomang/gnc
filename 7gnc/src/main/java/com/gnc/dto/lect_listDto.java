@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class lect_listDto {
-	private int LESSON_ID;
-	private String ROOM_ID;
-	private String BGNG_DT;
-	private String END_DT;
+	private int lecture_id;
+	private String bgng_dt;
+	private String end_dt;
+	private String room_id;
 }

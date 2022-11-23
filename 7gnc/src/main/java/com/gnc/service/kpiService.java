@@ -17,6 +17,7 @@ import com.gnc.dao.DeviceDao;
 import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @Service
@@ -39,7 +40,7 @@ public class kpiService {
 	@Autowired
 	DeviceDao deviceDao;
 	
-//@Scheduled(cron = "0 30 22 31 12 ?")
+@Scheduled(cron = "0 30 22 31 12 ?")
 public String kpi(){
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -50,7 +51,7 @@ public String kpi(){
 		String in= Integer.toString(increase);
 		Integer a ,b,c,d,e;
 		if(arDao.arStatisticsSum(year)!=null&&arDao.arStatisticsSum(in)!=null) {
-			a=arDao.arStatisticsSum(year)-arDao.arStatisticsSum(in);
+			a= arDao.arStatisticsSum(year)-arDao.arStatisticsSum(in);
 		}
 		else {
 			a=null;
@@ -164,7 +165,7 @@ public String kpi(){
 			 * map2); kpi.put("library_utztn_count", map3); kpi.put("ar_utztn_rate", map4);
 			 * kpi.put("class_utztn_rate", map5);
 			 */
-		 ResponseEntity<String> response = restTemplate.exchange("http://59.26.190.76:8080/dd", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
+		 ResponseEntity<String> response = restTemplate.exchange("http://10.1.3.32:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
 		
 		 
 		
