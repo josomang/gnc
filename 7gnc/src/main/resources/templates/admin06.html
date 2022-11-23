@@ -86,14 +86,14 @@
                     <tbody>
                         <tr>
                             <th>AR공간 이용 만족도 목표</th>
-                <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="a">%</td>
-                <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">%</td> 
+                <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="a">점</td>
+                <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">점</td> 
                         </tr>
                         <tr>
                             <th>돌봄센터 아동 화상교육 이용만족도 목표</th>
                             
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text"  class="input_200" id="b">%</td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">%</td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="text"  class="input_200" id="b">점</td>
+                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">점</td>
                         </tr>
                         <tr>
                             <th>AR공간 서비스 이용률 목표</th>
