@@ -442,7 +442,7 @@ public class MainController {
 
 	@RequestMapping("/lect_result")
 	public @ResponseBody String admin01_view(Model model, @RequestBody String result) {
-		System.out.println(result);
+	
 		LocalDate now = LocalDate.now();
 		int LESSON_ID;
 		String CENTER_ID = "";
@@ -462,14 +462,13 @@ public class MainController {
 
 		JsonArray memberArray = (JsonArray) jsonObj.get("center_count");
 		
-		System.out.println(result);
 
 		for (int i = 0; i < memberArray.size(); i++) {
 			JsonObject object = (JsonObject) memberArray.get(i);
 			String a = object.get("center_id").getAsString();
 			int b = object.get("count").getAsInt();
 
-			//centerDao.centerLessonsInsert(LESSON_ID, "050400"+a, b);
+			centerDao.centerLessonsInsert(LESSON_ID, "050400"+a, b);
 		}
 		if (LESSON_ID != 0) {
 			return result;
