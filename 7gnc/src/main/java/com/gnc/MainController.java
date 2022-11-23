@@ -1849,7 +1849,7 @@ public class MainController {
 		JsonElement element = parser.parse(result);
 		System.out.println(result);
 		
-		return "성공";
+		return "redirect:/admin";
 	}
 	
 	
@@ -1859,7 +1859,7 @@ public class MainController {
 	kpiService.kpi();
 		 
 
-		return "상공2";
+		return "redirect:/admin";
 	}
 	
 
