@@ -461,7 +461,7 @@ public class MainController {
 			String a = object.get("center_id").getAsString();
 			int b = object.get("count").getAsInt();
 
-			centerDao.centerLessonsInsert(LESSON_ID, a, b);
+			centerDao.centerLessonsInsert(LESSON_ID, "050400"+a, b);
 		}
 		if (LESSON_ID != 0) {
 			return "성공";
