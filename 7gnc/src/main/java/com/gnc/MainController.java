@@ -442,7 +442,7 @@ public class MainController {
 
 	@RequestMapping("/lect_result")
 	public @ResponseBody String admin01_view(Model model, @RequestBody String result) {
-
+		System.out.println(result);
 		LocalDate now = LocalDate.now();
 		int LESSON_ID;
 		String CENTER_ID = "";
