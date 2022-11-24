@@ -41,6 +41,6 @@ public interface CenterDao {
 	
 	public Integer centerUseStatisticsSum(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 
-	
+	public Object test();
 
 }

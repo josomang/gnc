@@ -1207,7 +1207,11 @@ public class MainController {
 	}
 
 	@PostMapping("/ar_user_log")
-	public @ResponseBody String mistake(@RequestBody String result) {
+	public @ResponseBody Map<String, String> mistake(@RequestBody String result) {
+		Map<String, String> map = new HashMap<>();
+		map.put("rt_code",map.getOrDefault("rt_code","0"));
+		map.put("message",map.getOrDefault("message","success"));
+		
 		LocalDate now = LocalDate.now();
 		String USE_DT = "";
 		String AR_CONTENT_TYPE = "";
@@ -1230,7 +1234,7 @@ public class MainController {
 
 		arDao.arRegisterDao(USE_DT, AR_CONTENT_TYPE, AR_USER_CATEGORY, DGSTFN_SCORE, now);
 
-		return "성공";
+		return map;
 	}
 
 	@GetMapping("/center")
@@ -1863,22 +1867,27 @@ public class MainController {
 	}
 
 	@GetMapping("/ee")
-	public @ResponseBody String kpi(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,HttpServletRequest request) {
-
+	public @ResponseBody Map<String, String>  kpi() {
+		Map<String, String> map = new HashMap<>();
+		map.put("rt_code",map.getOrDefault("rt_code","0"));
+		map.put("message",map.getOrDefault("message","success"));
 		kpiService.kpi();
 		
-		return "redirect:/admin";
+		return map;
 	}
 	
 	
 
 	@GetMapping("/test")
-	public @ResponseBody Object testService() {
+	public @ResponseBody String testService() {
 		Object a = null;
 		JsonObject obj = new JsonObject();
 		Object dw = null;
-		obj.add("class_utztn_rate", (JsonElement) dw);
-		return obj.toString();
+		JsonObject obj1 = new JsonObject();
+obj1=(JsonObject) centerDao.test();
+		obj.add("class_utztn_rate", obj1);
+		
+		return "안녕";
 	}
 
 }
