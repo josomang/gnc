@@ -86,29 +86,29 @@
                     <tbody>
                         <tr>
                             <th>AR공간 이용 만족도 목표</th>
-                <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="a">점</td>
-                <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">점</td> 
+                <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="a">점</td>
+                <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">점</td> 
                         </tr>
                         <tr>
                             <th>돌봄센터 아동 화상교육 이용만족도 목표</th>
                             
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text"  class="input_200" id="b">점</td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">점</td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="number"  class="input_200" id="b">점</td>
+                        <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">점</td>
                         </tr>
                         <tr>
                             <th>AR공간 서비스 이용률 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="c">%</td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].AR_RTOFUT_GOAL}" class="input_200" id="c">%</td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="c">%</td>
+                        <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].AR_RTOFUT_GOAL}" class="input_200" id="c">%</td>
                         </tr>
                         <tr>
                             <th>돌봄센터 아동 화상교육 참여율 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="d">%</td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LESSON_RTOFUT_GOAL}" class="input_200" id="d">%</td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="d">%</td>
+                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LESSON_RTOFUT_GOAL}" class="input_200" id="d">%</td>
                         </tr>
                         <tr>
                             <th>도서관 이용 증가율 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="text" class="input_200" id="e">%</td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="text" th:value="${view[0].LIBRARY_USER_RTOFINC_GOAL}" class="input_200" id="e">%</td>
+                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="e">%</td>
+                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LIBRARY_USER_RTOFINC_GOAL}" class="input_200" id="e">%</td>
                         </tr>
                     </tbody>
                 </table>

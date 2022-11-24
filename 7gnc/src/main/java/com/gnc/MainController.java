@@ -10,15 +10,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,15 +34,11 @@ import com.gnc.dao.DeviceDao;
 import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
-
-import com.gnc.service.kpiService;
-
 import com.gnc.dto.Criteria;
-
 import com.gnc.dto.PageDTO;
 import com.gnc.dto.Paging;
-import com.gnc.dto.goalsDto;
 import com.gnc.dto.lect_listDto;
+import com.gnc.service.kpiService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -79,6 +76,14 @@ public class MainController {
 
 	@Autowired
 	kpiService kpiService;
+	
+	@ExceptionHandler(value = Exception.class)
+	public Map<String,String> handleException(Exception e){
+		Map<String,String> res = new HashMap<>();
+		res.put("errorMsg", e.getMessage());
+		res.put("status", "error");
+		return res;
+	}
 	
 
 	@GetMapping("/")
@@ -441,8 +446,10 @@ public class MainController {
 	}
 
 	@RequestMapping("/lect_result")
-	public @ResponseBody String admin01_view(Model model, @RequestBody String result) {
-	
+	public @ResponseBody Map<String, String> admin01_view(Model model, @RequestBody String result,Exception e) {
+		Map<String, String> map = new HashMap<>();
+		map.put("rt_code",map.getOrDefault("rt_code","0"));
+		map.put("message",map.getOrDefault("message","success"));
 		LocalDate now = LocalDate.now();
 		int LESSON_ID;
 		String CENTER_ID = "";
@@ -471,9 +478,9 @@ public class MainController {
 			centerDao.centerLessonsInsert(LESSON_ID, "050400"+a, b);
 		}
 		if (LESSON_ID != 0) {
-			return result;
+			return map;
 		} else {
-			return result;
+			return handleException(e);
 		}
 
 	}
