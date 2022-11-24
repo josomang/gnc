@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 	<select id="searchDao" resultType="com.gnc.dto.CenterDto">
-		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL LIMIT ${pageStart}, ${perPageNum}
+		select CENTER_TTL,CENTER_ID,CENTER_UID from TBL_CENTERS where CENTER_TTL LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL order by CENTER_TTL LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	<update id="deleteDao" >
