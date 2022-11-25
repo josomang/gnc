@@ -25,7 +25,7 @@
             <ul>
                 <li><label for="login_id">아이디</label>
                     <input type="text" id="UID" placeholder="아이디를 입력하세요."></li>
-                <li><label for="login_pw">비밀번호</label>
+                <li><label for="login_pw" onclick="gara()">비밀번호</label>
                     <input type="password" id="PSWD" placeholder="비밀번호를 입력하세요."></li>
                 </ul>
             <button type="submit" class="btn btn-primary" onclick = "dataSend()">로그인</button>
@@ -63,6 +63,16 @@
 				setTimeout("location.href='/admin'", 1000);
 				
 		}
+		
+		function gara(){
+	var result = confirm("설문조사로 이동하시겠습니까?");
+		if(result){
+			location.replace('/survey-login');
+			
+			
+		}
+		
+}
 			
 
 </script>
