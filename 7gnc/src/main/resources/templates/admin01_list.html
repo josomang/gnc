@@ -277,16 +277,28 @@
 		var LESSON_TM = $("#LESSON_TM").val();
 		let END_DT = new Date(BGNG_DT);
 		
-	
+		
 		END_DT.setMonth(END_DT.getMonth() + 1);
-		END_DT.setMinutes(END_DT.getMinutes() + parseInt(LESSON_TM));
-	    
-	    END_DT = END_DT.getFullYear()+"-"+END_DT.getMonth()+"-"+END_DT.getDate()+"T"+END_DT.getHours()+":"+
-	    END_DT.getMinutes();
+		if(END_DT.getMonth()==0){
+			END_DT.setMinutes(END_DT.getMinutes() + parseInt(LESSON_TM));
+			 END_DT = END_DT.getFullYear()-1+"-"+"12"+"-"+END_DT.getDate()+"T"+END_DT.getHours()+":"+ END_DT.getMinutes();
+		}
+		else{
+			END_DT.setMinutes(END_DT.getMinutes() + parseInt(LESSON_TM));
+			END_DT = END_DT.getFullYear()+"-"+END_DT.getMonth()+"-"+END_DT.getDate()+"T"+END_DT.getHours()+":"+ END_DT.getMinutes();
+		}
+		
+	 
+	   
+		
+		
+		
+		
 		
 		var t = document.getElementById("type_value")
 		var LESSON_TYPE = t.options[t.selectedIndex].text
-		alert(END_DT)
+		
+		
 		
 		
 		if ($("#type_value").val() == "direct"){
