@@ -98,6 +98,7 @@
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color:#333;
 }
 
 .fc-icon-chevron-left:before {
