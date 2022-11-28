@@ -68,13 +68,14 @@
                 <div class="tablehead">
                     <div class="searchbox">
                         <select id="select_value" name="select_value" th:value="${year}">
-                            <option th:selected="${year}==''"></option>
+                            <option th:selected="${year}==''">년</option>
                             <option th:selected="${year}=='2022'">2022</option>
                             <option th:selected="${year}=='2023'">2023</option>
                             <option th:selected="${year}=='2024'">2024</option>
                             <option th:selected="${year}=='2025'">2025</option>
                         </select>
                 <select id="month" name="month">
+                             <option value="">월</option>
                             <option value="">전체</option>
                             <option value="-01">1월</option>
                             <option value="-02">2월</option>
