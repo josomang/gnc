@@ -8,10 +8,14 @@ plugins {
 group = 'com.gnc'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+apply plugin: 'war'
 
 repositories {
 	mavenCentral()
 }
+
+bootWar.enabled = false
+war.enabled = true
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
