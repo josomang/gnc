@@ -536,12 +536,19 @@ public class MainController {
 	}
 
 	@RequestMapping("/graph")
-	public String graph(Model model,
+	public String graph(Model model,String x,String start,String end,String typeDirect,String typeDirect1,
 			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
 
 		if (check == null) {
 			return "redirect:/login";
 		}
+		
+		model.addAttribute("x", x);
+		model.addAttribute("start", start);
+		model.addAttribute("end", end);
+		model.addAttribute("typeDirect", typeDirect);
+		model.addAttribute("typeDirect1", typeDirect1);
+		
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
