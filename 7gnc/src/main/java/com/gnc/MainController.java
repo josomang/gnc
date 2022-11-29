@@ -133,7 +133,7 @@ public class MainController {
 		LocalDateTime now = LocalDateTime.now();
 		String UID = "";
 		String PSWD = "";
-
+		
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
 		UID = element.getAsJsonObject().get("UID").getAsString();
@@ -454,7 +454,7 @@ public class MainController {
 		int LESSON_ID;
 		String CENTER_ID = "";
 		int total_count;
-		// int NOPE;
+		int NOPE;
 		JsonArray center_count;
 
 		JsonParser parser = new JsonParser();
@@ -1437,14 +1437,16 @@ public class MainController {
 	}
 
 	@GetMapping("/dgs")
-	public String dgs(String year, Model model,
+	public String dgs(String year, Model model,String mon,String year1,
 			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
 
 		if (check == null) {
 			return "redirect:/login";
 		}
 
-		model.addAttribute("year", year);
+		model.addAttribute("year", year1);
+		model.addAttribute("mon", mon);
+		
 		if (arDao.getCount01(year) != 0) {
 			model.addAttribute("fish", arDao.getCount01(year));
 			model.addAttribute("fishsum", arDao.sum01(year));

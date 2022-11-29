@@ -75,20 +75,19 @@
                             <option th:selected="${year}=='2025'">2025</option>
                         </select>
                 <select id="month" name="month">
-                             <option value="">월</option>
                             <option value="">전체</option>
-                            <option value="-01">1월</option>
-                            <option value="-02">2월</option>
-                            <option value="-03">3월</option>
-                            <option value="-04">4월</option>
-                            <option value="-05">5월</option>
-                            <option value="-06">6월</option>
-                            <option value="-07">7월</option>
-                            <option value="-08">8월</option>
-                            <option value="-09">9월</option>
-                            <option value="-10">10월</option>
-                            <option value="-11">11월</option>
-                            <option value="-12">12월</option>
+                            <option value="-01" th:selected="${mon}=='-01'">1월</option>
+                            <option value="-02" th:selected="${mon}=='-02'">2월</option>
+                            <option value="-03" th:selected="${mon}=='-03'">3월</option>
+                            <option value="-04" th:selected="${mon}=='-04'">4월</option>
+                            <option value="-05" th:selected="${mon}=='-05'">5월</option>
+                            <option value="-06" th:selected="${mon}=='-06'">6월</option>
+                            <option value="-07" th:selected="${mon}=='-07'">7월</option>
+                            <option value="-08" th:selected="${mon}=='-08'">8월</option>
+                            <option value="-09" th:selected="${mon}=='-00'">9월</option>
+                            <option value="-10" th:selected="${mon}=='-10'">10월</option>
+                            <option value="-11" th:selected="${mon}=='-11'">11월</option>
+                            <option value="-12" th:selected="${mon}=='-12'">12월</option>
                         </select>
                         <button type="button" class="btn_basic" onclick="dataSend()">조회</button>
                     </div>
@@ -169,7 +168,7 @@ function dataSend(){
 			
 			var month = $("#month").val()
 			
-			location.href='dgs'+'?'+'year='+year+month
+			location.href='dgs'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month
 			
 }
 

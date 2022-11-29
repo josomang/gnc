@@ -75,7 +75,6 @@
                             <option th:selected="${year}=='2025'">2025</option>
                         </select>
                 <select id="month" name="month">
-                           <option value="">월</option>
                             <option value="">전체</option>
                             <option value="-01">1월</option>
                             <option value="-02">2월</option>
@@ -169,7 +168,7 @@ function dataSend(){
 		
 var month = $("#month").val()
 			
-			location.href='dgs'+'?'+'year='+year+month
+			location.href='dgs'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month
 			
 			
 }
