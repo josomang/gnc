@@ -3,26 +3,20 @@ package com.gnc.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.client.RestTemplate;
 
-import com.gnc.SessionConstants;
 import com.gnc.dao.ArDao;
 import com.gnc.dao.CenterDao;
 import com.gnc.dao.DeviceDao;
 import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @Service
@@ -45,7 +39,7 @@ public class kpiService {
 	@Autowired
 	DeviceDao deviceDao;
 	
-	
+//@Scheduled(cron = "30 * * * * *")	
 @Scheduled(cron = "0 30 22 31 12 ?")
 public String kpi(){
 		
@@ -171,9 +165,13 @@ public String kpi(){
 			 * map2); kpi.put("library_utztn_count", map3); kpi.put("ar_utztn_rate", map4);
 			 * kpi.put("class_utztn_rate", map5);
 			 */
-		 ResponseEntity<String> response = restTemplate.exchange("http://10.1.3.32:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
+		 ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
+		System.out.println("response:"+response);
+
 		
+		  
 		 
+		
 		
 
 		return obj.toString();

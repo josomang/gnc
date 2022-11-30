@@ -1875,26 +1875,12 @@ public class MainController {
 		return "admin07_search";
 	}
 
-	@GetMapping("/ee")
-	public @ResponseBody Map<String, String>  kpi() {
-		Map<String, String> map = new HashMap<>();
-		map.put("rt_code",map.getOrDefault("rt_code","0"));
-		map.put("message",map.getOrDefault("message","success"));
-		kpiService.kpi();
-		
-		return map;
-	}
-	
+
 	
 
 	@GetMapping("/test")
 	public @ResponseBody String testService() {
-		Object a = null;
-		JsonObject obj = new JsonObject();
-		Object dw = null;
-		JsonObject obj1 = new JsonObject();
-obj1=(JsonObject) centerDao.test();
-		obj.add("class_utztn_rate", obj1);
+		kpiService.kpi();
 		
 		return "안녕";
 	}
