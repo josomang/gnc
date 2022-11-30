@@ -49,26 +49,30 @@ public String kpi(){
 		String year = now.format(formatter);
 		int increase= Integer.parseInt(year)-1;
 		String in= Integer.toString(increase);
-		Integer a ,b,c,d,e;
+		Integer d,e;
+		double a,b,c;
 		if(arDao.arStatisticsSum(year)!=null&&arDao.arStatisticsSum(in)!=null) {
-			a= arDao.arStatisticsSum(year)-arDao.arStatisticsSum(in);
+			a= ((arDao.arStatisticsSum(year)-arDao.arStatisticsSum(in))/(double)arDao.arStatisticsSum(in))*100;
+		
 		}
 		else {
-			a=null;
+			a=0;
 		}
 		
 		if(centerDao.centerStatisticsSum(year)!=null&&centerDao.centerStatisticsSum(in)!=null) {
-			b=centerDao.centerStatisticsSum(year)-centerDao.centerStatisticsSum(in);
+			b=((centerDao.centerStatisticsSum(year)-centerDao.centerStatisticsSum(in))/(double)centerDao.centerStatisticsSum(in))*100;
+			
+			
 		}
 		else {
-			b=null;
+			b=0;
 		}
 		
 		if(libraryDao.getLibraryPeopleDao(year)!=null&&libraryDao.getLibraryPeopleDao(in)!=null) {
-			c=libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in);
+			c=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
 		}
 		else {
-			c=null;
+			c=0;
 			
 		}
 		
@@ -76,14 +80,14 @@ public String kpi(){
 			d=arDao.arUseStatisticsSum(56*21*12,year)-arDao.arUseStatisticsSum(56*21*12,in);
 		}
 		else {
-			d=null;
+			d=0;
 			
 		}
 		if(centerDao.centerUseStatisticsSum(year)!=null&&centerDao.centerUseStatisticsSum(in)!=null) {
 			e=centerDao.centerUseStatisticsSum(year)-centerDao.centerUseStatisticsSum(in);
 		}
 		else {
-			e=null;
+			e=0;
 			
 		}
 		
@@ -128,19 +132,19 @@ public String kpi(){
 		 JsonObject data1 = new JsonObject();
 		 data1.addProperty("target", userDao.arStatisticsSum(year));
 		 data1.addProperty("result", arDao.arStatisticsSum(year));
-		 data1.addProperty("increase_rate",a);
+		 data1.addProperty("increase_rate",Math.round(a));
 		 obj.add("ar_dgstfn", data1);
 		 
 		 JsonObject data2 = new JsonObject();
 		 data2.addProperty("target", userDao.centerStatisticsSum(year));
 		 data2.addProperty("result", centerDao.centerStatisticsSum(year));
-		 data2.addProperty("increase_rate", b);
+		 data2.addProperty("increase_rate", Math.round(b));
 		 obj.add("class_dgstfn", data2);
 		 
 		 JsonObject data3 = new JsonObject();
 		 data3.addProperty("target", userDao.getLibraryPeopleDao(year));
 		 data3.addProperty("result", libraryDao.getLibraryPeopleDao(year));
-		 data3.addProperty("increase_rate",c);
+		 data3.addProperty("increase_rate",Math.round(c));
 		 obj.add("library_utztn_count", data3);
 		 
 		 JsonObject data4 = new JsonObject();
@@ -165,14 +169,13 @@ public String kpi(){
 			 * map2); kpi.put("library_utztn_count", map3); kpi.put("ar_utztn_rate", map4);
 			 * kpi.put("class_utztn_rate", map5);
 			 */
-		 ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
+		
+		ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
 		System.out.println("response:"+response);
+		 System.out.println(obj.toString());
 
 		
 		  
-		 
-		
-		
 
 		return obj.toString();
 	}

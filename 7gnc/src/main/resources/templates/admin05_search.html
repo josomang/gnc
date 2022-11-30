@@ -135,7 +135,7 @@
                     </canvas>
                 </div>
                 <div class="">
-                    <h2>돌봄센터 아동 화상교육 이용만족도</h2>
+                    <h2>돌봄센터 아동 화상교육 이용만족도 차트</h2>
                     <canvas id="myChart02">
                         <!-- 막대색상 #adcdec -->
                     </canvas>
@@ -549,15 +549,10 @@ location.href='graph'+'?'+'x='+x+'&&'+'start='+start+'&&'+'end='+end+'&&'+'typeD
 					data: {
 						labels: timeList, // X축 
 						datasets: [{
-							label:"도서관이용률",
+							label:"도서관이용증가률 차트",
 							data: posList, // 값
 							backgroundColor: 'rgb(150,205,236)',
 						
-						},{
-					 label: '증가율',
-                    type : 'line',        
-                    backgroundColor: 'red',
-                   data: posList
 						}
 						
 			]
@@ -568,7 +563,8 @@ location.href='graph'+'?'+'x='+x+'&&'+'start='+start+'&&'+'end='+end+'&&'+'typeD
             y: {
                
                   
-                   // suggestedMax: 100
+                   suggestedMax: 100,
+                   suggestedMin: -30
                 
             }
         }

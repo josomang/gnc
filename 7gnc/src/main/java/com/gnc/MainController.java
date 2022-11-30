@@ -1026,15 +1026,24 @@ public class MainController {
 		int start;
 		int end;
 		int x;
+		
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(masterResult);
 		x = element.getAsJsonObject().get("x").getAsInt();
 		start = element.getAsJsonObject().get("start").getAsInt();
 		end = element.getAsJsonObject().get("end").getAsInt();
-
+		
+		//int increase= Integer.parseInt(year)-1;
+		//String in= Integer.toString(increase);
+		//double a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
+		//list2.add((int) Math.round(a));
+		
 		if (start == end) {
 			list.add(start);
-			list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(start)));
+			int increase= start-1;
+			String in= Integer.toString(increase);
+			double a=((libraryDao.getLibraryPeopleDao(Integer.toString(start))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(Integer.toString(start)))*100;
+			list2.add((int) Math.round(a));
 			dd.put("month", list);
 			dd.put("point", list2);
 		}
@@ -1043,7 +1052,10 @@ public class MainController {
 		else {
 			for (int i = start; i < end + 1; i++) {
 				list.add(i);
-				list2.add(libraryDao.getLibraryPeopleDao(Integer.toString(i)));
+				int increase = i-1;
+				String in= Integer.toString(increase);
+				double a=((libraryDao.getLibraryPeopleDao(Integer.toString(i))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(Integer.toString(i)))*100;
+				list2.add((int) Math.round(a));
 			}
 			dd.put("month", list);
 			dd.put("point", list2);
@@ -1622,13 +1634,16 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-
+		int increase= Integer.parseInt(year)-1;
+		String in= Integer.toString(increase);
+		
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
 		list.add(Integer.parseInt(year));
-		list2.add(libraryDao.getLibraryPeopleDao(year));
+		double a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
+		list2.add((int) Math.round(a));
 		model.addAttribute("year", year);
 		dd.put("month", list);
 		dd.put("point", list2);
