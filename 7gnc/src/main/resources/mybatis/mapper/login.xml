@@ -41,24 +41,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 	
-	<select id="arStatisticsSum" resultType="_double">
+	<select id="arStatisticsSum" resultType="int">
 		select AR_DGSTFN_GOAL from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 	
-	<select id="centerStatisticsSum" resultType="_double">
+	<select id="centerStatisticsSum" resultType="int">
 		select LESSON_DGSTFN_GOAL from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 	
 	
-	<select id="getLibraryPeopleDao" resultType="_double">
+	<select id="getLibraryPeopleDao" resultType="int">
 		select LIBRARY_USER_RTOFINC_GOAL from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 	
-	<select id="arUseStatisticsSum" resultType="_double">
+	<select id="arUseStatisticsSum" resultType="int">
 		select AR_RTOFUT_GOAL from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 	
-	<select id="centerUseStatisticsSum" resultType="_double">
+	<select id="centerUseStatisticsSum" resultType="int">
 		select LESSON_RTOFUT_GOAL from TBL_RST_GOAL where TRGT_YR = #{year}
 	</select>
 

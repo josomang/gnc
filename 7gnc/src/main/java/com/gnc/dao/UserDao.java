@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.gnc.dto.LessonsDto;
+
 import com.gnc.dto.goalsDto;
 
 @Mapper
@@ -34,15 +34,15 @@ public interface UserDao {
     public List<goalsDto> goalDao(@Param("year")String year);
     
     
-    public double arStatisticsSum(@Param("year")String year);
+    public Integer arStatisticsSum(@Param("year")String year);
     
-    public double centerStatisticsSum(@Param("year")String year);
+    public Integer centerStatisticsSum(@Param("year")String year);
     
-    public double getLibraryPeopleDao(@Param("year")String year);
+    public Integer getLibraryPeopleDao(@Param("year")String year);
     
-    public double arUseStatisticsSum(@Param("year")String year);
+    public Integer arUseStatisticsSum(@Param("year")String year);
     
-    public double centerUseStatisticsSum(@Param("year")String year);
+    public Integer centerUseStatisticsSum(@Param("year")String year);
     
     
 }
