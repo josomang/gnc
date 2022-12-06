@@ -34,11 +34,11 @@
                         </colgroup>
                         <tbody>
                             <tr>
-                                <th>시리얼번호</th>
+                                <th>시리얼번호*</th>
                                 <td><input type="text" th:value="${view[0].AR_DEVICE_SN}" class="input_200" id="number" autocomplete="off"> </td>
                             </tr>
                             <tr>
-                                <th>타입</th>
+                                <th>타입*</th>
                                 <td>
                                     <select id="type_value" name="type_value" th:value="${view[0].AR_DEVICE_TYPE}">
                                         <option th:selected="${view[0].AR_DEVICE_TYPE}=='유형'">유형</option>
@@ -48,7 +48,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>상태</th>
+                                <th>상태*</th>
                                 <td>
                                     <select id="condition" name="condition" th:value="${view[0].AR_DEVICE_STTS}">
                                         <option th:selected="${view[0].AR_DEVICE_STTS}=='상태'">상태</option>

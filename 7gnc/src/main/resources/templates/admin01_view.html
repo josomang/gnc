@@ -199,7 +199,7 @@
 								<label style="display: none;" for="LESSON_TTL">수업명입력</label></td>
 							</tr>
 							<tr>
-								<th>수업일시</th>
+								<th>수업일시*</th>
 								<td class="search_date">
 									<div class="">
 										<input type="datetime-local" 
@@ -214,18 +214,18 @@
 								</td>
 							</tr>
 							<tr>
-								<th>수업시간</th>
+								<th>수업시간*</th>
 								<td><input type="number" th:value="${view[0].LESSON_TM}" id="LESSON_TM" class="input_200">분
 								<label style="display: none;" for="LESSON_TM">수업시간입력</label></td>
 							</tr>
 							<tr>
-								<th>화상교육 방번호</th>
+								<th>화상교육 방번호*</th>
 								<td><input type="text" th:value="${view[0].ROOM_ID}" id="ROOM_ID" class="input_200" autocomplete="off">
 								<label style="display: none;" for="ROOM_ID">화상교육입력</label></td>
 							</tr>
 							
 							<tr>
-								<th>강의자</th>
+								<th>강의자*</th>
 								<td><input type="text" th:value="${view[0].INSTR_NM}" id="INSTR_NM" class="input_200" autocomplete="off">
 								<label style="display: none;" for="INSTR_NM">강의자입력</label></td>
 							</tr>
