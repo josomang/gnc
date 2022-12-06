@@ -1,4 +1,6 @@
-<html>
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -28,7 +30,7 @@
                 <input type="checkbox" id="menu01">
                 <label for="menu01">
                     <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
+                    화상 교육 참여 인원</label>
                 <ul class="submenu" style="display: block;">
                     <li class="on"><a th:href="@{/admin}">수업목록</a></li>
                     <li><a th:href="@{/center}">돌봄센터</a></li>
@@ -51,8 +53,8 @@
                 <input type="checkbox" id="menu04">
                 <label for="menu04">
                     <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
-                <ul class="submenu">
+                    성과지표통계</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/statistics}">성과지표통계</a></li>
                     <li><a th:href="@{/goals}">목표설정</a></li>
                 </ul>
@@ -70,7 +72,8 @@
 
 				<div class="tablehead">
 					<div class="searchbox">
-						<input type="text" id="keyword" placeholder="수업명을 입력해주세요">
+						<input type="text" id="keyword" autocomplete="off" placeholder="수업명을 입력해주세요" autofocus />
+						<label style="display: none;" for="keyword">수업명 입력</label>
 						<button type="button" class="btn_basic" onclick="search()">검색</button>
 					</div>
 					<div class="btn_area">
@@ -79,6 +82,7 @@
 				</div>
 
 				<table>
+				<caption style="display: none;">수업목록</caption>
 					<thead>
 						<tr>
 							<th>수업일시</th>
@@ -139,6 +143,7 @@
 				</h1>
 				<div class="tablebox">
 					<table class="table_listview">
+					<caption style="display: none;">수업등록</caption>
 						<colgroup>
 							<col width="100px">
 							<col width="auto">
@@ -146,13 +151,15 @@
 						<tbody>
 							<tr>
 								<th>수업명</th>
-								<td><input type="text" id="LESSON_TTL" class="input_100per"></td>
+								<td><input type="text" id="LESSON_TTL" class="input_100per" autocomplete="off">
+								<label style="display: none;" for="LESSON_TTL">수업명 입력</label></td>
 							</tr>
 							<tr>
 								<th>수업일시</th>
 								<td class="search_date">
 									<div class="">
 										<input type="datetime-local" id="BGNG_DT">
+										<label style="display: none;" for="BGNG_DT">수업일시입력</label>
 										<span class="material-symbols-outlined"></span>
 
 									</div>
@@ -161,31 +168,36 @@
 							</tr>
 							<tr>
 								<th>수업시간</th>
-								<td><input type="number" id="LESSON_TM" class="input_200">분</td>
+								<td><input type="number" id="LESSON_TM" class="input_200">
+								분<label style="display: none;" for="LESSON_TM">수업시간입력</label></td>
 							</tr>
 							<tr>
 								<th>화상교육방번호</th>
-								<td><input type="text" id="ROOM_ID" class="input_200"></td>
+								<td><input type="text" id="ROOM_ID" class="input_200" autocomplete="off">
+								<label style="display: none;" for="ROOM_ID">화상교육방번호입력</label></td>
 							</tr>
 							<tr>
 								<th>강의자</th>
-								<td><input type="text" id="INSTR_NM" class="input_200"></td>
+								<td><input type="text" id="INSTR_NM" class="input_200" autocomplete="off">
+								<label style="display: none;" for="INSTR_NM">강의자입력</label></td>
 							</tr>
 							<tr>
 								<th>수업유형</th>
 								<td>
-
+									<label style="display: none;" for="type_value">수업유형입력</label>
 									<select id="type_value" name="type_value">
 										<option>유형</option>
 										<option>강의</option>
 										<option value="direct">직접입력</option>
 									</select>
 									<input type="text" id="typeDirect" name="typeDirect" />
+									<label style="display: none;" for="typeDirect">수업유형입력</label>
 								</td>
 							</tr>
 							<tr>
 								<th>수업설명</th>
-								<td><textarea id="LESSON_DESC"></textarea></td>
+								<td><textarea id="LESSON_DESC"></textarea>
+								<label style="display: none;" for="LESSON_DESC">수업설명입력</label></td>
 							</tr>
 						</tbody>
 					</table>

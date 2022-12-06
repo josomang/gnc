@@ -1,5 +1,6 @@
 <!doctype html>
-<html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>성남시 공공도서관 AR서비스</title>
@@ -27,8 +28,8 @@
                 <input type="checkbox" id="menu01">
                 <label for="menu01">
                     <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
-                <ul class="submenu">
+                    화상 교육 참여 인원</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/admin}">수업목록</a></li>
                     <li><a th:href="@{/center}">돌봄센터</a></li>
                 </ul>
@@ -49,8 +50,8 @@
                 <input type="checkbox" id="menu04">
                 <label for="menu04">
                     <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
-                <ul class="submenu">
+                    성과지표통계</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/statistics}">성과지표통계</a></li>
                     <li><a th:href="@{/goals}">목표설정</a></li>
                 </ul>
@@ -68,7 +69,8 @@
 
                 <div class="tablehead">
                     <div class="searchbox">
-                        <input type="text" id="keyword" placeholder="시리얼번호">
+                        <input type="text" id="keyword" placeholder="시리얼번호" autocomplete="off" autofocus />
+                        <label style="display: none;" for="keyword">시리얼번호</label>
                         <button type="button" class="btn_basic" onclick="search()">검색</button>
                     </div>
                     <div class="btn_area">
@@ -77,6 +79,7 @@
                 </div>
 
                 <table>
+                <caption style="display: none;">AR디바이스 현황</caption>
                     <colgroup>
                     <col width="100px">
                     <col width="">
@@ -145,6 +148,7 @@
                 </h1>
                 <div class="tablebox">
                     <table class="table_listview">
+                    <caption style="display: none;">디바이스 등록</caption>
                         <colgroup>
                             <col width="120px">
                             <col width="auto">
@@ -152,11 +156,13 @@
                         <tbody>
                             <tr>
                                 <th>시리얼번호</th>
-                                <td><input type="text" class="input_200" id="number"> </td>
+                                <td><input type="text" class="input_200" id="number" autocomplete="off">
+                                <label style="display: none;" for="number">시리얼번호입력</label></td>
                             </tr>
                             <tr>
                                 <th>타입</th>
                                 <td>
+                                <label style="display: none;" for="type_value">타입입력</label></td>
                                     <select id="type_value" name="type_value">
                                         <option>유형</option>
                                         <option>서피스</option>
@@ -167,6 +173,7 @@
                             <tr>
                                 <th>상태</th>
                                 <td>
+                                <label style="display: none;" for="condition">상태입력</label>
                                     <select id="condition" name="condition">
                                         <option>상태</option>
                                         <option>정상</option>
@@ -178,7 +185,8 @@
                             </tr>
                             <tr>
                                 <th>디바이스설명(메모)</th>
-                                <td><textarea id="memo"></textarea></td>
+                                <td><textarea id="memo"></textarea>
+                                <label style="display: none;" for="memo">디바이스설명입력</label></td>
                             </tr>
                         </tbody>
                     </table>
@@ -320,4 +328,4 @@
 	}
 </script>
 
-</html>
+</ht>

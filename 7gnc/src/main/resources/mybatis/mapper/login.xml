@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gnc.dao.UserDao">
 	<select id="getUserAccount" resultType="string">
-		select ADMIN_ID from TBL_ADMINS where UID = #{UID} and PSWD = MD5(#{PSWD})
+		select ADMIN_ID from TBL_ADMINS where UID = #{UID} and PSWD = SHA2(#{PSWD},256)
 	</select>
 
 	<select id="suerveyGetUserAccount" resultType="string">

@@ -1,5 +1,6 @@
 <!doctype html>
-<html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>성남시 공공도서관 AR서비스</title>
@@ -29,8 +30,8 @@
                 <input type="checkbox" id="menu01">
                 <label for="menu01">
                     <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
-                <ul class="submenu">
+                    화상 교육 참여 인원</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/admin}">수업목록</a></li>
                     <li><a th:href="@{/center}">돌봄센터</a></li>
                 </ul>
@@ -51,7 +52,7 @@
                 <input type="checkbox" id="menu04">
                 <label for="menu04">
                     <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
+                    성과지표통계</label>
                 <ul class="submenu" style="display: block;">
                     <li class="on"><a th:href="@{/statistics}">성과지표통계</a></li>
                     <li><a th:href="@{/goals}">목표설정</a></li>
@@ -69,18 +70,21 @@
             <div class="area_table">
                 <div class="tablehead">
                     <div class="searchbox">
+                    <label style="display: none;" for="type_value">년월선택</label>  
                         <select id="type_value" name="type_value">
                             <option value="0">년</option>
                             <option value="1">월</option>
                         </select>
                         <div class="search_date">
-                            <div class="select">  
+                            <div class="select">
+                            <label style="display: none;" for="start">검색년도선택</label>  
                                 <select id="start" name="start"><!-- 년 선택 -->
                                       <option th:selected="${year}=='2022'" value="2022">2022</option>
                                     <option th:selected="${year}=='2023'" value="2023">2023</option>
                                      <option th:selected="${year}=='2024'" value="2024">2024</option>
                                      <option th:selected="${year}=='2025'" value="2025">2025</option>
                                 </select>
+                                <label style="display: none;" for="typeDirect">검색월선택</label> 
                                 <select id="typeDirect" name="typeDirect"><!-- 월 선택 -->
                                    <option value="01">1월</option>
                                     <option value="02">2월</option>
@@ -98,12 +102,14 @@
                             </div>
                     		<span> ~ </span>
                             <div class="select">
+                            <label style="display: none;" for="end">검색년도선택</label> 
                                 <select id="end" name="end"><!-- 년 선택 -->
                                       <option th:selected="${year}=='2022'" value="2022">2022</option>
                                     <option th:selected="${year}=='2023'" value="2023">2023</option>
                                      <option th:selected="${year}=='2024'" value="2024">2024</option>
                                      <option th:selected="${year}=='2025'" value="2025">2025</option>
                                 </select>
+                                <label style="display: none;" for="typeDirect1">검색월선택</label> 
                                 <select id="typeDirect1" name="typeDirect1"><!-- 월 선택 -->
                                        <option value="01">1월</option>
                                     <option value="02">2월</option>

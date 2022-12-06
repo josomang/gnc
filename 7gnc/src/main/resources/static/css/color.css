@@ -6,7 +6,7 @@
 /* button */
 .btn_area button {padding:10px 20px; min-width:60px}
 .btn_list {border:1px solid #CCC}
-.btn_delete,.btn_grey {background-color: #999; border:1px solid #999; color:#FFF}
+.btn_delete,.btn_grey {background-color: #666; border:1px solid #666; color:#FFF}
 .btn_modify {background-color: #28394e; border:1px solid #28394e; color:#FFF}
 .btn_save {background-color: #28394e; border:1px solid #28394e; color:#FFF}
 .btn_excel {border:1px solid #CCC; text-indent: 25px; background: url(../images/icon_excel.png) 10px center no-repeat; background-size: 16px auto;}

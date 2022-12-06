@@ -2,7 +2,7 @@
 .nav .logo {background: url(../images/logo_w.png) no-repeat; background-size: auto 30px; background-position: center center; height:50px; font-size: 0;}
 .nav ul {border-top: 1px dotted rgba(265,265,265,0.5);}
 .nav ul li {color:#FFF; padding:15px 10px; border-bottom: 1px dotted rgba(265,265,265,0.5);}
-.nav ul li span {color:#FFF}
+.nav ul li span {color:#FFF; display: block; margin-bottom: 8px;}
 .nav ul li a {display: block;}
 .nav > ul li:hover,.nav ul li input[id*="menu"] + label:hover p {color:yellow}
 
@@ -18,6 +18,7 @@
 .nav ul li > .submenu li:hover:before {content: ">";}
 .nav ul li > .submenu li.on:before {content: ">";}
 .nav ul li input:checked ~ .submenu {display: block;}
+.nav ul li.on ~ .submenu {display: block;}
 
 
 .section {width:calc(100% - 200px); display:block; position: relative; padding-left: 200px;}
@@ -72,59 +73,3 @@
 .chart50 {display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px; row-gap: 50px; margin-top:50px}
 .chart50 div {}
 .chart50 h2 {margin-bottom: 20px}
-
-/* 달력 */
-*{
-    margin: 0;
-    padding: 0;
-   
-    
-}
-.custom_calendar_table td {
-   
-    text-align: center;
-    height: 70px;
-            width: 250px;
-            
-}
-
-.custom_calendar_table thead.cal_date th {
-    font-size: larger;
-     
-}
-
-
-
-.custom_calendar_table thead.cal_date th button {
-    font-size: 5rem;
-    background: none;
-    border: none;
-      color: rgb(192, 192, 192);
-}
-
-.custom_calendar_table thead.cal_week th {
-    background-color: rgb(192, 192, 192);
-    color: rgb(255, 255, 255);
-    height: 30px;
-    width: 200px;
-   
-}
-
-.custom_calendar_table tbody td {
-    cursor: pointer;
-    
-}
-
-.custom_calendar_table tbody td:nth-child(1) {
-    color: red;
-}
-
-.custom_calendar_table tbody td:nth-child(7) {
-    color: #288CFF;
-    
-}
-
-.custom_calendar_table tbody td.select_day {
-    background-color: rgb(192, 192, 192);
-    color: #fff;
-}

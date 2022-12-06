@@ -1,5 +1,6 @@
 <!doctype html>
-<html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>성남시 공공도서관 AR서비스</title>
@@ -27,8 +28,8 @@
                 <input type="checkbox" id="menu01">
                 <label for="menu01">
                     <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
-                <ul class="submenu">
+                    화상 교육 참여 인원</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/admin}">수업목록</a></li>
                     <li><a th:href="@{/center}">돌봄센터</a></li>
                 </ul>
@@ -49,8 +50,8 @@
                 <input type="checkbox" id="menu04">
                 <label for="menu04">
                     <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
-                <ul class="submenu">
+                    성과지표통계</label>
+                <ul class="submenu" style="display: block;">
                    <li><a th:href="@{/statistics}">성과지표통계</a></li>
                     <li><a th:href="@{/goals}">목표설정</a></li>
                 </ul>
@@ -67,6 +68,7 @@
             <div class="area_table">
                 <div class="tablehead">
                     <div class="searchbox">
+                    <label style="display: none;" for="select_value">검색년도선택</label>
                         <select id="select_value" name="select_value" th:value="${year}">
                             <option th:selected="${year}==''">년도</option>
                             <option th:selected="${year}=='2022'">2022</option>
@@ -74,6 +76,7 @@
                             <option th:selected="${year}=='2024'">2024</option>
                             <option th:selected="${year}=='2025'">2025</option>
                         </select>
+                        <label style="display: none;" for="month">검색월선택</label>
                 <select id="month" name="month">
                             <option value="">전체</option>
                             <option value="-01">1월</option>
@@ -95,6 +98,7 @@
 
                 <h2 class="mt20 mb10">AR공간 서비스 이용 만족도</h2>
                 <table style="display: inline-table;">
+                 <caption style="display: none;">AR공간 서비스 이용 만족도</caption>
                     <thead>
                         <tr>
                         	<th>구분</th>
@@ -137,6 +141,7 @@
 
                 <h2 class="mt50 mb10">돌봄센터 아동 화상교육 이용 만족도</h2>
                 <table th:style="${all== '0'? 'display:none':'display:bolck'}">
+                <caption style="display: none;">돌봄센터 아동 화상교육 이용 만족도</caption>
                     <thead>
                         <tr>
                             <th>설문 응답 센터수</th>

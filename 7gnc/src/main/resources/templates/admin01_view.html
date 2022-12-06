@@ -1,6 +1,6 @@
 <!doctype html>
-<html>
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>성남시 공공도서관 AR서비스</title>
@@ -26,7 +26,7 @@
                 <input type="checkbox" id="menu01">
                 <label for="menu01">
                     <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
+                    화상 교육 참여 인원</label>
                 <ul class="submenu" style="display: block;">
                     <li class="on"><a th:href="@{/admin}">수업목록</a></li>
                     <li><a th:href="@{/center}">돌봄센터</a></li>
@@ -48,8 +48,8 @@
                 <input type="checkbox" id="menu04">
                 <label for="menu04">
                     <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
-                <ul class="submenu">
+                    성과지표통계</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/statistics}">성과지표통계</a></li>
                     <li><a th:href="@{/goals}">목표설정</a></li>
                 </ul>
@@ -66,6 +66,7 @@
 			<div class="area_table">
 
 				<table class="table_listview">
+				<caption style="display: none;">수업상세정보</caption>
 					<colgroup>
 						<col width="200px">
 						<col width="auto">
@@ -117,9 +118,6 @@
 							<td th:style="${total_count== 0? 'display:none':'display:bolck'}" >
 							<span th:text="${DGSTFN_SCORE}" ></span></td>
 						</tr>
-						<tr>
-
-						</tr>
 					</tbody>
 				</table>
 
@@ -148,6 +146,7 @@
 				</h1>
 				<div class="tablebox">
 					<table>
+					<caption style="display: none;">수업상세센터정보</caption>
 						<colgroup>
 							<col width="">
 							<col width="">
@@ -188,6 +187,7 @@
 				</h1>
 				<div class="tablebox">
 					<table class="table_listview">
+					<caption style="display: none;">수업상세정보수정</caption>
 						<colgroup>
 							<col width="100px">
 							<col width="auto">
@@ -195,7 +195,8 @@
 						<tbody>
 							<tr>
 								<th>수업명</th>
-								<td ><input type="text" th:value="${view[0].LESSON_TTL}" id="LESSON_TTL" class="input_100per"></td>
+								<td ><input type="text" th:value="${view[0].LESSON_TTL}" id="LESSON_TTL" class="input_100per" autocomplete="off">
+								<label style="display: none;" for="LESSON_TTL">수업명입력</label></td>
 							</tr>
 							<tr>
 								<th>수업일시</th>
@@ -204,6 +205,7 @@
 										<input type="datetime-local" 
 										th:value="${view[0].BGNG_DT}"
 										id="BGNG_DT">
+										<label style="display: none;" for="BGNG_DT">수업일시입력</label>
 										<span class="material-symbols-outlined"></span>
 
 									</div>
@@ -213,32 +215,38 @@
 							</tr>
 							<tr>
 								<th>수업시간</th>
-								<td><input type="number" th:value="${view[0].LESSON_TM}" id="LESSON_TM" class="input_200">분</td>
+								<td><input type="number" th:value="${view[0].LESSON_TM}" id="LESSON_TM" class="input_200">분
+								<label style="display: none;" for="LESSON_TM">수업시간입력</label></td>
 							</tr>
 							<tr>
 								<th>화상교육 방번호</th>
-								<td><input type="text" th:value="${view[0].ROOM_ID}" id="ROOM_ID" class="input_200"></td>
+								<td><input type="text" th:value="${view[0].ROOM_ID}" id="ROOM_ID" class="input_200" autocomplete="off">
+								<label style="display: none;" for="ROOM_ID">화상교육입력</label></td>
 							</tr>
 							
 							<tr>
 								<th>강의자</th>
-								<td><input type="text" th:value="${view[0].INSTR_NM}" id="INSTR_NM" class="input_200"></td>
+								<td><input type="text" th:value="${view[0].INSTR_NM}" id="INSTR_NM" class="input_200" autocomplete="off">
+								<label style="display: none;" for="INSTR_NM">강의자입력</label></td>
 							</tr>
 							<tr>
 								<th>수업유형</th>
 								<td>
+								<label style="display: none;" for="type_value">수업유형입력</label>
 									<select id="type_value" name="type_value">
 										<option>유형</option>
 										<option>강의</option>
 										<option value="direct">기타[직접입력]</option>
 									</select>
 									<input type="text" id="typeDirect" name="typeDirect" />
+									<label style="display: none;" for="typeDirect">수업유형입력</label>
 								</td>
 							</tr>
 							<tr>
 								<th>수업설명(메모)</th>
 								<td><textarea th:text="${view[0].LESSON_DESC}" 
-								id="LESSON_DESC"></textarea></td>
+								id="LESSON_DESC"></textarea>
+								<label style="display: none;" for="LESSON_DESC">수업설명입력</label></td>
 							</tr>
 						</tbody>
 					</table>

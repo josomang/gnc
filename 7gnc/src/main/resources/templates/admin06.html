@@ -1,166 +1,195 @@
 <!doctype html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>성남시 공공도서관 AR서비스</title>
-    <meta name="viewport"
-        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="css/common.css" />
-    <link rel="stylesheet" type="text/css" href="css/layout.css" />
-    <link rel="stylesheet" type="text/css" href="css/board.css" />
-    <link rel="stylesheet" type="text/css" href="css/color.css" />
-    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="js/date.js"></script>
-    <!--[if lt IE 9]>
+	<meta charset="UTF-8">
+	<title>성남시 공공도서관 AR서비스</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="css/board.css" />
+	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="js/date.js"></script>
+	<!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
     <![endif]-->
 </head>
 
 <body>
-    <div class="nav">
-        <div class="logo" onclick="gara()">ADMIN</div>
-        <ul>
-            <li>
-                <input type="checkbox" id="menu01">
-                <label for="menu01">
-                    <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
-                <ul class="submenu">
-                    <li><a th:href="@{/admin}">수업목록</a></li>
-                    <li><a th:href="@{/center}">돌봄센터</a></li>
-                </ul>
-            </li>
-            <li>
-                <span class="material-symbols-outlined">group</span>
-                <a th:href="@{/ar}">AR 공간 이용자 수</a>
-            </li>
-              <li>
-                <span class="material-symbols-outlined">tablet_android</span>
-               <a th:href="@{/device}">AR 디바이스현황</a>
-            </li>
-            <li>
-                <span class="material-symbols-outlined">sentiment_satisfied</span>
-                <a th:href="@{/satisfaction}">이용자 만족도</a>
-            </li>
-            <li class="on">
-                <input type="checkbox" id="menu04">
-                <label for="menu04">
-                    <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
-                <ul class="submenu" style="display: block;">
-                    <li><a th:href="@{/statistics}">성과지표통계</a></li>
-                    <li class="on"><a th:href="@{/goals}">목표설정</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div><!-- //nav -->
-    <div class="section">
-        <div class="header">
-            <button type="button" onclick="logOut()">로그아웃</button>
-        </div>
-        <div class="inner">
-            <h1>성과 지표 목표 설정 / 도서관 이용자</h1>
+	<div class="nav">
+		<div class="logo" onclick="gara()">ADMIN</div>
+		<ul>
+			<li>
+				<input type="checkbox" id="menu01">
+				<label for="menu01">
+					<span class="material-symbols-outlined">list_alt</span>
+					화상 교육 참여 인원</label>
+				<ul class="submenu" style="display: block;">
+					<li><a th:href="@{/admin}">수업목록</a></li>
+					<li><a th:href="@{/center}">돌봄센터</a></li>
+				</ul>
+			</li>
+			<li>
+				<span class="material-symbols-outlined">group</span>
+				<a th:href="@{/ar}">AR 공간 이용자 수</a>
+			</li>
+			<li>
+				<span class="material-symbols-outlined">tablet_android</span>
+				<a th:href="@{/device}">AR 디바이스현황</a>
+			</li>
+			<li>
+				<span class="material-symbols-outlined">sentiment_satisfied</span>
+				<a th:href="@{/satisfaction}">이용자 만족도</a>
+			</li>
+			<li class="on">
+				<input type="checkbox" id="menu04">
+				<label for="menu04">
+					<span class="material-symbols-outlined">monitoring</span>
+					성과지표통계</label>
+				<ul class="submenu" style="display: block;">
+					<li><a th:href="@{/statistics}">성과지표통계</a></li>
+					<li class="on"><a th:href="@{/goals}">목표설정</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div><!-- //nav -->
+	<div class="section">
+		<div class="header">
+			<button type="button" onclick="logOut()">로그아웃</button>
+		</div>
+		<div class="inner">
+			<h1>성과 지표 목표 설정 / 도서관 이용자</h1>
 
-            <div class="area_table">
-                <div class="tablehead">
-                    <div class="searchbox">
-                        <select id="year" name="year">
-                            <option value="2022" th:selected="${year}=='2022'">2022년</option>
-                            <option value="2023" th:selected="${year}=='2023'">2023년</option>
-                            <option value="2024" th:selected="${year}=='2024'">2024년</option>
-                            <option value="2025" th:selected="${year}=='2025'">2025년</option>
-                        </select>
-                        <button type="button" class="btn_basic" onclick="lookup()" >조회</button>
-                    </div>
-                </div>
+			<div class="area_table">
+				<div class="tablehead">
+					<div class="searchbox">
+						<label style="display: none;" for="year">검색년도선택</label>
+						<select id="year" name="year">
+							<option value="2022" th:selected="${year}=='2022'">2022년</option>
+							<option value="2023" th:selected="${year}=='2023'">2023년</option>
+							<option value="2024" th:selected="${year}=='2024'">2024년</option>
+							<option value="2025" th:selected="${year}=='2025'">2025년</option>
+						</select>
+						<button type="button" class="btn_basic" onclick="lookup()">조회</button>
+					</div>
+				</div>
 
-                <h2 class="mt20 mb10">성과지표 목표</h2>
-                <table class="table_listview" style="display: inline-table;">
-                    <colgroup>
-                        <col width="300px">
-                        <col width="auto">
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <th>AR공간 이용 만족도 목표</th>
-                <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="a">점</td>
-                <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">점</td> 
-                        </tr>
-                        <tr>
-                            <th>돌봄센터 아동 화상교육 이용만족도 목표</th>
-                            
-                            <td th:if="${#lists.isEmpty(view)}"><input type="number"  class="input_200" id="b">점</td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">점</td>
-                        </tr>
-                        <tr>
-                            <th>AR공간 서비스 이용률 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="c">%</td>
-                        <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].AR_RTOFUT_GOAL}" class="input_200" id="c">%</td>
-                        </tr>
-                        <tr>
-                            <th>돌봄센터 아동 화상교육 참여율 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="d">%</td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LESSON_RTOFUT_GOAL}" class="input_200" id="d">%</td>
-                        </tr>
-                        <tr>
-                            <th>도서관 이용 증가율 목표</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="e">%</td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LIBRARY_USER_RTOFINC_GOAL}" class="input_200" id="e">%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
-                <div class="data_null" style="display: none;">조회할 데이터가 존재하지 않습니다.</div>
+				<h2 class="mt20 mb10">성과지표 목표</h2>
+				<table class="table_listview" style="display: inline-table;">
+					<caption style="display: none;">성과지표 목표 설정</caption>
+					<colgroup>
+						<col width="300px">
+						<col width="auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>AR공간 이용 만족도 목표</th>
+							<td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="a">점
+								<label style="display: none;" for="a">AR공간 이용 만족도 목표</label>
+							</td>
+							<td th:if="${!#lists.isEmpty(view)}"><input type="number"
+									th:value="${view[0].AR_DGSTFN_GOAL}" class="input_200" id="a">점
+								<label style="display: none;" for="a">AR공간 이용 만족도 목표</label>
+							</td>
+						</tr>
+						<tr>
+							<th>돌봄센터 아동 화상교육 이용만족도 목표</th>
 
-                <h2 class="mt50 mb10">도서관 이용자 수</h2>
-                <table class="table_listview" style="display: inline-table;">
-                    <colgroup>
-                        <col width="300px">
-                        <col width="auto">
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <th>당해년도 도서관 이용자 수</th>
-                            <td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="f">명</td>
-                            <td th:if="${!#lists.isEmpty(view)}"><input type="number" th:value="${view[0].LIBRARY_NUOFUS}" class="input_200" id="f">명</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
-               <!-- <div class="data_null" style="display: block;">조회할 데이터가 존재하지 않습니다.</div>-->
+							<td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="b">점
+								<label style="display: none;" for="b">돌봄센터 아동 화상교육 이용만족도 목표</label>
+							</td>
+							<td th:if="${!#lists.isEmpty(view)}"><input type="number"
+									th:value="${view[0].LESSON_DGSTFN_GOAL}" class="input_200" id="b">점
+								<label style="display: none;" for="b">돌봄센터 아동 화상교육 이용만족도 목표</label>
+							</td>
+						</tr>
+						<tr>
+							<th>AR공간 서비스 이용률 목표</th>
+							<td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="c">%
+								<label style="display: none;" for="c">AR공간 서비스 이용률 목표</label>
+							</td>
+							<td th:if="${!#lists.isEmpty(view)}"><input type="number"
+									th:value="${view[0].AR_RTOFUT_GOAL}" class="input_200" id="c">%
+									<label style="display: none;" for="c">AR공간 서비스 이용률 목표</label></td>
+						</tr>
+						<tr>
+							<th>돌봄센터 아동 화상교육 참여율 목표</th>
+							<td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="d">%
+								<label style="display: none;" for="d">돌봄센터 아동 화상교육 참여율 목표</label>
+							</td>
+							<td th:if="${!#lists.isEmpty(view)}"><input type="number"
+									th:value="${view[0].LESSON_RTOFUT_GOAL}" class="input_200" id="d">%
+									<label style="display: none;" for="d">돌봄센터 아동 화상교육 참여율 목표</label></td>
+						</tr>
+						<tr>
+							<th>도서관 이용 증가율 목표</th>
+							<td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="e">%
+								<label style="display: none;" for="e">도서관 이용 증가율 목표</label>
+							</td>
+							<td th:if="${!#lists.isEmpty(view)}"><input type="number"
+									th:value="${view[0].LIBRARY_USER_RTOFINC_GOAL}" class="input_200" id="e">%
+									<label style="display: none;" for="e">도서관 이용 증가율 목표</label></td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
+				<div class="data_null" style="display: none;">조회할 데이터가 존재하지 않습니다.</div>
+
+				<h2 class="mt50 mb10">도서관 이용자 수</h2>
+				<table class="table_listview" style="display: inline-table;">
+					<caption style="display: none;">도서관 이용자 수</caption>
+					<colgroup>
+						<col width="300px">
+						<col width="auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>당해년도 도서관 이용자 수</th>
+							<td th:if="${#lists.isEmpty(view)}"><input type="number" class="input_200" id="f">명
+							<label style="display: none;" for="f">당해년도 도서관 이용자 수</label></td>
+							<td th:if="${!#lists.isEmpty(view)}"><input type="number"
+									th:value="${view[0].LIBRARY_NUOFUS}" class="input_200" id="f">명
+									<label style="display: none;" for="f">당해년도 도서관 이용자 수</label></td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- 데이터 없을 경우 출력되는 문구 // 위 테이블 display:none; 아래div display:block; -->
+				<!-- <div class="data_null" style="display: block;">조회할 데이터가 존재하지 않습니다.</div>-->
 
 
-                <div class="btn_area">
-                    <div class="right">
-                        <button type="button" class="btn_grey" onclick="reload()" >취소</button>
-                        <button type="button" class="btn_save" onclick="dataSend()" >저장</button>
-                    </div>
-                </div>
-            </div><!-- //area_table -->
-        </div><!-- //inner -->
+				<div class="btn_area">
+					<div class="right">
+						<button type="button" class="btn_grey" onclick="reload()">취소</button>
+						<button type="button" class="btn_save" onclick="dataSend()">저장</button>
+					</div>
+				</div>
+			</div><!-- //area_table -->
+		</div><!-- //inner -->
 
 
-    </div><!-- //section -->
+	</div><!-- //section -->
 </body>
 <script>
-function dataSend() {
+	function dataSend() {
 		var result = confirm("등록하시겠습니까?");
-		if(result){
-		var a = $("#a").val();
-		var b = $("#b").val();
-		var c = $("#c").val();
-		var d = $("#d").val();
-		var e = $("#e").val();
-		var f = $("#f").val();
-		var year = $("#year").val()
-		
-	
-		
+		if (result) {
+			var a = $("#a").val();
+			var b = $("#b").val();
+			var c = $("#c").val();
+			var d = $("#d").val();
+			var e = $("#e").val();
+			var f = $("#f").val();
+			var year = $("#year").val()
 
-		 
+
+
+
+
 			var LessonsDto = JSON.stringify({
 				a: a,
 				b: b,
@@ -168,84 +197,84 @@ function dataSend() {
 				d: d,
 				e: e,
 				f: f,
-			year:year,
+				year: year,
 			});
-			
+
 			$.ajax({
 				method: 'post',
 				url: '/goals-info',
 				headers: {'Content-type': 'application/json'},
 				data: year,
 				success: function (data) {
-					
-					if(data==1){
-						
+
+					if (data == 1) {
+
 						$.ajax({
-				method: 'post',
-				url: '/goal-register',
-				headers: {'Content-type': 'application/json'},
-				data: LessonsDto
-			
-			})
+							method: 'post',
+							url: '/goal-register',
+							headers: {'Content-type': 'application/json'},
+							data: LessonsDto
+
+						})
 					}
-					
-					
-					else{
-					
+
+
+					else {
+
 						$.ajax({
-				method: 'post',
-				url: '/goal-update',
-				headers: {'Content-type': 'application/json'},
-				data: LessonsDto
-			})	
-						
+							method: 'post',
+							url: '/goal-update',
+							headers: {'Content-type': 'application/json'},
+							data: LessonsDto
+						})
+
 					}
-					
+
 				}
-			
+
 			})
-			
-			
+
+
 		}
 
 		setTimeout("location.reload()", 1000);
-		
+
 	}
 
-function reload(){
-location.reload();
-}
-function lookup(){
-	var year = $("#year").val()
-	location.href='goals-lookup'+'?'+'year='+year
-}
+	function reload() {
+		location.reload();
+	}
+	function lookup() {
+		var year = $("#year").val()
+		location.href = 'goals-lookup' + '?' + 'year=' + year
+	}
 
 
-function gara(){
-	var result = confirm("개발팀이 아니시라면 취소버튼을 눌러주세요 중요한 버튼입니다");
-		if(result){
+	function gara() {
+		var result = confirm("개발팀이 아니시라면 취소버튼을 눌러주세요 중요한 버튼입니다");
+		if (result) {
 			var result1 = confirm("데이터를 전부 보내시겠습니까?");
-			if(result1){
+			if (result1) {
 				$.ajax({
-				method: 'GET',
-				url: '/test'
+					method: 'GET',
+					url: '/test'
 
-			})
+				})
 			}
-			
+
 		}
-		
-}
+
+	}
 
 </script>
 <script>
-	function logOut(){
+	function logOut() {
 		var logout = confirm("로그아웃 하시겠습니까?");
-		if(logout){
-		$.ajax({
+		if (logout) {
+			$.ajax({
 				method: 'POST',
 				url: '/logout'
-				
+
 
 
 			})
@@ -254,7 +283,8 @@ function gara(){
 		else {
 			location.reload();
 		}
-		
+
 	}
 </script>
+
 </html>

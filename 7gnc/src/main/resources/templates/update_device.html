@@ -1,5 +1,6 @@
  <!doctype html>
-<html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -34,7 +35,7 @@
                         <tbody>
                             <tr>
                                 <th>시리얼번호</th>
-                                <td><input type="text" th:value="${view[0].AR_DEVICE_SN}" class="input_200" id="number"> </td>
+                                <td><input type="text" th:value="${view[0].AR_DEVICE_SN}" class="input_200" id="number" autocomplete="off"> </td>
                             </tr>
                             <tr>
                                 <th>타입</th>

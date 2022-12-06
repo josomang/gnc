@@ -1,5 +1,6 @@
 <!doctype html>
-<html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -168,8 +169,8 @@ scr_width = screen.availWidth;
                 <input type="checkbox" id="menu01">
                 <label for="menu01">
                     <span class="material-symbols-outlined">list_alt</span>
-                    <p>화상 교육 참여 인원</p></label>
-                <ul class="submenu">
+                    화상 교육 참여 인원</label>
+                <ul class="submenu" style="display: block;">
                     <li><a th:href="@{/admin}">수업목록</a></li>
                     <li><a th:href="@{/center}">돌봄센터</a></li>
                 </ul>
@@ -190,8 +191,8 @@ scr_width = screen.availWidth;
                 <input type="checkbox" id="menu04">
                 <label for="menu04">
                     <span class="material-symbols-outlined">monitoring</span>
-                    <p>성과지표통계</p></label>
-                <ul class="submenu">
+                    성과지표통계</label>
+                <ul class="submenu" style="display: block;">
                    <li><a th:href="@{/statistics}">성과지표통계</a></li>
                     <li><a th:href="@{/goals}">목표설정</a></li>
                 </ul>
@@ -206,9 +207,11 @@ scr_width = screen.availWidth;
 		</div>
 		<div class="inner">
 			<h1>AR 이용 통계</h1>
-
+		
 			<div class="cal_box">
+				
 				<div id="calendar"></div>
+				
 			</div><!-- //cal -->
 
 			<div class="chart">
