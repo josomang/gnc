@@ -59,9 +59,20 @@
 				method: 'POST',
 				url: '/login',
 				headers: {'Content-type': 'application/json'},
-				data: LoginDto		
+				data: LoginDto,
+				success: function (data){
+				if(data==1){
+					setTimeout("location.href='/admin'", 1000);
+				}	
+				else if(data==2){
+					alert("아이디 혹은 비밀 번호가 틀렸습니다 5회 오류시 1분 동안 로그인이 제한됩니다")
+				}
+				else if(data==3){
+					alert("5회 오류로 로그인이 1분 제한됩니다")
+				}
+				}
 				});
-				setTimeout("location.href='/admin'", 1000);
+				
 				
 		}
 			

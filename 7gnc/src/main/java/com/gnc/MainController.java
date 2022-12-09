@@ -56,6 +56,7 @@ public class MainController {
 	int masterLessonCenterId;
 	String testKeyword;
 	int masterArDeviceId;
+	int masterCount =0;
 	@Autowired
 	UserDao userDao;
 
@@ -103,7 +104,7 @@ public class MainController {
 	}
 
 	@PostMapping("/login")
-	public String login(@RequestBody String result, BindingResult bindingResult, HttpServletRequest request) {
+	public @ResponseBody int login(@RequestBody String result, BindingResult bindingResult, HttpServletRequest request) {
 		LocalDateTime now = LocalDateTime.now();
 		String UID = "";
 		String PSWD = "";
@@ -112,19 +113,42 @@ public class MainController {
 		JsonElement element = parser.parse(result);
 		UID = element.getAsJsonObject().get("UID").getAsString();
 		PSWD = element.getAsJsonObject().get("PSWD").getAsString();
-
+		
+		
+		
+		
 		String check = userDao.getUserAccount(UID, PSWD);
 
+	
+		
 		if (check == null) {
-			bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-			return "login";
-		} else {
+			
+			masterCount++;
+			if(masterCount==5||masterCount==10) {
+				long start = System.currentTimeMillis(); 
+				  long end = start + 20*1000;
+				  while(System.currentTimeMillis() < end) { 
+					  masterCount=5;
+					  return 3;
+				  }
+				  
+				return 3;
+			}
+			else {
+				return 2;
+			}
+		} 
+		
+		else if(masterCount!=5 && check !=null) {
 			HttpSession session = request.getSession();
 			session.setAttribute(SessionConstants.LOGIN_MEMBER, check);
 			userDao.last_lgn_dtDao(check, now);
-
-			return "redirect:/admin";
+			masterCount=0;
+			return 1;
 		}
+		
+		return 3;
+		
 
 	}
 
@@ -416,6 +440,16 @@ public class MainController {
 		return "popup";
 
 	}
+	@RequestMapping("/popup-center")
+	public String popup_center(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			String date, Model model) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		
+		return "popup_center";
+		
+		}
 
 	@RequestMapping("/view")
 	public String view(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
@@ -1043,7 +1077,8 @@ public class MainController {
 			int increase= start-1;
 			String in= Integer.toString(increase);
 			if(libraryDao.getLibraryPeopleDao(Integer.toString(start))!=null&&libraryDao.getLibraryPeopleDao(in)!=null) {
-				 a=((libraryDao.getLibraryPeopleDao(Integer.toString(start))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(Integer.toString(start)))*100;
+				
+				a=((libraryDao.getLibraryPeopleDao(Integer.toString(start))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
 			}
 			else {
 				a=0;
@@ -1060,7 +1095,7 @@ public class MainController {
 				int increase = i-1;
 				String in= Integer.toString(increase);
 				if(libraryDao.getLibraryPeopleDao(Integer.toString(i))!=null&&libraryDao.getLibraryPeopleDao(in)!=null) { 
-					a=((libraryDao.getLibraryPeopleDao(Integer.toString(i))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(Integer.toString(i)))*100;
+					a=((libraryDao.getLibraryPeopleDao(Integer.toString(i))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
 				}
 				else {
 					a=0;
@@ -1655,7 +1690,7 @@ public class MainController {
 		list.add(Integer.parseInt(year));
 		
 		if(libraryDao.getLibraryPeopleDao(year)!=null&&libraryDao.getLibraryPeopleDao(in)!=null) {
-			 a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
+			 a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
 		}
 		else { a=0;}
 		
@@ -1911,7 +1946,7 @@ public class MainController {
 
 	@GetMapping("/test")
 	public @ResponseBody String testService() {
-		kpiService.kpi();
+		//kpiService.kpi();
 		
 		return "안녕";
 	}

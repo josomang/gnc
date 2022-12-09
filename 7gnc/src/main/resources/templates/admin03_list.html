@@ -81,11 +81,11 @@
                 <table>
                 <caption style="display: none;">돌봄센터 목록</caption>
                     <colgroup>
-                    <col width="100px">
-                    <col width="auto">
-                    <col width="200px">
-                    <col width="200px">
-                    <col width="200px">
+                    <col style="width:100px">
+                    <col style="width:auto">
+                    <col style="width:200px">
+                    <col style="width:200px">
+                    <col style="width:200px">
                     </colgroup>
                     <thead>
                         <tr>
@@ -103,10 +103,10 @@
                              <td ><span th:text="${tt.CENTER_ID}"></span></td>
                             <td><span th:text="${tt.CENTER_UID}"></span></td>
                             <td>
-                                <button type="button" class="btn_basic" th:id="${tt.CENTER_ID}" 
-                                onclick="idSend(this.getAttribute('id'))">수정</button>
-                                <button type="button" class="btn_basic" th:id="${tt.CENTER_ID}"
-                                onclick="deleteSend(this.getAttribute('id'))">삭제</button>
+                                <button type="button" class="btn_basic" th:value="${tt.CENTER_ID}" 
+                                onclick="idSend(this.getAttribute('value'))">수정</button>
+                                <button type="button" class="btn_basic" th:value="${tt.CENTER_ID}"
+                                onclick="deleteSend(this.getAttribute('value'))">삭제</button>
                             </td>
                         </tr>
                     </tbody>
@@ -114,22 +114,27 @@
 
                 <div class="paging" th:style="${check== 0? 'display:none':'display:block'}">
                    <ul class="pagination pagination-sm no-margin pull-right">
+                   <li>
 						<span class="before" th:if="${pageMaker.prev} == true">
 							<a th:href="@{/center(page=${pageMaker.startPage}-1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
 						</span>
+						</li>
+						<li>
 						<span class="current" th:each="idx,iterStat : 
 					${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
 							th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
 							<a th:href="@{/center(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
 								th:text="${idx}"></a>
 						</span>
-
+						</li>
+<li>
 						<span class="next" th:if="${pageMaker.next} == true and 
 					${pageMaker.endPage > 0}">
 							<a th:href="@{/center(page=${pageMaker.endPage}+1,
 					perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
 						</span>
+						</li>
 					</ul>
                 </div>
 

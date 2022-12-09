@@ -110,25 +110,31 @@
 				</table>
 
 				<div class="paging" th:style="${check== 0? 'display:none':'display:block'}">
-					<ul class="pagination pagination-sm no-margin pull-right">
-						<span class="before" th:if="${pageMaker.prev} == true">
-							<a th:href="@{/admin(page=${pageMaker.startPage}-1,
-					perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
-						</span>
-						<span class="current" th:each="idx,iterStat : 
-					${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
-							th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
-							<a th:href="@{/admin(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
-								th:text="${idx}"></a>
-						</span>
-
-						<span class="next" th:if="${pageMaker.next} == true and 
-					${pageMaker.endPage > 0}">
-							<a th:href="@{/admin(page=${pageMaker.endPage}+1,
-					perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
-						</span>
-					</ul>
-				</div>
+					
+					     <ul class="pagination pagination-sm no-margin pull-right">
+     <li>
+                  <span class="before" th:if="${pageMaker.prev} == true">
+                     <a th:href="@{/admin(page=${pageMaker.startPage}-1,
+               perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
+                  </span>
+                  </li>
+                  <li>
+                  <span class="current" th:each="idx,iterStat : 
+               ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
+                     th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
+                     <a th:href="@{/admin(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+                        th:text="${idx}"></a>
+                  </span>
+</li>
+<li>
+                  <span class="next" th:if="${pageMaker.next} == true and 
+               ${pageMaker.endPage > 0}">
+                     <a th:href="@{/admin(page=${pageMaker.endPage}+1,
+               perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
+                  </span>
+                  </li>
+               </ul>
+            </div>
 
 			</div><!-- //area_table -->
 
@@ -145,8 +151,8 @@
 					<table class="table_listview">
 					<caption style="display: none;">수업등록</caption>
 						<colgroup>
-							<col width="100px">
-							<col width="auto">
+							<col style="width:100px">
+							<col style="width:auto">
 						</colgroup>
 						<tbody>
 							<tr>
