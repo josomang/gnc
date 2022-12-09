@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 공공도서관 AR서비스</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/board.css" />
+    <link rel="stylesheet" type="text/css" href="css/color.css" />
+    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/date.js"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+<body>
+  <!-- 돌봄센터 등록 -->
+        <div class="popup_layer">
+            <div class="popup_box">
+                <h1>돌봄센터 등록
+                    <button type="button" class="btn_close"><span class="material-symbols-outlined">close</span></button>
+                </h1>
+                <div class="tablebox">
+                    <table class="table_listview">
+                    <caption style="display: none;">돌봄센터 등록</caption>
+                        <colgroup>
+                            <col width="120px">
+                            <col width="auto">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th>센터명*</th>
+                                <td><input type="text" id="CENTER_TTL" class="input_100per" autocomplete="off">
+                                <label style="display: none;" for="CENTER_TTL">센터명입력*</label></td>
+                            </tr>
+                            <tr>
+                                <th>센터코드*</th>
+                                <td><input type="text" id="CENTER_ID" class="input_100per" autocomplete="off">
+                                <label style="display: none;" for="CENTER_ID">센터코드입력*</label></td>
+                            </tr>
+                            <tr>
+                                <th>담당자ID*</th>
+                                <td><input type="text" id="CENTER_UID" class="input_100per" autocomplete="off">
+                                <label style="display: none;" for="CENTER_UID">담당자ID입력*</label></td>
+                            </tr>
+                            <tr>
+                                <th>비밀번호*</th>
+                                <td><input type="password" id="PSWD" class="input_100per" autocomplete="off">
+                                <label style="display: none;" for="PSWD">비밀번호입력*</label></td>
+                            </tr>
+                            <tr>
+                                <th>비밀번호 확인*</th>
+                                <td><input type="password" id="CENTER_PSWD" class="input_100per" autocomplete="off">
+                                <label style="display: none;" for="CENTER_PSWD">비밀번호입력*</label></td>
+                            </tr>
+                            <tr>
+                                <th>돌봄 아동 수*</th>
+                                <td><input type="number" id="CENTER_MAX_NOPE" class="input_200">명
+                                <label style="display: none;" for="CENTER_MAX_NOPE">아동수입력</label></td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn">
+                    <button type="button" class="btn_delete">취소</button>
+                    <button type="button" class="btn_save" onclick="dataSend()">확인</button>
+                </div>
+            </div>
+        </div><!--// popup -->
+
+
+
+
+
+</body>
+
+<script>
+
+let modal = document.getElementsByClassName("popup_layer")[0];
+	let modal2 = document.getElementsByClassName("btn")[0];
+	// Get the <span> element that closes the modal
+	let btn_close = document.getElementsByClassName("btn_close")[0];
+	let btn_close2 = document.getElementsByClassName("btn_delete")[0];
+	let btn_open = document.getElementsByClassName("btn_save")[0];
+
+
+
+	btn_close2.onclick = function () {
+		window.close();
+		setTimeout("location.reload()", 100);
+	}
+	// When the user clicks on <span> (x), close the modal
+	btn_close.onclick = function () {
+		window.close();
+		setTimeout("location.reload()", 100);
+	}
+	
+
+
+function dataSend() {
+		var result = confirm("등록하시겠습니까?");
+		if(result){
+		var CENTER_TTL = $("#CENTER_TTL").val();
+		var CENTER_ID = $("#CENTER_ID").val();
+		var CENTER_UID = $("#CENTER_UID").val();
+		var PSWD = $("#PSWD").val();
+		var CENTER_PSWD = $("#CENTER_PSWD").val();
+		var CENTER_MAX_NOPE = $("#CENTER_MAX_NOPE").val();
+		
+		
+		
+
+		if (CENTER_TTL == "" || CENTER_ID=="" || CENTER_UID==""||CENTER_MAX_NOPE=="") {
+			alert("모두 입력해주세요")
+		}
+		else if(PSWD!=CENTER_PSWD){
+			alert("비밀번호가 일치하지 않습니다")	
+		}
+		else {
+			var CenterDto = JSON.stringify({
+				CENTER_TTL: CENTER_TTL,
+				CENTER_ID: CENTER_ID,
+				CENTER_UID: CENTER_UID,
+				CENTER_PSWD: CENTER_PSWD,
+				CENTER_MAX_NOPE: CENTER_MAX_NOPE,
+			});
+
+
+			$.ajax({
+				method: 'POST',
+				url: '/center-register',
+				headers: {'Content-type': 'application/json'},
+				data: CenterDto,
+				 success: function (data) {
+					opener.location.reload();
+
+           window.close();
+				}
+				
+			})
+       
+		}
+     }
+	}
+</script>
