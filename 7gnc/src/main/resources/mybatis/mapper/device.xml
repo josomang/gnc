@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
        
         <select id="deviceListDao" resultType="com.gnc.dto.DeviceDto" parameterType="string"> 
-select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where DEL_DT IS NULL order by AR_DEVICE_ID LIMIT #{pageStart}, #{perPageNum}</select>
+select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where DEL_DT IS NULL order by AR_DEVICE_ID LIMIT ${pageStart}, ${perPageNum}</select>
 	
 	
 	<select id="getCount" resultType="int">
@@ -27,7 +27,7 @@ select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO fr
 	</select>
 	
 		<select id="searchDao" resultType="com.gnc.dto.DeviceDto">
-		select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where AR_DEVICE_SN LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL order by AR_DEVICE_ID LIMIT #{pageStart}, #{perPageNum}
+		select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO from TBL_AR_DEVICE_INFO where AR_DEVICE_SN LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL order by AR_DEVICE_ID LIMIT ${pageStart}, ${perPageNum}
 	</select>
 	
 	
