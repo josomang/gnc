@@ -1911,7 +1911,7 @@ public class MainController {
 	public String deviceDelete(@RequestBody int number) {
 		LocalDateTime now = LocalDateTime.now();
 
-		deviceDao.deleteDao(now, number);
+		deviceDao.deleteDao(number);
 
 		return "redirect:/device";
 

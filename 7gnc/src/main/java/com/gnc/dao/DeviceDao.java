@@ -28,7 +28,7 @@ public interface DeviceDao {
 	
 	public List<String> searchDao(@Param("keyword")Object keyword,PageDTO pageDTO,@Param("pageStart") int start,@Param("perPageNum")int perPageNum,Criteria cri);
 	
-	public void deleteDao(@Param("DEL_DT")LocalDateTime DEL_DT,@Param("AR_DEVICE_ID")int AR_DEVICE_ID);
+	public void deleteDao(@Param("AR_DEVICE_ID")int AR_DEVICE_ID);
 	
 	
 }

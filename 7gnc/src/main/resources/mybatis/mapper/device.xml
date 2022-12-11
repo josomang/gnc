@@ -35,8 +35,8 @@ select AR_DEVICE_ID,AR_DEVICE_SN,AR_DEVICE_TYPE,AR_DEVICE_STTS,AR_DEVICE_MEMO fr
     SELECT count(*) FROM TBL_AR_DEVICE_INFO where AR_DEVICE_SN LIKE CONCAT('%',#{keyword},'%') and DEL_DT IS NULL
 </select>
 	
-	<update id="deleteDao" >
-		 update TBL_AR_DEVICE_INFO set DEL_DT = #{DEL_DT} where AR_DEVICE_ID = #{AR_DEVICE_ID}
-	</update>
+	<delete id="deleteDao" >
+		 delete from TBL_AR_DEVICE_INFO DEL_DT where AR_DEVICE_ID = #{AR_DEVICE_ID}
+	</delete>
 	
 </mapper>
