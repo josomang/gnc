@@ -217,11 +217,12 @@
 
 	btn_close2.onclick = function () {
 		modal.style.display = "none";
-
+		setTimeout("location.reload()", 100);
 	}
 	// When the user clicks on <span> (x), close the modal
 	btn_close.onclick = function () {
 		modal.style.display = "none";
+		setTimeout("location.reload()", 100);
 	}
 	
 	
@@ -260,16 +261,18 @@
 				headers: {'Content-type': 'application/json'},
 				data: CenterDto,
 				success: function(data){
+					  modal.style.display = "none";
+		setTimeout("location.reload()", 1000);
    
     },
      error:function(request,status,error){
         alert("해당 시리얼 넘버가 존재합니다"); // 실패 시 처리
+       
        }
      
 
 			})
-        modal.style.display = "none";
-		setTimeout("location.reload()", 1000);
+      
 		}
      }
 	}
