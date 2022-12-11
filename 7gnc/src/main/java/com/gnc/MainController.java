@@ -56,7 +56,11 @@ public class MainController {
 	int masterLessonCenterId;
 	String testKeyword;
 	int masterArDeviceId;
-	int masterCount =0;
+	int masterCount =1;
+	long masterStart = System.currentTimeMillis(); 
+	long masterEnd;
+	
+	
 	@Autowired
 	UserDao userDao;
 
@@ -118,28 +122,31 @@ public class MainController {
 		
 		
 		String check = userDao.getUserAccount(UID, PSWD);
-
+		if(System.currentTimeMillis() < masterEnd) {
+			return 3;
+		}
 	
 		
 		if (check == null) {
 			
-			masterCount++;
-			if(masterCount==5||masterCount==10) {
-				long start = System.currentTimeMillis(); 
-				  long end = start + 20*1000;
-				  while(System.currentTimeMillis() < end) { 
-					  masterCount=5;
+			if(masterCount==5) {
+				masterEnd = masterStart + 60*1000;
+				
+				  if(System.currentTimeMillis() < masterEnd) { 
+					  masterCount=1;
 					  return 3;
 				  }
-				  
-				return 3;
+				  masterCount=1;
 			}
 			else {
+				masterCount++;
 				return 2;
 			}
 		} 
 		
-		else if(masterCount!=5 && check !=null) {
+		else if(System.currentTimeMillis() > masterEnd&&check !=null) {
+			
+			
 			HttpSession session = request.getSession();
 			session.setAttribute(SessionConstants.LOGIN_MEMBER, check);
 			userDao.last_lgn_dtDao(check, now);
@@ -147,7 +154,8 @@ public class MainController {
 			return 1;
 		}
 		
-		return 3;
+		
+			return 3;
 		
 
 	}
