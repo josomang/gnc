@@ -1,5 +1,6 @@
 package com.gnc.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -7,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import com.gnc.dao.ArDao;
@@ -41,7 +46,7 @@ public class kpiService {
 	
 //@Scheduled(cron = "30 * * * * *")	
 @Scheduled(cron = "0 30 22 31 12 ?")
-public String kpi(){
+public String kpi() throws Exception{
 		
 		LocalDateTime now = LocalDateTime.now();
 		
@@ -51,9 +56,11 @@ public String kpi(){
 		String in= Integer.toString(increase);
 		Integer d,e;
 		double a,b,c;
-		if(arDao.arStatisticsSum(year)!=null&&arDao.arStatisticsSum(in)!=null) {
-			a= ((arDao.arStatisticsSum(year)-arDao.arStatisticsSum(in))/(double)arDao.arStatisticsSum(in))*100;
 		
+		if(arDao.arStatisticsSum(year)!=null&&arDao.arStatisticsSum(in)!=null) {
+			
+			a= ((arDao.arStatisticsSum(year)-arDao.arStatisticsSum(in))/(double)arDao.arStatisticsSum(in))*100;
+
 		}
 		else {
 			a=0;
@@ -69,7 +76,7 @@ public String kpi(){
 		}
 		
 		if(libraryDao.getLibraryPeopleDao(year)!=null&&libraryDao.getLibraryPeopleDao(in)!=null) {
-			c=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
+			c=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
 		}
 		else {
 			c=0;
@@ -170,15 +177,22 @@ public String kpi(){
 			 * kpi.put("class_utztn_rate", map5);
 			 */
 		
-		ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
-		System.out.println("response:"+response);
-		 System.out.println(obj.toString());
-
+		//ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
 		
-		  
+
+		 
+			ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>(obj.toString()), String.class);
+			 System.out.println("response:"+response);
+			 System.out.println(obj.toString());
+	
+				
+				
 
 		return obj.toString();
 	}
+
+
+
 
 	
 }
