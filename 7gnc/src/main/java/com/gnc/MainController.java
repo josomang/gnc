@@ -57,7 +57,7 @@ public class MainController {
 	String testKeyword;
 	int masterArDeviceId;
 	int masterCount =1;
-	long masterStart = System.currentTimeMillis(); 
+	long masterStart; 
 	long masterEnd;
 	
 	
@@ -130,7 +130,7 @@ public class MainController {
 		if (check == null) {
 			
 			if(masterCount==5) {
-				masterEnd = masterStart + 60*1000;
+				masterEnd = System.currentTimeMillis() + 60*1000;
 				
 				  if(System.currentTimeMillis() < masterEnd) { 
 					  masterCount=1;
