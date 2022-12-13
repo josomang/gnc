@@ -154,11 +154,18 @@ public void kpi() throws Exception{
 		 data1.addProperty("increase_rate",Math.round(a));
 		 obj.add("ar_dgstfn", data1);
 		 
-		 JsonObject data2 = new JsonObject();
-		 data2.addProperty("target", userDao.centerStatisticsSum(year));
-		 data2.addProperty("result", centerDao.centerStatisticsSum(year));
-		 data2.addProperty("increase_rate", Math.round(b));
-		 obj.add("class_dgstfn", data2);
+		 JsonObject data4 = new JsonObject();
+		 data4.addProperty("target", userDao.arUseStatisticsSum(year));
+		 data4.addProperty("result", arDao.arUseStatisticsSum(56*21*12,year));
+		 data4.addProperty("increase_rate", d);
+		 obj.add("ar_utztn_rate", data4);
+		 
+		 JsonObject data5 = new JsonObject();
+		 data5.addProperty("target", userDao.centerUseStatisticsSum(year));
+		 data5.addProperty("result", centerDao.centerUseStatisticsSum(year));
+		 data5.addProperty("increase_rate",e);
+		 obj.add("class_utztn_rate", data5);
+		 
 		 
 		 JsonObject data3 = new JsonObject();
 		 data3.addProperty("target", userDao.getLibraryPeopleDao(year));
@@ -166,17 +173,14 @@ public void kpi() throws Exception{
 		 data3.addProperty("increase_rate",Math.round(c));
 		 obj.add("library_utztn_count", data3);
 		 
-		 JsonObject data4 = new JsonObject();
-		 data4.addProperty("target", userDao.arUseStatisticsSum(year));
-		 data4.addProperty("result", arDao.arUseStatisticsSum(56*21*12,year));
-		 data4.addProperty("increase_rate", d);
-		 obj.add("ar_utztn_rate", data4);
+		 JsonObject data2 = new JsonObject();
+		 data2.addProperty("target", userDao.centerStatisticsSum(year));
+		 data2.addProperty("result", centerDao.centerStatisticsSum(year));
+		 data2.addProperty("increase_rate", Math.round(b));
+		 obj.add("class_dgstfn", data2);
+		 
 		
-		 JsonObject data5 = new JsonObject();
-		 data5.addProperty("target", userDao.centerUseStatisticsSum(year));
-		 data5.addProperty("result", centerDao.centerUseStatisticsSum(year));
-		 data5.addProperty("increase_rate",e);
-		 obj.add("class_utztn_rate", data5);
+		
 		
 		
 		
@@ -202,6 +206,7 @@ public void kpi() throws Exception{
 			//System.out.println("response:"+response);
 			 //System.out.println(obj.getAsJsonObject());
 	ResponseEntity<Void> response = restTemplate.postForEntity(url, map, Void.class);
+	//System.out.println(map);
 			 //restTemplate.postForEntity(url, request, Object.class);
 			
 	
