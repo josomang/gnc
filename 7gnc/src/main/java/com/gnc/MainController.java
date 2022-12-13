@@ -14,7 +14,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -118,10 +120,12 @@ public class MainController {
 		UID = element.getAsJsonObject().get("UID").getAsString();
 		PSWD = element.getAsJsonObject().get("PSWD").getAsString();
 		
+		 String coverted = new String(DatatypeConverter.parseBase64Binary(PSWD)); 
 		
 		
+		coverted+="6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918";
 		
-		String check = userDao.getUserAccount(UID, PSWD);
+		String check = userDao.getUserAccount(UID, coverted);
 		if(System.currentTimeMillis() < masterEnd) {
 			return 3;
 		}
@@ -159,6 +163,12 @@ public class MainController {
 		
 
 	}
+
+	private void String(byte[] decodeBase64) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	@PostMapping("/survey-login")
 	public String surveyLogin(@RequestBody String result, BindingResult bindingResult, HttpServletRequest request) {
@@ -1950,13 +1960,5 @@ public class MainController {
 	}
 
 
-	
-
-	@GetMapping("/test")
-	public @ResponseBody String testService() {
-		//kpiService.kpi();
-		
-		return "안녕";
-	}
 
 }

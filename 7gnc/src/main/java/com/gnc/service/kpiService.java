@@ -3,9 +3,13 @@ package com.gnc.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
@@ -16,6 +20,9 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gnc.dao.ArDao;
 import com.gnc.dao.CenterDao;
 import com.gnc.dao.DeviceDao;
@@ -23,6 +30,7 @@ import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 @Service
 public class kpiService {
@@ -44,9 +52,9 @@ public class kpiService {
 	@Autowired
 	DeviceDao deviceDao;
 	
-//@Scheduled(cron = "30 * * * * *")	
-@Scheduled(cron = "0 30 22 31 12 ?")
-public String kpi() throws Exception{
+@Scheduled(cron = "30 * * * * *")	
+//@Scheduled(cron = "0 30 22 31 12 ?")
+public void kpi() throws Exception{
 		
 		LocalDateTime now = LocalDateTime.now();
 		
@@ -100,8 +108,10 @@ public String kpi() throws Exception{
 		
 		
 		 
-		/*
-		 * HashMap<String,Integer> map = new HashMap<>(); HashMap<String,Integer> map1 =
+		
+		//  HashMap<String,Integer> map = new HashMap<>();
+/*		
+ HashMap<String,Integer> map1 =
 		 * new HashMap<>(); HashMap<String,Integer> map2 = new HashMap<>();
 		 * HashMap<String,Integer> map3 = new HashMap<>(); HashMap<String,Integer> map4
 		 * = new HashMap<>(); HashMap<String,Integer> map5 = new HashMap<>();
@@ -132,6 +142,8 @@ public String kpi() throws Exception{
 		 * map5.getOrDefault("result",0)+85); map5.put("increase_rate",
 		 * map5.getOrDefault("increase_rate",0)+10);
 		 */
+		
+		
 		
 		JsonObject obj =new JsonObject();
 		 obj.addProperty("year", Integer.parseInt(year));
@@ -166,10 +178,16 @@ public String kpi() throws Exception{
 		 data5.addProperty("increase_rate",e);
 		 obj.add("class_utztn_rate", data5);
 		
-		  
+		
+		
+		 
 		 // RestTemplate 객체 생성
 		 RestTemplate restTemplate = new RestTemplate();
-		
+		 HttpHeaders headers = new HttpHeaders();
+		 Map<Object, Object> map = null;
+		    
+		   
+		map = new ObjectMapper().readValue(obj.toString(), Map.class);
 		 
 			/*
 			 * kpi.put("year", map); kpi.put("ar_dgstfn", map1); kpi.put("class_dgstfn",
@@ -177,18 +195,18 @@ public String kpi() throws Exception{
 			 * kpi.put("class_utztn_rate", map5);
 			 */
 		
-		//ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>( obj.toString()), String.class);
 		
-
-		 
-			ResponseEntity<String> response = restTemplate.exchange("http://61.83.247.71:9000/kpi", HttpMethod.POST,new HttpEntity<String>(obj.toString()), String.class);
-			 System.out.println("response:"+response);
-			 System.out.println(obj.toString());
+		
+	 String url = "http://61.83.247.71:9000/kpi";
+			//restTemplate.postForObject(url, "5" , Object.class);
+			//System.out.println("response:"+response);
+			 //System.out.println(obj.getAsJsonObject());
+	ResponseEntity<Void> response = restTemplate.postForEntity(url, map, Void.class);
+			 //restTemplate.postForEntity(url, request, Object.class);
+			
 	
-				
-				
 
-		return obj.toString();
+		
 	}
 
 
