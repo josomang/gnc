@@ -13,9 +13,12 @@
 .btn_basic {border:1px solid #CCC; padding:7px 20px;}
 .a_link {border:1px solid #FFF; width:80%; margin:0 auto; max-width:500px; padding:7px 0; display:inline-block; text-align:center;}
 .a_link:hover {background-color:#000; color:#FFF;}
+.btn_board {border:1px solid #CCC; padding:3px 5px;}
 
 button:hover {opacity: 0.8;}
 button span {position: absolute; top:50%; left: 50%; transform: translate(-50%,-50%);}
+.btn_bottom {display: flex; justify-content: space-between; padding-right: 20px; align-items: center;}
+.btn_bottom .score_data span {font-size: 20px; font-weight: 600; margin-left: 10px; color: #28394e}
 
 /* board */
 

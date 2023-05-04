@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 공공도서관 AR서비스</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/board.css" />
+    <link rel="stylesheet" type="text/css" href="css/color.css" />
+    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/date.js"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+	<!-- AR 만족도 상세보기 -->
+        <div class="popup_layer" id="popup_score">
+            <div class="popup_box">
+                <h1><span>게이미피케이션 어린왕자</span>상세보기
+                    <button type="button" class="btn_close" onclick="window.close()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </h1>
+                <div class="tablebox">
+                    <table class="table_listview">
+                        <caption style="display: none;">검색</caption>
+                        <colgroup>
+                            <col width="200px">
+                            <col width="auto">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th>연령대</th>
+                                <td><input type="radio" id="age01" name="age"><label for="age01">연령대01</label></td>
+                            </tr>
+                            <tr>
+                                <th>성별</th>
+                                <td><input type="radio" id="male" name="gender"><label for="male">남</label>
+                                    <input type="radio" id="female" name="gender"><label for="female">여</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>거주지</th>
+                                <td><input type="radio" id="home01" name="home"><label for="home01">거주지01</label>
+                                    <input type="radio" id="home02" name="home"><label for="home02">거주지02</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt10 txtcenter">
+                        <button type="button" class="btn_save">검색</button>
+                    </div>
+                </div>
+                <div class="tablebox">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>이용날짜</th>
+                                <th>연령대</th>
+                                <th>성별</th>
+                                <th>거주지</th>
+                                <th>만족도</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <tr th:each="tt : ${list}">
+                             <td><span th:text="${tt.USE_DT}"></span></td>
+							<td><span th:if="${tt.AR_USER_CAT}==01" th:text="미취학"></span>
+							<span th:if="${tt.AR_USER_CAT}==02" th:text="초등"></span>
+							<span th:if="${tt.AR_USER_CAT}==03" th:text="중등"></span>
+							<span th:if="${tt.AR_USER_CAT}==04" th:text="고등"></span>
+							<span th:if="${tt.AR_USER_CAT}==05" th:text="일반"></span></td>
+							<td><span th:if="${tt.gender}==1" th:text="남자">
+							<span th:if="${tt.gender}==2" th:text="여자">
+							</span></td>
+							<td><span th:if="${tt.address}==01" th:text="중원구"></span>
+							<span th:if="${tt.address}==02" th:text="수정구"></span>
+							<span th:if="${tt.address}==03" th:text="분당구"></span>
+							<span th:if="${tt.address}==04" th:text="기타"></span>
+							</td>
+							<td><span th:text="${tt.DGSTFN_SCORE}" ></span></td>
+                            </tr>
+                          
+                          
+                          
+                        
+                           
+                           
+                          
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="paging">
+					
+					     <ul class="pagination pagination-sm no-margin pull-right">
+     <li>
+                  <span class="before" th:if="${pageMaker.prev} == true">
+                     <a th:href="@{/aryg(page=${pageMaker.startPage}-1,
+               perPageNum=${pageMaker.cri.perPageNum})}">이전</a>
+                  </span>
+                  </li>
+                  <li>
+                  <span class="current" th:each="idx,iterStat : 
+               ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
+                     th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
+                     <a th:href="@{/aryg(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+                        th:text="${idx}">다음</a>
+                  </span>
+</li>
+<li>
+
+           
+                
+                <div class="btn_bottom mt10 p-20">
+                    <div>
+                        <button type="button" class="btn_excel">엑셀다운로드</button>
+                        <button type="button" class="btn_excel">엑셀업로드</button>
+                    </div>
+                    <div>
+                        <span class="score_data">만족도평균<span th:text="${avg}"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div><!--// popup -->
+
+</body>
+</html>

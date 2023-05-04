@@ -10,6 +10,7 @@ html, body, div, span, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre
     background:transparent;
 	  font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
+    color:#282828;
     word-break: keep-all;
     line-height: 1.2;
 }
@@ -57,9 +58,11 @@ h1, h2, h3, h4, h5, h6 {margin-bottom: 0;}
 .mt50 {margin-top:50px !important;}
 .mb0 {margin-bottom:0 !important;}
 .mb10 {margin-bottom: 10px !important;}
+.p-20 {padding:0 20px !important;}
 .txtunderline {text-decoration: underline;}
 .txtalign_r {text-align: right !important;}
 .txtleft {text-align: left !important;}
+.txtcenter {text-align: center !important;}
 .bt03 {border-top:3px solid #DDD}
 
 select {min-width:200px; border:1px solid #CCC; border-radius:3px; height:32px; padding:0 30px 0 10px; -webkit-appearance: none; background: url(../images/expand_more.png) no-repeat right; background-size:30px auto; margin:0 1px}
@@ -71,8 +74,9 @@ select {min-width:200px; border:1px solid #CCC; border-radius:3px; height:32px; 
 .text_ellipsis {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: break-all;}
 
 .popup_layer {background-color: rgba(0,0,0,0.5); width:100%; height:100vh; position: fixed; top:0; left: 0; z-index: 9999;}
-.popup_box {width:90%; max-width:1000px; height:auto; padding:0 0 20px; background-color: #FFF; border:1px solid #DDD; box-shadow: 0px 0px 3px 0px rgba(200,200,200,0.50); position: absolute; top:40%; left: 50%; transform: translate(-50%, -50%); z-index: 99999;}
+.popup_box {width:90%; max-width:1000px; height:auto; padding:0 0 20px; background-color: #FFF; border:1px solid #DDD; box-shadow: 0px 0px 3px 0px rgba(200,200,200,0.50); position: absolute; top:50%; left: 50%; transform: translate(-50%, -50%); z-index: 99999;}
 .popup_box h1 {border-bottom:1px solid #DDD; background-color: #EEE; height:30px; line-height: 30px; text-indent: 20px; padding:10px 0; font-weight: 500; font-size: 20px;}
+.popup_box h1 span {font-weight: 600; font-size: 20px; margin-right: 10px;}
 .popup_box h1 .btn_close {width:30px; height: 30px; font-size: 0; position: fixed; top: 10px; right: 10px;}
 .popup_box .msg {padding:20px; vertical-align: middle;}
 .popup_box .inner {padding:0 10px 0 20px; vertical-align: middle; height: 300px; overflow-y: auto; margin-bottom: 20px;}
@@ -94,3 +98,8 @@ select {min-width:200px; border:1px solid #CCC; border-radius:3px; height:32px; 
 .popup_box th:first-child,.popup_box td:first-child {border-left: 0;}
 .popup_box table input[type="checkbox"] {margin:0}
 .popup_box table .link {text-decoration: underline; cursor: pointer;}
+
+.popup_box .table_listview {height:auto;}
+.popup_box .table_listview input[type="radio"] {width:13px; height:13px;}
+.popup_box .table_listview input[type="radio"]+label {margin-right:15px}
+.popup_box .table_listview td {display: flex; justify-content: flex-start; align-items: center;}
