@@ -43,9 +43,9 @@ select sum(DGSTFN_SCORE) from TBL_AR_LOGS where USE_DT LIKE CONCAT('%',#{year},'
 </select>
 
 <insert id="arRegisterDao">
-      insert into TBL_AR_LOGS(USE_DT,AR_CN_TYPE,AR_USER_CAT,DGSTFN_SCORE,lOG_CRT_YMD)
+      insert into TBL_AR_LOGS(USE_DT,AR_CN_TYPE,AR_USER_CAT,DGSTFN_SCORE,lOG_CRT_YMD,gender,address)
       values
-      (#{param1},#{param2},#{param3},#{param4},#{param5})
+      (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
     </insert>
     
   <select id="getCount01_10" resultType="int">

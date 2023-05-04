@@ -112,25 +112,25 @@
                         <td>뮤지컬 도와줘 치로로</td>
                             <td th:text="${fish}+'명'"></td>
                             <td th:text="${fishsum}+'점'"></td>
-                            <td th:text="${fishav}+'점'"></td>
+                            <td><span th:text="${fishav}+'점'"></span><button type="button" class="btn_board ml5" onclick="fishavpopup()">상세보기</button></td>
                         </tr>
                         <tr>
                         <td>뮤지컬 어린왕자</td>
                             <td th:text="${yg}+'명'"></td>
                             <td th:text="${ygsum}+'점'"></td>
-                            <td th:text="${ygav}+'점'"></td>
+                             <td><span th:text="${ygav}+'점'"></span><button type="button" class="btn_board ml5" onclick="ygavpopup()">상세보기</button></td>
                         </tr>
                         <tr>
                         <td>게이미피케이션 도와줘 치로로</td>
                             <td th:text="${arfish}+'명'"></td>
                             <td th:text="${arfishsum}+'점'"></td>
-                            <td th:text="${arfishav}+'점'"></td>
+                             <td><span th:text="${arfishav}+'점'"></span><button type="button" class="btn_board ml5" onclick="arfishavpopup()">상세보기</button></td>
                         </tr>
                         <tr>
                         <td>게이미피케이션 어린왕자</td>
                             <td th:text="${aryg}+'명'"></td>
                             <td th:text="${arygsum}+'점'"></td>
-                            <td th:text="${arygav}+'점'">></td>
+                             <td><span th:text="${arygav}+'점'"></span><button type="button" class="btn_board ml5" onclick="arygavpopup()">상세보기</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -153,7 +153,7 @@
                         <tr>
                             <td th:text="${all}+'곳'"></td>
                             <td th:text="${sumall}+'점'"></td>
-                            <td th:text="${avall}+'점'">></td>
+                           <td><span th:text="${avall}+'점'"></span><button type="button" class="btn_board ml5" onclick="avallpopup()">상세보기</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -176,6 +176,48 @@ function dataSend(){
 			location.href='dgs'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month
 			
 }
+
+
+  function fishavpopup() {
+	var s = document.getElementById("select_value")
+		var year = s.options[s.selectedIndex].text
+			
+			var month = $("#month").val()
+		window.open('fish_search'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month,'fish','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function ygavpopup() {
+		var s = document.getElementById("select_value")
+		var year = s.options[s.selectedIndex].text
+			
+			var month = $("#month").val()
+		window.open('yg_search'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month,'yg','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function arfishavpopup() {
+		var s = document.getElementById("select_value")
+		var year = s.options[s.selectedIndex].text
+			
+			var month = $("#month").val()
+		window.open('arfish_search'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month,'arfish','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function arygavpopup() {
+		var s = document.getElementById("select_value")
+		var year = s.options[s.selectedIndex].text
+			
+			var month = $("#month").val()
+		window.open('aryg_search'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month,'aryg','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function avallpopup() {
+		var s = document.getElementById("select_value")
+		var year = s.options[s.selectedIndex].text
+			
+			var month = $("#month").val()
+		window.open('avall_search'+'?'+'year='+year+month+'&&'+'year1='+year+'&&'+'mon='+month,'avall','top=250, left=500, width=1000, height=650, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
 
 </script>
 

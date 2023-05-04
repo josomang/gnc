@@ -112,25 +112,26 @@
                         <td>뮤지컬 도와줘 치로로</td>
                             <td th:text="${fish}+'명'"></td>
                             <td th:text="${fishsum}+'점'"></td>
-                            <td th:text="${fishav}+'점'"></td>
+                            <td><span th:text="${fishav}+'점'"></span><button type="button" class="btn_board ml5" onclick="fishavpopup()">상세보기</button></td>
                         </tr>
                         <tr>
                         <td>뮤지컬 어린왕자</td>
                             <td th:text="${yg}+'명'"></td>
                             <td th:text="${ygsum}+'점'"></td>
-                            <td th:text="${ygav}+'점'"></td>
+                            <td><span th:text="${ygav}+'점'"></span><button type="button" class="btn_board ml5" onclick="ygavpopup()">상세보기</button></td>
                         </tr>
                         <tr>
                         <td>게이미피케이션 도와줘 치로로</td>
                             <td th:text="${arfish}+'명'"></td>
                             <td th:text="${arfishsum}+'점'"></td>
-                            <td th:text="${arfishav}+'점'"></td>
+                            <td><span th:text="${arfishav}+'점'"></span><button type="button" class="btn_board ml5" onclick="arfishavpopup()">상세보기</button></td>
                         </tr>
                         <tr>
                         <td>게이미피케이션 어린왕자</td>
                             <td th:text="${aryg}+'명'"></td>
-                            <td th:text="${arygsum}+'점'"></td>
-                            <td th:text="${arygav}+'점'">></td>
+                            <td th:text="${arygsum}+'점'"></td>                           
+                            <td><span th:text="${arygav}+'점'"></span><button type="button" class="btn_board ml5" onclick="arygavpopup()">상세보기</button></td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -153,7 +154,7 @@
                         <tr>
                             <td th:text="${all}+'곳'"></td>
                             <td th:text="${sumall}+'점'"></td>
-                            <td th:text="${avall}+'점'">></td>
+                            <td><span th:text="${avall}+'점'"></span><button type="button" class="btn_board ml5" onclick="avallpopup()">상세보기</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -177,6 +178,27 @@ var month = $("#month").val()
 			
 			
 }
+
+	 function fishavpopup() {
+		window.open('fish','fish','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function ygavpopup() {
+		window.open('yg','yg','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function arfishavpopup() {
+		window.open('arfish','arfish','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function arygavpopup() {
+		window.open('aryg','aryg','top=250, left=500, width=1000, height=700, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
+	function avallpopup() {
+		window.open('avall','avall','top=250, left=500, width=1000, height=650, status=no, menubar=no, toolbar=no, resizable=no');
+
+	}
 
 </script>
 
