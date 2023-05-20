@@ -21,6 +21,11 @@ public interface CenterDao {
 			@Param("CENTER_UID")String CENTER_UID,@Param("CENTER_PSWD")String CENTER_PSWD, 
 			@Param("CENTER_MAX_NOPE")int CENTER_MAX_NOPE,@Param("UPDT_DT")LocalDateTime UPDT_DT );
 	
+	public void updateDao2(@Param("CENTER_TTL")String CENTER_TTL,@Param("CENTER_ID")String CENTER_ID,
+			@Param("CENTER_UID")String CENTER_UID,@Param("CENTER_PSWD")String CENTER_PSWD, 
+			@Param("CENTER_MAX_NOPE")int CENTER_MAX_NOPE,@Param("UPDT_DT")LocalDateTime UPDT_DT,
+			@Param("DEL_DT")String DEL_DT);
+	
 	public List<String> centerListDao(Criteria cri,PageDTO pageDTO,@Param("pageStart")int start,@Param("perPageNum")int perPageNum);
 	
 	public List<CenterDto> centerDao(@Param("CENTER_ID")Object CENTER_ID);
@@ -43,4 +48,25 @@ public interface CenterDao {
 
 	public Object test();
 
+	public String checkIdDao(@Param("CENTER_ID")String CENTER_ID);
+	
+	public String checkDao(@Param("CENTER_ID")String CENTER_ID);
+	
+	public String checkDao2(@Param("LESSON_ID")int LESSON_ID,@Param("CENTER_ID")String CENTER_ID );
+	
+	public String checkDao3(@Param("LESSON_ID")int LESSON_ID);
+	
+	public String checkDao4(@Param("LESSON_ID")int LESSON_ID,@Param("CENTER_ID")String CENTER_ID );
+	
+	public void updateDao3(@Param("NOPE")Integer NOPE,@Param("DGSTFN_SCORE")Integer DGSTFN_SCORE,
+			@Param("LESSON_ID")int LESSON_ID,@Param("CENTER_ID")String CENTER_ID );
+	
+	public void updateDao4(@Param("DGSTFN_SCORE")Integer DGSTFN_SCORE,
+			@Param("LESSON_ID")int LESSON_ID,@Param("CENTER_ID")String CENTER_ID );
+	
+	public void updateDao5(@Param("NOPE")Integer NOPE,
+			@Param("LESSON_ID")int LESSON_ID,@Param("CENTER_ID")String CENTER_ID );
+	
+	public void innsertDao(int LESSON_ID,String CENTER_ID,Integer NOPE,Integer DGSTFN_SCORE);
+	
 }

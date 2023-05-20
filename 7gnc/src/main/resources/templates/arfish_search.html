@@ -40,35 +40,50 @@
                         <tbody>
                             <tr>
                                 <th>연령대</th>
-                                <td><input type="radio" id="age01" name="age"><label for="age01">연령대01</label></td>
+                                <td>
+                                <input type="radio" id="age00" name="age" checked="checked" value="0"><label for="0">전체</label>
+                                <input type="radio" id="age00" name="age" value="01"><label for="01">미취학</label>
+                                <input type="radio" id="age00" name="age" value="02"><label for="02">초등</label>
+                                <input type="radio" id="age00" name="age" value="03"><label for="03">중등</label>
+                                <input type="radio" id="age00" name="age" value="04"><label for="04">고등</label>
+                                <input type="radio" id="age00" name="age" value="05"><label for="05">일반</label>
+                                </td>
+                                
+                               
                             </tr>
                             <tr>
                                 <th>성별</th>
-                                <td><input type="radio" id="male" name="gender"><label for="male">남</label>
-                                    <input type="radio" id="female" name="gender"><label for="female">여</label>
+                                <td>
+                                <input type="radio" id="all" name="gender" checked="checked" value="0"><label for="all">전체</label>
+                                <input type="radio" id="male" name="gender" value="01"><label for="male">남</label>
+                                    <input type="radio" id="female" name="gender" value="02"><label for="female">여</label>
                                 </td>
                             </tr>
                             <tr>
                                 <th>거주지</th>
-                                <td><input type="radio" id="home01" name="home"><label for="home01">거주지01</label>
-                                    <input type="radio" id="home02" name="home"><label for="home02">거주지02</label>
+                                <td>
+                                <input type="radio" id="home00" name="home" checked="checked" value="0"><label for="home00">전체</label>
+                                <input type="radio" id="home01" name="home" value="01"><label for="home01">중원구</label>
+                                    <input type="radio" id="home02" name="home" value="02"><label for="home02">수정구</label>
+                                    <input type="radio" id="home03" name="home" value="03"><label for="home03">분당구</label>
+                                    <input type="radio" id="home04" name="home" value="04"><label for="home04">기타</label>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="mt10 txtcenter">
-                        <button type="button" class="btn_save">검색</button>
+                        <button type="button" class="btn_save" onclick="search('USE_DT')">검색</button>
                     </div>
                 </div>
                 <div class="tablebox">
                     <table>
                         <thead>
                             <tr>
-                                <th>이용날짜</th>
-                                <th>연령대</th>
-                                <th>성별</th>
-                                <th>거주지</th>
-                                <th>만족도</th>
+                               <th><a href="javascript:search('USE_DT');">이용날짜</a></th>
+                                <th><a href="javascript:search('AR_USER_CAT');">연령대</a></th>
+                                <th><a href="javascript:search('gender');">성별</a></th>
+                                <th><a href="javascript:search('address');">거주지</a></th>
+                                <th><a href="javascript:search('DGSTFN_SCORE');">만족도</a></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,7 +94,7 @@
 							<span th:if="${tt.AR_USER_CAT}==03" th:text="중등"></span>
 							<span th:if="${tt.AR_USER_CAT}==04" th:text="고등"></span>
 							<span th:if="${tt.AR_USER_CAT}==05" th:text="일반"></span></td>
-							<td><span th:if="${tt.gender}==1" th:text="남자">
+							<td><span th:if="${tt.gender}==1" th:text="남자"></span>
 							<span th:if="${tt.gender}==2" th:text="여자">
 							</span></td>
 							<td><span th:if="${tt.address}==01" th:text="중원구"></span>
@@ -90,11 +105,7 @@
 							<td><span th:text="${tt.DGSTFN_SCORE}" ></span></td>
                             </tr>
                           
-                          
-                          
-                        
-                           
-                           
+                 
                           
                         </tbody>
                     </table>
@@ -123,8 +134,9 @@
                 
                 <div class="btn_bottom mt10 p-20">
                     <div>
-                        <button type="button" class="btn_excel">엑셀다운로드</button>
-                        <button type="button" class="btn_excel">엑셀업로드</button>
+                        <button type="button" class="btn_excel" onclick="download()">엑셀다운로드</button>
+                        <button type="button" class="btn_excel" onclick="upload()">엑셀업로드</button>
+                   		<input type="file" id="file" th:name="file">
                     </div>
                     <div>
                         <span class="score_data">만족도평균<span th:text="${avg}"></span></span>
@@ -134,4 +146,62 @@
         </div><!--// popup -->
 
 </body>
+<script>
+	function download(){
+		var down = confirm("엑셀을 다운로드 하시겠습니까?");
+		if(down){
+		location.href="/arfishsearchdownload";
+		}
+		
+		
+	}
+	
+	function search(order) {
+		var age  = $(':radio[name="age"]:checked').val();
+		var gender  = $(':radio[name="gender"]:checked').val();
+		var home  = $(':radio[name="home"]:checked').val();
+		
+		const urlParams = new URL(location.href).searchParams;
+		const year = urlParams.get('year');
+		location.href='/arfish_search2'+'?'+'year='+year+'&&'+'age='+age+'&&'
+		+'gender='+gender+'&&'+'home='+home+'&&'+'order='+order;
+
+
+	}
+	
+	
+	function upload(){
+       var formData     = new FormData();
+        formData.append("file", $("#file")[0].files[0]);
+        var down = confirm("엑셀을 업로드 하시겠습니까?");
+     
+                if(down){
+                $.ajax({
+                    enctype: 'multipart/form-data',
+                    url: '/arfishupload',
+  					method:"POST",
+  					processData: false,
+               		contentType : false,
+               		 data: formData,
+  		
+                   success: function(data){  
+                       if(data==1){
+	 				alert("엑셀 업로드 성공하였습니다")
+	 				window.close();
+}
+else if(data==2){
+	alert("엑셀파일을 등록해주세요")
+}
+else{
+	alert("양식이 맞지 않습니다.")
+}
+                   },
+                  error:function(){
+	alert("엑셀파일을 등록해주세요")
+}  
+    
+                })
+            }
+	}
+</script>
 </html>

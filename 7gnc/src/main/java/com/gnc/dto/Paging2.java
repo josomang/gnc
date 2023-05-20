@@ -2,17 +2,17 @@ package com.gnc.dto;
 
 
 
-public class Paging {
+public class Paging2 {
     
     private int totalCount; 
     private int displayPageNum = 20; 
     
     private int startPage; 
-    private int endPage;  
+    private int endPage;   
     private boolean prev; 
     private boolean next; 
     
-    private Criteria cri;
+    private Criteria2 cri;
  
    
     public int getTotalCount() {
@@ -84,11 +84,11 @@ public class Paging {
         this.next = next;
     }
  
-    public Criteria getCri() {
+    public Criteria2 getCri() {
         return cri;
     }
  
-    public void setCri(Criteria cri) {
+    public void setCri(Criteria2 cri) {
         this.cri = cri;
     }
     

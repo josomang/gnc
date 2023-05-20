@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnc.dao.AvallDao">
+<select id="avallList" resultType="com.gnc.dto.AvallDto" parameterType="string"> 
+select TBL_LESSONS.BGNG_DT date ,TBL_LESSONS.LESSON_TTL,TBL_LESSONS.INSTR_NM,TBL_CENTERS.CENTER_TTL,
+TBL_LESSON_CENTER.DGSTFN_SCORE , ((TBL_LESSON_CENTER.NOPE/TBL_CENTERS.CENTER_MAX_NOPE)*100) nope
+from TBL_LESSONS,TBL_CENTERS ,TBL_LESSON_CENTER where TBL_LESSONS.LESSON_ID=TBL_LESSON_CENTER.LESSON_ID and TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID 
+and TBL_LESSON_CENTER.DGSTFN_SCORE is not null and TBL_LESSONS.BGNG_DT LIKE CONCAT(#{year},'%')
+	</select>
+
+
+<select id="avallListDao" resultType="com.gnc.dto.AvallDto" parameterType="string"> 
+select TBL_AR_LOGS.USE_DT as date, AR_USER_CAT, gender , address,DGSTFN_SCORE 
+ from TBL_AR_LOGS where AR_CN_TYPE = '01' order by USE_DT desc LIMIT ${pageStart}, ${perPageNum}
+	</select>
+	
+	<select id="getCount" resultType="int">
+    SELECT count(*) FROM TBL_AR_LOGS where AR_CN_TYPE = '01'
+</select>
+
+<select id="avgDao" resultType="Integer">
+select avg(DGSTFN_SCORE) from tbl_ar_logs where AR_CN_TYPE = '01'
+	</select>
+	
+	<select id="avallSearchListDao" resultType="com.gnc.dto.AvallDto" parameterType="string"> 
+select TBL_LESSONS.BGNG_DT date ,TBL_LESSONS.LESSON_TTL,TBL_LESSONS.INSTR_NM,TBL_CENTERS.CENTER_TTL,
+TBL_LESSON_CENTER.DGSTFN_SCORE , ((TBL_LESSON_CENTER.NOPE/TBL_CENTERS.CENTER_MAX_NOPE)*100) nope
+from TBL_LESSONS,TBL_CENTERS ,TBL_LESSON_CENTER where TBL_LESSONS.LESSON_ID=TBL_LESSON_CENTER.LESSON_ID and TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID 
+and TBL_LESSON_CENTER.DGSTFN_SCORE is not null and TBL_LESSONS.BGNG_DT LIKE CONCAT(#{year},'%') order by ${order} LIMIT ${pageStart}, ${perPageNum}
+	</select>
+	
+	<select id="getSearchCount" resultType="int">
+    select count(*) from TBL_LESSONS,TBL_CENTERS ,TBL_LESSON_CENTER 
+where TBL_LESSONS.LESSON_ID=TBL_LESSON_CENTER.LESSON_ID and TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID 
+and TBL_LESSON_CENTER.DGSTFN_SCORE is not null and TBL_LESSONS.BGNG_DT LIKE CONCAT(#{year},'%')
+</select>
+
+<select id="avgSearchDao" resultType="Integer">
+select avg(TBL_LESSON_CENTER.DGSTFN_SCORE)
+from TBL_LESSONS,TBL_CENTERS ,TBL_LESSON_CENTER 
+where TBL_LESSONS.LESSON_ID=TBL_LESSON_CENTER.LESSON_ID and TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID 
+and TBL_LESSON_CENTER.DGSTFN_SCORE is not null and TBL_LESSONS.BGNG_DT LIKE CONCAT(#{year},'%')
+	</select>
+<select id="avgSearchDao2" resultType="Integer">
+select avg((TBL_LESSON_CENTER.NOPE/TBL_CENTERS.CENTER_MAX_NOPE)*100)
+from TBL_LESSONS,TBL_CENTERS ,TBL_LESSON_CENTER 
+where TBL_LESSONS.LESSON_ID=TBL_LESSON_CENTER.LESSON_ID and TBL_LESSON_CENTER.CENTER_ID = TBL_CENTERS.CENTER_ID 
+and TBL_LESSON_CENTER.DGSTFN_SCORE is not null and TBL_LESSONS.BGNG_DT LIKE CONCAT(#{year},'%')
+	</select>	
+	
+	
+</mapper>

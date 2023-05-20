@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>성남시 공공도서관 AR서비스</title>
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/board.css" />
+    <link rel="stylesheet" type="text/css" href="css/color.css" />
+    <link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/date.js"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<!-- AR 만족도 상세보기 -->
+        <div class="popup_layer" id="popup_score02" >
+            <div class="popup_box">
+                <h1>돌봄센터 아동 화상교육 이용 만족도
+                    <button type="button" class="btn_close" onclick="popup_score02.style.display='none'">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </h1>
+                <div class="tablebox">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><a href="javascript:search('TBL_LESSONS.BGNG_DT');">수업일시</a></th>
+                                <th><a href="javascript:search('TBL_LESSONS.LESSON_TTL');">수업명</a></th>
+                                <th><a href="javascript:search('TBL_LESSONS.INSTR_NM');">강의자</a></th>
+                                <th><a href="javascript:search('TBL_CENTERS.CENTER_TTL');">돌봄센터</a></th>
+                                <th><a href="javascript:search('TBL_LESSON_CENTER.DGSTFN_SCORE');">만족도</a></th>
+                                <th><a href="javascript:search('nope');">참여율</a></th>
+                        
+                            </tr>
+                        </thead>
+                        <tbody>
+                              <tr th:each="tt : ${list}">
+                             <td><span th:text="${tt.date}"></span></td>
+							<td><span th:text="${tt.LESSON_TTL}" ></span></td>
+							<td><span th:text="${tt.INSTR_NM}" ></span></td>
+							<td><span th:text="${tt.CENTER_TTL}" ></span></td>
+							<td><span th:text="${tt.DGSTFN_SCORE}" ></span></td>
+							<td><span th:text="${tt.nope}" ></span></td>
+                            </tr>
+        
+                        </tbody>
+                    </table>
+                </div>
+                
+              <div class="paging">
+					
+					     <ul class="pagination pagination-sm no-margin pull-right">
+     <li>
+                  <span class="before" th:if="${pageMaker.prev} == true" th:text="이">
+                     <a th:href="@{/avall_search(year=${year},order=${order}, page=${pageMaker.startPage}-1,
+               perPageNum=${pageMaker.cri.perPageNum})}"></a>
+                  </span>
+                  </li>
+                  <li>
+                  <span class="current" th:each="idx,iterStat : 
+               ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
+                     th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
+                     <a th:href="@{/avall_search(year=${year},order=${order},page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+                        th:text="${idx}"></a>
+                  </span>
+</li>
+<li>
+<span class="next" th:if="${pageMaker.next} == true and 
+               ${pageMaker.endPage > 0}">
+                     <a th:href="@{/avall_search(year=${year},order=${order,page=${pageMaker.endPage}+1,
+               perPageNum=${pageMaker.cri.perPageNum})}"><span>다음</span></a>
+                  </span>
+                  </li>
+                  </div>
+
+       
+
+                <div class="btn_bottom mt10 p-20">
+                    <div>
+                        <button type="button" class="btn_excel" onclick="download()">엑셀다운로드</button>
+                       <button type="button" class="btn_excel" onclick="upload()">엑셀업로드</button>
+                        <input type="file" id="file" th:name="file">
+                    </div>
+                    <div>
+                        <span class="score_data">만족도평균<span th:text="${avg}"></span></span>
+                        <span class="score_data ml5">참여율평균<span th:text="${avg2}"></span></span>
+                    </div>
+                </div>
+            </div>
+        </div><!--// popup -->
+</body>
+<script>
+	function download(){
+		var down = confirm("엑셀을 다운로드 하시겠습니까?");
+		if(down){
+		location.href="/avallsearchdownload";
+		}
+		
+		
+	}
+	
+		function search(order) {
+	
+
+		const urlParams = new URL(location.href).searchParams;
+		const year = urlParams.get('year');
+		location.href = '/avall_search' + '?' + 'year=' + year +'&&'+'order='+order;
+
+
+	}
+	
+	function upload(){
+       var formData     = new FormData();
+        formData.append("file", $("#file")[0].files[0]);
+        var down = confirm("엑셀을 업로드 하시겠습니까?");
+     
+                if(down){
+                $.ajax({
+                    enctype: 'multipart/form-data',
+                    url: '/avallupload',
+  					method:"POST",
+  					processData: false,
+               		contentType : false,
+               		 data: formData,
+  		
+                   success: function(data){  
+                       if(data==1){
+	 				alert("엑셀 업로드 성공하였습니다")
+	 				window.close();
+}
+else if(data==2){
+	alert("엑셀파일을 등록해주세요")
+}
+else if(data==4){
+	alert("수업 id가 없는 정보가 존재합니다. 정확히 입력한 정보들은 업로드 되었습니다.")
+}
+
+                   },
+                  error:function(){
+	alert("엑셀파일 업로드 오류 입니다 엑셀파일을 확인해주세요")
+}  
+    
+                })
+            }
+	}
+	
+</script>
+</html>

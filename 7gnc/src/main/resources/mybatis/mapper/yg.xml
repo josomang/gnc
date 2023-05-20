@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnc.dao.YgDao">
+<select id="ygList" resultType="com.gnc.dto.YgDto" parameterType="string"> 
+select TBL_AR_LOGS.USE_DT as USE_DT, AR_USER_CAT, gender , address,DGSTFN_SCORE 
+ from TBL_AR_LOGS where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%')
+	</select>
+
+
+
+<select id="ygListDao" resultType="com.gnc.dto.YgDto" parameterType="string"> 
+select TBL_AR_LOGS.USE_DT as USE_DT, AR_USER_CAT, gender , address,DGSTFN_SCORE 
+ from TBL_AR_LOGS where AR_CN_TYPE = '02' order by USE_DT desc LIMIT ${pageStart}, ${perPageNum}
+	</select>
+	
+	<select id="getCount" resultType="int">
+    SELECT count(*) FROM TBL_AR_LOGS where AR_CN_TYPE = '02'
+</select>
+
+<select id="avgDao" resultType="Integer">
+select avg(DGSTFN_SCORE) from tbl_ar_logs where AR_CN_TYPE = '02'
+	</select>
+	
+	<select id="ygSearchListDao" resultType="com.gnc.dto.YgDto" parameterType="string"> 
+select TBL_AR_LOGS.USE_DT as USE_DT, AR_USER_CAT, gender , address,DGSTFN_SCORE 
+ from TBL_AR_LOGS where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%') order by USE_DT desc LIMIT ${pageStart}, ${perPageNum}
+	</select>
+	
+	<select id="getSearchCount" resultType="int">
+    SELECT count(*) FROM TBL_AR_LOGS where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%')
+</select>
+
+<select id="avgSearchDao" resultType="Integer">
+select avg(DGSTFN_SCORE) from tbl_ar_logs where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%')
+	</select>
+	
+<select id="ygSearchListDao2" resultType="com.gnc.dto.YgDto" parameterType="string"> 
+select TBL_AR_LOGS.USE_DT as USE_DT, AR_USER_CAT, gender , address,DGSTFN_SCORE 
+ from TBL_AR_LOGS where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%') and 
+ AR_USER_CAT LIKE CONCAT('%',#{age},'%') and gender LIKE CONCAT('%',#{gender},'%') 
+and address LIKE CONCAT('%',#{address},'%') order by ${order} LIMIT ${pageStart}, ${perPageNum}
+	</select>	
+	
+	<select id="getSearchCount2" resultType="int">
+    SELECT count(*) FROM TBL_AR_LOGS where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%')
+    and AR_USER_CAT LIKE CONCAT('%',#{age},'%') and gender LIKE CONCAT('%',#{gender},'%') 
+and address LIKE CONCAT('%',#{address},'%') 
+
+
+</select>
+
+<select id="avgSearchDao2" resultType="Integer">
+select avg(DGSTFN_SCORE) from tbl_ar_logs where AR_CN_TYPE = '02' and USE_DT LIKE CONCAT(#{year},'%')
+and AR_USER_CAT LIKE CONCAT('%',#{age},'%') and gender LIKE CONCAT('%',#{gender},'%') 
+and address LIKE CONCAT('%',#{address},'%') 
+	</select>
+	
+</mapper>

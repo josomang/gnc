@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>성남시 공공도서관 AR서비스</title>
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="css/board.css" />
+	<link rel="stylesheet" type="text/css" href="css/color.css" />
+	<link rel="stylesheet" type="text/css" href="css/datepicker.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="js/date.js"></script>
+	<!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+	<!-- AR 만족도 상세보기 -->
+	<div class="popup_layer" id="popup_score">
+		<div class="popup_box">
+			<h1><span>게이미피케이션 어린왕자</span>상세보기
+				<button type="button" class="btn_close" onclick="window.close()">
+					<span class="material-symbols-outlined">close</span>
+				</button>
+			</h1>
+			<div class="tablebox">
+				<table class="table_listview">
+					<caption style="display: none;">검색</caption>
+					<colgroup>
+						<col width="200px">
+						<col width="auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>연령대</th>
+							<td>
+								<input type="radio" id="age00" name="age" th:checked="${age}=='0'" value="0"><label
+									for="0">전체</label>
+								<input type="radio" id="age00" name="age" th:checked="${age}=='01'" value="01"><label
+									for="01">미취학</label>
+								<input type="radio" id="age00" name="age" th:checked="${age}=='02'" value="02"><label
+									for="02">초등</label>
+								<input type="radio" id="age00" name="age" th:checked="${age}=='03'" value="03"><label
+									for="03">중등</label>
+								<input type="radio" id="age00" name="age" th:checked="${age}=='04'" value="04"><label
+									for="04">고등</label>
+								<input type="radio" id="age00" name="age" th:checked="${age}=='05'" value="05"><label
+									for="05">일반</label>
+							</td>
+
+
+						</tr>
+						<tr>
+							<th>성별</th>
+							<td>
+								<input type="radio" id="all" name="gender" th:checked="${gender}=='0'" value="0"><label
+									for="all">전체</label>
+								<input type="radio" id="male" name="gender" th:checked="${gender}=='01'"
+									value="01"><label for="male">남</label>
+								<input type="radio" id="female" name="gender" th:checked="${gender}=='02'"
+									value="02"><label for="female">여</label>
+							</td>
+						</tr>
+						<tr>
+							<th>거주지</th>
+							<td>
+								<input type="radio" id="home00" name="home" th:checked="${home}=='0'" value="0"><label
+									for="home00">전체</label>
+								<input type="radio" id="home01" name="home" th:checked="${home}=='01'" value="01"><label
+									for="home01">중원구</label>
+								<input type="radio" id="home02" name="home" th:checked="${home}=='02'" value="02"><label
+									for="home02">수정구</label>
+								<input type="radio" id="home03" name="home" th:checked="${home}=='03'" value="03"><label
+									for="home03">분당구</label>
+								<input type="radio" id="home04" name="home" th:checked="${home}=='04'" value="04"><label
+									for="home04">기타</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="mt10 txtcenter">
+					<button type="button" class="btn_save" onclick="search('USE_DT')">검색</button>
+				</div>
+			</div>
+			<div class="tablebox">
+				<table>
+					<thead>
+						<tr>
+							<th><a href="javascript:search('USE_DT');">이용날짜</a></th>
+                                <th><a href="javascript:search('AR_USER_CAT');">연령대</a></th>
+                                <th><a href="javascript:search('gender');">성별</a></th>
+                                <th><a href="javascript:search('address');">거주지</a></th>
+                                <th><a href="javascript:search('DGSTFN_SCORE');">만족도</a></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="tt : ${list}">
+							<td><span th:text="${tt.USE_DT}"></span></td>
+							<td><span th:if="${tt.AR_USER_CAT}==01" th:text="미취학"></span>
+								<span th:if="${tt.AR_USER_CAT}==02" th:text="초등"></span>
+								<span th:if="${tt.AR_USER_CAT}==03" th:text="중등"></span>
+								<span th:if="${tt.AR_USER_CAT}==04" th:text="고등"></span>
+								<span th:if="${tt.AR_USER_CAT}==05" th:text="일반"></span>
+							</td>
+							<td><span th:if="${tt.gender}==1" th:text="남자"></span>
+								<span th:if="${tt.gender}==2" th:text="여자">
+								</span>
+							</td>
+							<td><span th:if="${tt.address}==01" th:text="중원구"></span>
+								<span th:if="${tt.address}==02" th:text="수정구"></span>
+								<span th:if="${tt.address}==03" th:text="분당구"></span>
+								<span th:if="${tt.address}==04" th:text="기타"></span>
+							</td>
+							<td><span th:text="${tt.DGSTFN_SCORE}"></span></td>
+						</tr>
+
+
+					</tbody>
+				</table>
+			</div>
+
+			<div class="paging">
+
+				<ul class="pagination pagination-sm no-margin pull-right">
+					<li>
+						<span class="before" th:if="${pageMaker.prev} == true">
+							<a th:href="@{/aryg_search2(year=${year},age=${age},
+                     gender=${gender},home=${home},order=${order},page=${pageMaker.startPage}-1,
+               perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
+						</span>
+					</li>
+					<li>
+						<span class="current" th:each="idx,iterStat : 
+               ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
+							th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
+							<a th:href="@{/aryg_search2(year=${year},age=${age},
+                     gender=${gender},home=${home},order=${order},page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+								th:text="${idx}"></a>
+						</span>
+					</li>
+					<li>
+
+
+
+						<div class="btn_bottom mt10 p-20">
+							<div>
+								<button type="button" class="btn_excel" onclick="download()">엑셀다운로드</button>
+								<button type="button" class="btn_excel" onclick="upload()">엑셀업로드</button>
+                        <input type="file" id="file" th:name="file">
+							</div>
+							<div>
+								<span class="score_data">만족도평균<span th:text="${avg}"></span></span>
+							</div>
+						</div>
+			</div>
+		</div>
+		<!--// popup -->
+
+</body>
+<script>
+	function download() {
+		var down = confirm("엑셀을 다운로드 하시겠습니까?");
+		if (down) {
+			location.href = "/ygsearchdownload";
+		}
+	}
+
+	function search(order) {
+		var age = $(':radio[name="age"]:checked').val();
+		var gender = $(':radio[name="gender"]:checked').val();
+		var home = $(':radio[name="home"]:checked').val();
+
+		const urlParams = new URL(location.href).searchParams;
+		const year = urlParams.get('year');
+		location.href = '/aryg_search2' + '?' + 'year=' + year + '&&' + 'age=' + age + '&&'
+			+ 'gender=' + gender + '&&' + 'home=' + home+'&&'+'order='+order;
+
+
+	}
+
+
+function upload(){
+       var formData     = new FormData();
+        formData.append("file", $("#file")[0].files[0]);
+        var down = confirm("엑셀을 업로드 하시겠습니까?");
+     
+                if(down){
+                $.ajax({
+                    enctype: 'multipart/form-data',
+                    url: '/arygupload',
+  					method:"POST",
+  					processData: false,
+               		contentType : false,
+               		 data: formData,
+  		
+                   success: function(data){  
+                       if(data==1){
+	 				alert("엑셀 업로드 성공하였습니다")
+	 				window.close();
+}
+else if(data==2){
+	alert("엑셀파일을 등록해주세요")
+}
+else{
+	alert("양식이 맞지 않습니다.")
+}
+                   },
+                  error:function(){
+	alert("엑셀파일을 등록해주세요")
+}  
+    
+                })
+            }
+	}
+
+
+</script>
+
+</html>

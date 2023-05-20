@@ -87,7 +87,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <tr th:each="tt : ${list}">
+                        <tr th:each="tt : ${list}">
                              <td><span th:text="${tt.USE_DT}"></span></td>
 							<td><span th:if="${tt.AR_USER_CAT}==01" th:text="미취학"></span>
 							<span th:if="${tt.AR_USER_CAT}==02" th:text="초등"></span>
@@ -119,8 +119,8 @@
 					
 					     <ul class="pagination pagination-sm no-margin pull-right">
      <li>
-                  <span class="before" th:if="${pageMaker.prev} == true">
-                     <a th:href="@{/aryg(page=${pageMaker.startPage}-1,
+                  <span class="before" th:if="${pageMaker.prev} == true" th:text="이">
+                     <a th:href="@{/aryg_search(year=${year}, page=${pageMaker.startPage}-1,
                perPageNum=${pageMaker.cri.perPageNum})}">이전</a>
                   </span>
                   </li>
@@ -128,21 +128,18 @@
                   <span class="current" th:each="idx,iterStat : 
                ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"
                      th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
-                     <a th:href="@{/aryg(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
+                     <a th:href="@{/aryg_search(year=${year},page=${idx},perPageNum=${pageMaker.cri.perPageNum})}"
                         th:text="${idx}"></a>
                   </span>
 </li>
 <li>
 <span class="next" th:if="${pageMaker.next} == true and 
                ${pageMaker.endPage > 0}">
-                     <a th:href="@{/aryg(page=${pageMaker.endPage}+1,
+                     <a th:href="@{/aryg_search(year=${year},page=${pageMaker.endPage}+1,
                perPageNum=${pageMaker.cri.perPageNum})}"><span>다음</span></a>
                   </span>
                   </li>
-
-
-
-</div>
+                  </div>
 
            
                 
@@ -164,7 +161,7 @@
 	function download(){
 		var down = confirm("엑셀을 다운로드 하시겠습니까?");
 		if(down){
-		location.href="/arygdownload";
+		location.href="/arygsearchdownload";
 		}
 		
 		
@@ -175,14 +172,13 @@
 		var gender  = $(':radio[name="gender"]:checked').val();
 		var home  = $(':radio[name="home"]:checked').val();
 		
-		var now = new Date();	// 현재 날짜 및 시간
-		var year = now.getFullYear();	// 연도
+		const urlParams = new URL(location.href).searchParams;
+		const year = urlParams.get('year');
 		location.href='/aryg_search2'+'?'+'year='+year+'&&'+'age='+age+'&&'
 		+'gender='+gender+'&&'+'home='+home+'&&'+'order='+order;
 
 
 	}
-	
 	
 	
 	function upload(){

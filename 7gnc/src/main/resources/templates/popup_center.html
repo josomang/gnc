@@ -139,9 +139,16 @@ function dataSend() {
 				headers: {'Content-type': 'application/json'},
 				data: CenterDto,
 				 success: function (data) {
-					opener.location.reload();
-
-           window.close();
+			if(data==0){
+				opener.location.reload();
+               window.close();
+			}
+			else if(data==1){
+				alert("이미 등록되어 있는 센터 코드입니다")
+			}
+			
+			
+				
 				}
 				
 			})
