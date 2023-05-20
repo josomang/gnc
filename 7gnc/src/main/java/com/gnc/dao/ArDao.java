@@ -30,7 +30,7 @@ public interface ArDao {
 	
 	public int sumAll (@Param("year") String year);
 	
-	public void arRegisterDao(String USE_DT, String AR_CN_TYPE,String AR_USER_CAT, Integer DGSTFN_SCORE,LocalDate lOG_CRT_YMD,String GENDER,String ADDRESS);
+	public void arRegisterDao(String USE_DT, String AR_CN_TYPE,String AR_USER_CAT, double DGSTFN_SCORE,LocalDate lOG_CRT_YMD,String GENDER,String ADDRESS);
 	
 	public int getCount01_10(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
 	public int getCount01_11(@Param("LOG_CRT_YMD") String LOG_CRT_YMD);
