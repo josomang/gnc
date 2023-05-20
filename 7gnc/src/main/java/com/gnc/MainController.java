@@ -1,5 +1,8 @@
 package com.gnc;
 
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -12,12 +15,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,20 +40,40 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.gnc.dao.ArDao;
+import com.gnc.dao.ArfishDao;
+import com.gnc.dao.ArygDao;
+import com.gnc.dao.AvallDao;
 import com.gnc.dao.CenterDao;
 import com.gnc.dao.DeviceDao;
+import com.gnc.dao.FishDao;
 import com.gnc.dao.LessonsDao;
 import com.gnc.dao.LibraryDao;
 import com.gnc.dao.UserDao;
+import com.gnc.dao.YgDao;
+import com.gnc.dto.ArfishDto;
+import com.gnc.dto.ArygDto;
+import com.gnc.dto.AvallDto;
 import com.gnc.dto.Criteria;
+import com.gnc.dto.Criteria2;
+import com.gnc.dto.ExcelData;
+import com.gnc.dto.FishDto;
 import com.gnc.dto.PageDTO;
 import com.gnc.dto.Paging;
+import com.gnc.dto.Paging2;
+import com.gnc.dto.YgDto;
 import com.gnc.dto.lect_listDto;
 import com.gnc.service.kpiService;
 import com.google.gson.Gson;
@@ -58,11 +93,11 @@ public class MainController {
 	int masterLessonCenterId;
 	String testKeyword;
 	int masterArDeviceId;
-	int masterCount =1;
-	long masterStart; 
+	int masterCount = 1;
+	long masterStart;
 	long masterEnd;
-	
-	
+	String masterYear;
+
 	@Autowired
 	UserDao userDao;
 
@@ -82,16 +117,30 @@ public class MainController {
 	DeviceDao deviceDao;
 
 	@Autowired
+	FishDao fishDao;
+
+	@Autowired
+	YgDao ygDao;
+
+	@Autowired
+	ArfishDao arfishDao;
+
+	@Autowired
+	ArygDao arygDao;
+
+	@Autowired
+	AvallDao avallDao;
+
+	@Autowired
 	kpiService kpiService;
-	
+
 	@ExceptionHandler(value = Exception.class)
-	public Map<String,String> handleException(Exception e){
-		Map<String,String> res = new HashMap<>();
+	public Map<String, String> handleException(Exception e) {
+		Map<String, String> res = new HashMap<>();
 		res.put("errorMsg", e.getMessage());
 		res.put("status", "error");
 		return res;
 	}
-	
 
 	@GetMapping("/")
 	public String root(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
@@ -110,7 +159,8 @@ public class MainController {
 	}
 
 	@PostMapping("/login")
-	public @ResponseBody int login(@RequestBody String result, BindingResult bindingResult, HttpServletRequest request) {
+	public @ResponseBody int login(@RequestBody String result, BindingResult bindingResult,
+			HttpServletRequest request) {
 		LocalDateTime now = LocalDateTime.now();
 		String UID = "";
 		String PSWD = "";
@@ -119,63 +169,56 @@ public class MainController {
 		JsonElement element = parser.parse(result);
 		UID = element.getAsJsonObject().get("UID").getAsString();
 		PSWD = element.getAsJsonObject().get("PSWD").getAsString();
-		
-		 String coverted = new String(DatatypeConverter.parseBase64Binary(PSWD)); 
-		
-		
-		coverted+="6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918";
-		
+
+		String coverted = new String(DatatypeConverter.parseBase64Binary(PSWD));
+
+		coverted += "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918";
+
 		String check = userDao.getUserAccount(UID, coverted);
-		if(System.currentTimeMillis() < masterEnd) {
+		if (System.currentTimeMillis() < masterEnd) {
 			return 3;
 		}
-	
-		
+
 		if (check == null) {
-			
-			if(masterCount==5) {
-				masterEnd = System.currentTimeMillis() + 60*1000;
-				
-				  if(System.currentTimeMillis() < masterEnd) { 
-					  masterCount=1;
-					  return 3;
-				  }
-				  masterCount=1;
-			}
-			else {
+
+			if (masterCount == 5) {
+				masterEnd = System.currentTimeMillis() + 60 * 1000;
+
+				if (System.currentTimeMillis() < masterEnd) {
+					masterCount = 1;
+					return 3;
+				}
+				masterCount = 1;
+			} else {
 				masterCount++;
 				return 2;
 			}
-		} 
-		
-		else if(System.currentTimeMillis() > masterEnd&&check !=null) {
-			
-			
+		}
+
+		else if (System.currentTimeMillis() > masterEnd && check != null) {
+
 			HttpSession session = request.getSession();
 			session.setAttribute(SessionConstants.LOGIN_MEMBER, check);
 			userDao.last_lgn_dtDao(check, now);
-			masterCount=0;
+			masterCount = 0;
 			return 1;
 		}
-		
-		
-			return 3;
-		
+
+		return 3;
 
 	}
 
 	private void String(byte[] decodeBase64) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@PostMapping("/survey-login")
 	public String surveyLogin(@RequestBody String result, BindingResult bindingResult, HttpServletRequest request) {
 		LocalDateTime now = LocalDateTime.now();
 		String UID = "";
 		String PSWD = "";
-		
+
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
 		UID = element.getAsJsonObject().get("UID").getAsString();
@@ -212,8 +255,6 @@ public class MainController {
 		return "redirect:/login";
 
 	}
-	
-	
 
 	@PostMapping("/survey-logout")
 	public String surveyLogout(HttpServletRequest request1,
@@ -458,16 +499,17 @@ public class MainController {
 		return "popup";
 
 	}
+
 	@RequestMapping("/popup-center")
 	public String popup_center(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
 			String date, Model model) {
 		if (check == null) {
 			return "redirect:/login";
 		}
-		
+
 		return "popup_center";
-		
-		}
+
+	}
 
 	@RequestMapping("/view")
 	public String view(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
@@ -498,10 +540,10 @@ public class MainController {
 	}
 
 	@RequestMapping("/lect_result")
-	public @ResponseBody Map<String, String> admin01_view(Model model, @RequestBody String result,Exception e) {
+	public @ResponseBody Map<String, String> admin01_view(Model model, @RequestBody String result, Exception e) {
 		Map<String, String> map = new HashMap<>();
-		map.put("rt_code",map.getOrDefault("rt_code","0"));
-		map.put("message",map.getOrDefault("message","success"));
+		map.put("rt_code", map.getOrDefault("rt_code", "0"));
+		map.put("message", map.getOrDefault("message", "success"));
 		LocalDate now = LocalDate.now();
 		int LESSON_ID;
 		String CENTER_ID = "";
@@ -511,7 +553,7 @@ public class MainController {
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
-		
+
 		LESSON_ID = element.getAsJsonObject().get("lecture_id").getAsInt();
 		total_count = element.getAsJsonObject().get("total_count").getAsInt();
 		// center_count =
@@ -520,14 +562,15 @@ public class MainController {
 		JsonObject jsonObj = (JsonObject) parser.parse(result);
 
 		JsonArray memberArray = (JsonArray) jsonObj.get("center_count");
-		
 
 		for (int i = 0; i < memberArray.size(); i++) {
 			JsonObject object = (JsonObject) memberArray.get(i);
 			String a = object.get("center_id").getAsString();
 			int b = object.get("count").getAsInt();
 
-			centerDao.centerLessonsInsert(LESSON_ID, "050400"+a, b);
+			if (centerDao.checkDao2(LESSON_ID, "050400" + a) == null) {
+				centerDao.centerLessonsInsert(LESSON_ID, "050400" + a, b);
+			}
 		}
 		if (LESSON_ID != 0) {
 			return map;
@@ -588,19 +631,19 @@ public class MainController {
 	}
 
 	@RequestMapping("/graph")
-	public String graph(Model model,String x,String start,String end,String typeDirect,String typeDirect1,
+	public String graph(Model model, String x, String start, String end, String typeDirect, String typeDirect1,
 			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
 
 		if (check == null) {
 			return "redirect:/login";
 		}
-		
+
 		model.addAttribute("x", x);
 		model.addAttribute("start", start);
 		model.addAttribute("end", end);
 		model.addAttribute("typeDirect", typeDirect);
 		model.addAttribute("typeDirect1", typeDirect1);
-		
+
 		LocalDate now = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
@@ -1078,28 +1121,30 @@ public class MainController {
 		int start;
 		int end;
 		int x;
-		
+
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(masterResult);
 		x = element.getAsJsonObject().get("x").getAsInt();
 		start = element.getAsJsonObject().get("start").getAsInt();
 		end = element.getAsJsonObject().get("end").getAsInt();
-		
-		//int increase= Integer.parseInt(year)-1;
-		//String in= Integer.toString(increase);
-		//double a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
-		//list2.add((int) Math.round(a));
+
+		// int increase= Integer.parseInt(year)-1;
+		// String in= Integer.toString(increase);
+		// double
+		// a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(year))*100;
+		// list2.add((int) Math.round(a));
 		double a;
 		if (start == end) {
 			list.add(start);
-			int increase= start-1;
-			String in= Integer.toString(increase);
-			if(libraryDao.getLibraryPeopleDao(Integer.toString(start))!=null&&libraryDao.getLibraryPeopleDao(in)!=null) {
-				
-				a=((libraryDao.getLibraryPeopleDao(Integer.toString(start))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
-			}
-			else {
-				a=0;
+			int increase = start - 1;
+			String in = Integer.toString(increase);
+			if (libraryDao.getLibraryPeopleDao(Integer.toString(start)) != null
+					&& libraryDao.getLibraryPeopleDao(in) != null) {
+
+				a = ((libraryDao.getLibraryPeopleDao(Integer.toString(start)) - libraryDao.getLibraryPeopleDao(in))
+						/ (double) libraryDao.getLibraryPeopleDao(in)) * 100;
+			} else {
+				a = 0;
 			}
 			list2.add((int) Math.round(a));
 			dd.put("month", list);
@@ -1110,16 +1155,17 @@ public class MainController {
 		else {
 			for (int i = start; i < end + 1; i++) {
 				list.add(i);
-				int increase = i-1;
-				String in= Integer.toString(increase);
-				if(libraryDao.getLibraryPeopleDao(Integer.toString(i))!=null&&libraryDao.getLibraryPeopleDao(in)!=null) { 
-					a=((libraryDao.getLibraryPeopleDao(Integer.toString(i))-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
-				}
-				else {
-					a=0;
+				int increase = i - 1;
+				String in = Integer.toString(increase);
+				if (libraryDao.getLibraryPeopleDao(Integer.toString(i)) != null
+						&& libraryDao.getLibraryPeopleDao(in) != null) {
+					a = ((libraryDao.getLibraryPeopleDao(Integer.toString(i)) - libraryDao.getLibraryPeopleDao(in))
+							/ (double) libraryDao.getLibraryPeopleDao(in)) * 100;
+				} else {
+					a = 0;
 				}
 				list2.add((int) Math.round(a));
-			
+
 			}
 			dd.put("month", list);
 			dd.put("point", list2);
@@ -1292,20 +1338,24 @@ public class MainController {
 	@PostMapping("/ar_user_log")
 	public @ResponseBody Map<String, String> mistake(@RequestBody String result) {
 		Map<String, String> map = new HashMap<>();
-		map.put("rt_code",map.getOrDefault("rt_code","0"));
-		map.put("message",map.getOrDefault("message","success"));
-		
+		map.put("rt_code", map.getOrDefault("rt_code", "0"));
+		map.put("message", map.getOrDefault("message", "success"));
+
 		LocalDate now = LocalDate.now();
 		String USE_DT = "";
 		String AR_CONTENT_TYPE = "";
 		String AR_USER_CATEGORY = "";
 		Integer DGSTFN_SCORE;
+		String GENDER = "";
+		String ADDRESS = "";
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(result);
 		USE_DT = element.getAsJsonObject().get("datetime").getAsString();
 		AR_CONTENT_TYPE = element.getAsJsonObject().get("content_type").getAsString();
 		AR_USER_CATEGORY = element.getAsJsonObject().get("user_category").getAsString();
+		GENDER = element.getAsJsonObject().get("gender").getAsString();
+		ADDRESS = element.getAsJsonObject().get("address").getAsString();
 
 		if (element.getAsJsonObject().get("dgstfn_score").isJsonNull()) {
 
@@ -1315,7 +1365,7 @@ public class MainController {
 
 		}
 
-		arDao.arRegisterDao(USE_DT, AR_CONTENT_TYPE, AR_USER_CATEGORY, DGSTFN_SCORE, now);
+		arDao.arRegisterDao(USE_DT, AR_CONTENT_TYPE, AR_USER_CATEGORY, DGSTFN_SCORE, now, GENDER, ADDRESS);
 
 		return map;
 	}
@@ -1349,9 +1399,9 @@ public class MainController {
 		return "admin03_list";
 	}
 
-	@PostMapping("/center-register")
-	public String centerRegister(@RequestBody String result) {
-
+	@RequestMapping("/center-register")
+	public @ResponseBody int centerRegister(@RequestBody String result) {
+		int a = 0;
 		LocalDateTime now = LocalDateTime.now();
 
 		String CENTER_TTL = "";
@@ -1368,9 +1418,21 @@ public class MainController {
 		CENTER_PSWD = element.getAsJsonObject().get("CENTER_PSWD").getAsString();
 		CENTER_MAX_NOPE = element.getAsJsonObject().get("CENTER_MAX_NOPE").getAsInt();
 
-		centerDao.registerDao(CENTER_TTL, CENTER_ID, CENTER_UID, CENTER_PSWD, CENTER_MAX_NOPE);
+		if (centerDao.checkIdDao(CENTER_ID) == null) {
+			centerDao.registerDao(CENTER_TTL, CENTER_ID, CENTER_UID, CENTER_PSWD, CENTER_MAX_NOPE);
+			a = 0;
+		} else {
+			if (centerDao.checkDao(CENTER_ID) == null) {
+				a = 1;
+			} else {
 
-		return "redirect:/admin";
+				centerDao.updateDao2(CENTER_TTL, CENTER_ID, CENTER_UID, CENTER_PSWD, CENTER_MAX_NOPE, now, null);
+
+				a = 0;
+			}
+		}
+
+		return a;
 	}
 
 	@GetMapping("/center-update-modal")
@@ -1520,7 +1582,7 @@ public class MainController {
 	}
 
 	@GetMapping("/dgs")
-	public String dgs(String year, Model model,String mon,String year1,
+	public String dgs(String year, Model model, String mon, String year1,
 			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check) {
 
 		if (check == null) {
@@ -1529,7 +1591,7 @@ public class MainController {
 
 		model.addAttribute("year", year1);
 		model.addAttribute("mon", mon);
-		
+
 		if (arDao.getCount01(year) != 0) {
 			model.addAttribute("fish", arDao.getCount01(year));
 			model.addAttribute("fishsum", arDao.sum01(year));
@@ -1698,20 +1760,22 @@ public class MainController {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
 		String year = now.format(formatter);
-		int increase= Integer.parseInt(year)-1;
-		String in= Integer.toString(increase);
+		int increase = Integer.parseInt(year) - 1;
+		String in = Integer.toString(increase);
 		double a;
 		HashMap<String, List<Integer>> dd = new HashMap<>();
 		List<Integer> list = new ArrayList<>();
 		List<Integer> list2 = new ArrayList<>();
 
 		list.add(Integer.parseInt(year));
-		
-		if(libraryDao.getLibraryPeopleDao(year)!=null&&libraryDao.getLibraryPeopleDao(in)!=null) {
-			 a=((libraryDao.getLibraryPeopleDao(year)-libraryDao.getLibraryPeopleDao(in))/(double)libraryDao.getLibraryPeopleDao(in))*100;
+
+		if (libraryDao.getLibraryPeopleDao(year) != null && libraryDao.getLibraryPeopleDao(in) != null) {
+			a = ((libraryDao.getLibraryPeopleDao(year) - libraryDao.getLibraryPeopleDao(in))
+					/ (double) libraryDao.getLibraryPeopleDao(in)) * 100;
+		} else {
+			a = 0;
 		}
-		else { a=0;}
-		
+
 		list2.add((int) Math.round(a));
 		model.addAttribute("year", year);
 		dd.put("month", list);
@@ -1959,6 +2023,1560 @@ public class MainController {
 		return "admin07_search";
 	}
 
+	@GetMapping("/fish")
+	public String popup_fish(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		LocalDate now = LocalDate.now();
 
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", fishDao.fishSearchListDao(year, start, perPageNum));
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(fishDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", fishDao.avgSearchDao(year));
+
+		return "fish";
+
+	}
+
+	@RequestMapping("/yg")
+	public String popup_yg(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", ygDao.ygSearchListDao(year, start, perPageNum));
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(ygDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", ygDao.avgSearchDao(year));
+
+		return "yg";
+
+	}
+
+	@RequestMapping("/arfish")
+	public String popup_arfish(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", arfishDao.arfishSearchListDao(year, start, perPageNum));
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(arfishDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", arfishDao.avgSearchDao(year));
+
+		return "arfish";
+
+	}
+
+	@RequestMapping("/aryg")
+	public String popup_aryg(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", arygDao.arygSearchListDao(year, start, perPageNum));
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(arygDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", arygDao.avgSearchDao(year));
+
+		return "aryg";
+
+	}
+
+	@RequestMapping("/avall")
+	public String popup_avall(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", avallDao.avallSearchListDao(year, start, perPageNum, "TBL_LESSONS.BGNG_DT"));
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(avallDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", avallDao.avgSearchDao(year));
+		model.addAttribute("avg2", avallDao.avgSearchDao2(year));
+
+		return "avall";
+
+	}
+
+	@RequestMapping("/avall_search")
+	public String popup_avall_search(
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String year, String order) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		masterYear = year;
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+		model.addAttribute("list", avallDao.avallSearchListDao(year, start, perPageNum, order));
+
+		model.addAttribute("year", year);
+		model.addAttribute("order", order);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(avallDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", avallDao.avgSearchDao(year));
+		model.addAttribute("avg2", avallDao.avgSearchDao2(year));
+		return "avall_search";
+
+	}
+
+	@GetMapping("/fish_search")
+	public String popup_fish_search(
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String year, String mon, String year1) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		masterYear = year;
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+		model.addAttribute("list", fishDao.fishSearchListDao(year, start, perPageNum));
+
+		model.addAttribute("year", year);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(fishDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", fishDao.avgSearchDao(year));
+
+		return "fish_search";
+
+	}
+
+	@RequestMapping("/yg_search")
+	public String popup_yg_search(
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String year, String mon, String year1) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		masterYear = year;
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+		model.addAttribute("list", ygDao.ygSearchListDao(year, start, perPageNum));
+
+		model.addAttribute("year", year);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(ygDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", ygDao.avgSearchDao(year));
+
+		return "yg_search";
+
+	}
+
+	@RequestMapping("/yg_search2")
+	public String yg_search2(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String age, String gender, String home, String year,
+			String order) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", ygDao.ygSearchListDao2(year, start, perPageNum, age, gender, home, order));
+		model.addAttribute("year", year);
+		model.addAttribute("age", age);
+		model.addAttribute("gender", gender);
+		model.addAttribute("home", home);
+		model.addAttribute("order", order);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(ygDao.getSearchCount2(year, age, gender, home));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", ygDao.avgSearchDao2(year, age, gender, home));
+
+		return "yg_search2";
+
+	}
+
+	@RequestMapping("/arfish_search")
+	public String popup_arfish_search(
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String year, String mon, String year1) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		masterYear = year;
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", arfishDao.arfishSearchListDao(year, start, perPageNum));
+
+		model.addAttribute("year", year);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(arfishDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", arfishDao.avgSearchDao(year));
+
+		return "arfish_search";
+
+	}
+
+	@RequestMapping("/arfish_search2")
+	public String arfish_search2(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String age, String gender, String home, String year,
+			String order) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+		if (year == null) {
+			LocalDate now = LocalDate.now();
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+			year = now.format(formatter);
+
+			age = "0";
+			gender = "0";
+			home = "0";
+
+		}
+		model.addAttribute("list", arfishDao.arfishSearchListDao2(year, start, perPageNum, age, gender, home, order));
+		model.addAttribute("year", year);
+		model.addAttribute("age", age);
+		model.addAttribute("gender", gender);
+		model.addAttribute("home", home);
+		model.addAttribute("order", order);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(arfishDao.getSearchCount2(year, age, gender, home));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", arfishDao.avgSearchDao2(year, age, gender, home));
+
+		return "arfish_search2";
+
+	}
+
+	@RequestMapping("/aryg_search")
+	public String popup_aryg_search(
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String year, String mon, String year1) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+		masterYear = year;
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", arygDao.arygSearchListDao(year, start, perPageNum));
+
+		model.addAttribute("year", year);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(arygDao.getSearchCount(year));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", arygDao.avgSearchDao(year));
+
+		return "aryg_search";
+
+	}
+
+	@RequestMapping("/aryg_search2")
+	public String aryg_search2(@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String age, String gender, String home, String year,
+			String order) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", arygDao.arygSearchListDao2(year, start, perPageNum, age, gender, home, order));
+		model.addAttribute("year", year);
+		model.addAttribute("age", age);
+		model.addAttribute("gender", gender);
+		model.addAttribute("home", home);
+		model.addAttribute("order", order);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(arygDao.getSearchCount2(year, age, gender, home));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", arygDao.avgSearchDao2(year, age, gender, home));
+
+		return "aryg_search2";
+
+	}
+
+	@RequestMapping("/fish_search2")
+	public String popup_fish_search2(
+			@SessionAttribute(name = SessionConstants.LOGIN_MEMBER, required = false) String check,
+			@ModelAttribute("cri") Criteria2 cri, Model model, String age, String gender, String home, String order,
+			String year) {
+		if (check == null) {
+			return "redirect:/login";
+		}
+
+		int start = cri.getPageStart();
+		int perPageNum = cri.getPerPageNum();
+
+		model.addAttribute("list", fishDao.fishSearchListDao2(year, start, perPageNum, age, gender, home, order));
+		model.addAttribute("year", year);
+		model.addAttribute("age", age);
+		model.addAttribute("gender", gender);
+		model.addAttribute("home", home);
+		model.addAttribute("order", order);
+
+		Paging2 pageMaker = new Paging2();
+
+		pageMaker.setCri(cri);
+
+		pageMaker.setTotalCount(fishDao.getSearchCount2(year, age, gender, home));
+
+		model.addAttribute("pageMaker", pageMaker);
+
+		model.addAttribute("avg", fishDao.avgSearchDao2(year, age, gender, home));
+
+		return "fish_search2";
+
+	}
+
+	@GetMapping("/fishdownload")
+	public void excelDownload(HttpServletResponse response, FishDto fishDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<FishDto> excel = fishDao.fishList(year);
+
+		// Body
+		for (int i = 0; i < fishDao.getSearchCount(year); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/fishsearchdownload")
+	public void excelfishSearchDownload(HttpServletResponse response, FishDto fishDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<FishDto> excel = fishDao.fishList(masterYear);
+
+		// Body
+		for (int i = 0; i < fishDao.getSearchCount(masterYear); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/ygdownload")
+	public void excelygDownload(HttpServletResponse response, YgDto ygDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<YgDto> excel = ygDao.ygList(year);
+
+		// Body
+		for (int i = 0; i < ygDao.getSearchCount(year); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/ygsearchdownload")
+	public void excelygsearchDownload(HttpServletResponse response, YgDto ygDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<YgDto> excel = ygDao.ygList(masterYear);
+
+		// Body
+		for (int i = 0; i < ygDao.getSearchCount(masterYear); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/arfishdownload")
+	public void arfishexcelDownload(HttpServletResponse response, ArfishDto arfishDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<ArfishDto> excel = arfishDao.arfishList(year);
+
+		// Body
+		for (int i = 0; i < arfishDao.getSearchCount(year); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/arfishsearchdownload")
+	public void arfishSearchexcelfishSearchDownload(HttpServletResponse response, ArfishDto arfishDto)
+			throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<ArfishDto> excel = arfishDao.arfishList(masterYear);
+
+		// Body
+		for (int i = 0; i < arfishDao.getSearchCount(masterYear); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/arygdownload")
+	public void arygexcelygDownload(HttpServletResponse response, ArygDto arygDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<ArygDto> excel = arygDao.arygList(year);
+
+		// Body
+		for (int i = 0; i < arygDao.getSearchCount(year); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/arygsearchdownload")
+	public void arygexcelygsearchDownload(HttpServletResponse response, ArygDto yargDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("이용날짜");
+		cell = row.createCell(1);
+		cell.setCellValue("연령대");
+		cell = row.createCell(2);
+		cell.setCellValue("성별");
+		cell = row.createCell(3);
+		cell.setCellValue("거주지");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+
+		// System.out.println(fishDao.fishList());
+		List<ArygDto> excel = arygDao.arygList(masterYear);
+
+		// Body
+		for (int i = 0; i < arygDao.getSearchCount(masterYear); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getUSE_DT());
+			cell = row.createCell(1);
+			if (excel.get(i).getAR_USER_CAT() == 1) {
+				cell.setCellValue("미취학");
+			} else if (excel.get(i).getAR_USER_CAT() == 2) {
+				cell.setCellValue("초등");
+			} else if (excel.get(i).getAR_USER_CAT() == 3) {
+				cell.setCellValue("중등");
+			} else if (excel.get(i).getAR_USER_CAT() == 4) {
+				cell.setCellValue("고등");
+			} else if (excel.get(i).getAR_USER_CAT() == 5) {
+				cell.setCellValue("일반");
+			}
+			cell = row.createCell(2);
+			if (excel.get(i).getGender() == 1) {
+				cell.setCellValue("남자");
+			} else if (excel.get(i).getGender() == 2) {
+				cell.setCellValue("여자");
+			}
+			cell = row.createCell(3);
+			if (excel.get(i).getAddress() == 1) {
+				cell.setCellValue("중원구");
+			} else if (excel.get(i).getAddress() == 2) {
+				cell.setCellValue("수정구");
+			} else if (excel.get(i).getAddress() == 3) {
+				cell.setCellValue("분당구");
+			} else if (excel.get(i).getAddress() == 4) {
+				cell.setCellValue("기타");
+			}
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+		}
+
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/avalldownload")
+	public void avallexcelygsearchDownload(HttpServletResponse response, AvallDto avallDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+
+		LocalDate now = LocalDate.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+		String year = now.format(formatter);
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("수업일시");
+		cell = row.createCell(1);
+		cell.setCellValue("수업명");
+		cell = row.createCell(2);
+		cell.setCellValue("강의자");
+		cell = row.createCell(3);
+		cell.setCellValue("돌봄센터");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+		cell = row.createCell(5);
+		cell.setCellValue("참여율");
+
+		// System.out.println(fishDao.fishList());
+		List<AvallDto> excel = avallDao.avallList(year);
+
+		// Body
+		for (int i = 0; i < avallDao.getSearchCount(year); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getDate());
+			cell = row.createCell(1);
+			cell.setCellValue(excel.get(i).getLESSON_TTL());
+			cell = row.createCell(2);
+			cell.setCellValue(excel.get(i).getINSTR_NM());
+			cell = row.createCell(3);
+			cell.setCellValue(excel.get(i).getCENTER_TTL());
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+			cell = row.createCell(5);
+			cell.setCellValue(excel.get(i).getNope());
+
+		}
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@GetMapping("/avallsearchdownload")
+	public void avallSearchexcelygsearchDownload(HttpServletResponse response, AvallDto avallDto) throws IOException {
+//	        Workbook wb = new HSSFWorkbook();
+		Workbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet("첫번째 시트");
+		Row row = null;
+		Cell cell = null;
+		int rowNum = 0;
+
+		// List<java.lang.String> list=fishDao.fishList(fishDto);
+
+		// Header
+		row = sheet.createRow(rowNum++);
+		cell = row.createCell(0);
+		cell.setCellValue("수업일시");
+		cell = row.createCell(1);
+		cell.setCellValue("수업명");
+		cell = row.createCell(2);
+		cell.setCellValue("강의자");
+		cell = row.createCell(3);
+		cell.setCellValue("돌봄센터");
+		cell = row.createCell(4);
+		cell.setCellValue("만족도");
+		cell = row.createCell(5);
+		cell.setCellValue("참여율");
+
+		// System.out.println(fishDao.fishList());
+		List<AvallDto> excel = avallDao.avallList(masterYear);
+
+		// Body
+		for (int i = 0; i < avallDao.getSearchCount(masterYear); i++) {
+			row = sheet.createRow(rowNum++);
+			cell = row.createCell(0);
+			cell.setCellValue(excel.get(i).getDate());
+			cell = row.createCell(1);
+			cell.setCellValue(excel.get(i).getLESSON_TTL());
+			cell = row.createCell(2);
+			cell.setCellValue(excel.get(i).getINSTR_NM());
+			cell = row.createCell(3);
+			cell.setCellValue(excel.get(i).getCENTER_TTL());
+			cell = row.createCell(4);
+			cell.setCellValue(excel.get(i).getDGSTFN_SCORE());
+			cell = row.createCell(5);
+			cell.setCellValue(excel.get(i).getNope());
+
+		}
+		// 컨텐츠 타입과 파일명 지정
+		response.setContentType("ms-vnd/excel");
+//	        response.setHeader("Content-Disposition", "attachment;filename=example.xls");
+		response.setHeader("Content-Disposition", "attachment;filename=down.xlsx");
+
+		// Excel File Output
+		wb.write(response.getOutputStream());
+		wb.close();
+
+	}
+
+	@RequestMapping("/fishupload")
+	public @ResponseBody int upload(@RequestParam("file") MultipartFile file) throws IOException {
+		int a = 1;
+		Date m;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<ExcelData> dataList = new ArrayList<>();
+		LocalDate now = LocalDate.now();
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+		if (!extension.equals("xlsx") && !extension.equals("xls")) {
+			a = 2;
+			return a;
+		}
+		Workbook workbook = null;
+
+		if (extension.equals("xlsx")) {
+			workbook = new XSSFWorkbook(file.getInputStream());
+		} else if (extension.equals("xls")) {
+			workbook = new HSSFWorkbook(file.getInputStream());
+		}
+
+		Sheet worksheet = workbook.getSheetAt(0);
+
+		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+			Row row = worksheet.getRow(i);
+
+			ExcelData data = new ExcelData();
+			String an = "";
+			String an1 = "";
+			String bn = "";
+			String bn1 = "";
+			String cn = "";
+			String cn1 = "";
+			m = row.getCell(0).getDateCellValue();
+
+			an = row.getCell(1).getStringCellValue();
+
+			bn = row.getCell(2).getStringCellValue();
+			cn = row.getCell(3).getStringCellValue();
+			if (an.equals("미취학")) {
+				an1 = "01";
+			} else if (an.equals("초등")) {
+				an1 = "02";
+			} else if (an.equals("중등")) {
+				an1 = "03";
+			}
+
+			else if (an.equals("고등")) {
+				an1 = "04";
+			} else if (an.equals("일반")) {
+				an1 = "05";
+			}
+			if (bn.equals("남자")) {
+				bn1 = "01";
+			} else if (bn.equals("여자")) {
+				bn1 = "02";
+			}
+			if (cn.equals("중원구")) {
+				cn1 = "01";
+			} else if (cn.equals("수정구")) {
+				cn1 = "02";
+			} else if (cn.equals("분당구")) {
+				cn1 = "03";
+			} else if (cn.equals("기타")) {
+				cn1 = "04";
+			}
+
+			arDao.arRegisterDao(format.format(m), "01", an1, row.getCell(4).getNumericCellValue(), now, bn1, cn1);
+
+		}
+
+		return a;
+	}
+
+	@RequestMapping("/ygupload")
+	public @ResponseBody int ygupload(@RequestParam("file") MultipartFile file) throws IOException {
+		int a = 1;
+		Date m;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<ExcelData> dataList = new ArrayList<>();
+		LocalDate now = LocalDate.now();
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+		if (!extension.equals("xlsx") && !extension.equals("xls")) {
+			a = 2;
+			return a;
+		}
+		Workbook workbook = null;
+
+		if (extension.equals("xlsx")) {
+			workbook = new XSSFWorkbook(file.getInputStream());
+		} else if (extension.equals("xls")) {
+			workbook = new HSSFWorkbook(file.getInputStream());
+		}
+
+		Sheet worksheet = workbook.getSheetAt(0);
+
+		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+			Row row = worksheet.getRow(i);
+
+			ExcelData data = new ExcelData();
+			String an = "";
+			String an1 = "";
+			String bn = "";
+			String bn1 = "";
+			String cn = "";
+			String cn1 = "";
+			m = row.getCell(0).getDateCellValue();
+
+			an = row.getCell(1).getStringCellValue();
+
+			bn = row.getCell(2).getStringCellValue();
+			cn = row.getCell(3).getStringCellValue();
+			if (an.equals("미취학")) {
+				an1 = "01";
+			} else if (an.equals("초등")) {
+				an1 = "02";
+			} else if (an.equals("중등")) {
+				an1 = "03";
+			}
+
+			else if (an.equals("고등")) {
+				an1 = "04";
+			} else if (an.equals("일반")) {
+				an1 = "05";
+			}
+			if (bn.equals("남자")) {
+				bn1 = "01";
+			} else if (bn.equals("여자")) {
+				bn1 = "02";
+			}
+			if (cn.equals("중원구")) {
+				cn1 = "01";
+			} else if (cn.equals("수정구")) {
+				cn1 = "02";
+			} else if (cn.equals("분당구")) {
+				cn1 = "03";
+			} else if (cn.equals("기타")) {
+				cn1 = "04";
+			}
+
+			arDao.arRegisterDao(format.format(m), "02", an1, row.getCell(4).getNumericCellValue(), now, bn1, cn1);
+
+		}
+
+		return a;
+	}
+
+	@RequestMapping("/arfishupload")
+	public @ResponseBody int arfishupload(@RequestParam("file") MultipartFile file) throws IOException {
+		int a = 1;
+		Date m;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<ExcelData> dataList = new ArrayList<>();
+		LocalDate now = LocalDate.now();
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+		if (!extension.equals("xlsx") && !extension.equals("xls")) {
+			a = 2;
+			return a;
+		}
+		Workbook workbook = null;
+
+		if (extension.equals("xlsx")) {
+			workbook = new XSSFWorkbook(file.getInputStream());
+		} else if (extension.equals("xls")) {
+			workbook = new HSSFWorkbook(file.getInputStream());
+		}
+
+		Sheet worksheet = workbook.getSheetAt(0);
+
+		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+			Row row = worksheet.getRow(i);
+
+			ExcelData data = new ExcelData();
+			String an = "";
+			String an1 = "";
+			String bn = "";
+			String bn1 = "";
+			String cn = "";
+			String cn1 = "";
+			m = row.getCell(0).getDateCellValue();
+
+			an = row.getCell(1).getStringCellValue();
+
+			bn = row.getCell(2).getStringCellValue();
+			cn = row.getCell(3).getStringCellValue();
+			if (an.equals("미취학")) {
+				an1 = "01";
+			} else if (an.equals("초등")) {
+				an1 = "02";
+			} else if (an.equals("중등")) {
+				an1 = "03";
+			}
+
+			else if (an.equals("고등")) {
+				an1 = "04";
+			} else if (an.equals("일반")) {
+				an1 = "05";
+			}
+			if (bn.equals("남자")) {
+				bn1 = "01";
+			} else if (bn.equals("여자")) {
+				bn1 = "02";
+			}
+			if (cn.equals("중원구")) {
+				cn1 = "01";
+			} else if (cn.equals("수정구")) {
+				cn1 = "02";
+			} else if (cn.equals("분당구")) {
+				cn1 = "03";
+			} else if (cn.equals("기타")) {
+				cn1 = "04";
+			}
+
+			arDao.arRegisterDao(format.format(m), "11", an1, row.getCell(4).getNumericCellValue(), now, bn1, cn1);
+
+		}
+
+		return a;
+	}
+
+	@RequestMapping("/arygupload")
+	public @ResponseBody int arygupload(@RequestParam("file") MultipartFile file) throws IOException {
+		int a = 1;
+		Date m;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		List<ExcelData> dataList = new ArrayList<>();
+		LocalDate now = LocalDate.now();
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+		if (!extension.equals("xlsx") && !extension.equals("xls")) {
+			a = 2;
+			return a;
+		}
+		Workbook workbook = null;
+
+		if (extension.equals("xlsx")) {
+			workbook = new XSSFWorkbook(file.getInputStream());
+		} else if (extension.equals("xls")) {
+			workbook = new HSSFWorkbook(file.getInputStream());
+		}
+
+		Sheet worksheet = workbook.getSheetAt(0);
+
+		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+			Row row = worksheet.getRow(i);
+
+			ExcelData data = new ExcelData();
+			String an = "";
+			String an1 = "";
+			String bn = "";
+			String bn1 = "";
+			String cn = "";
+			String cn1 = "";
+			m = row.getCell(0).getDateCellValue();
+
+			an = row.getCell(1).getStringCellValue();
+
+			bn = row.getCell(2).getStringCellValue();
+			cn = row.getCell(3).getStringCellValue();
+			if (an.equals("미취학")) {
+				an1 = "01";
+			} else if (an.equals("초등")) {
+				an1 = "02";
+			} else if (an.equals("중등")) {
+				an1 = "03";
+			}
+
+			else if (an.equals("고등")) {
+				an1 = "04";
+			} else if (an.equals("일반")) {
+				an1 = "05";
+			}
+			if (bn.equals("남자")) {
+				bn1 = "01";
+			} else if (bn.equals("여자")) {
+				bn1 = "02";
+			}
+			if (cn.equals("중원구")) {
+				cn1 = "01";
+			} else if (cn.equals("수정구")) {
+				cn1 = "02";
+			} else if (cn.equals("분당구")) {
+				cn1 = "03";
+			} else if (cn.equals("기타")) {
+				cn1 = "04";
+			}
+
+			arDao.arRegisterDao(format.format(m), "12", an1, row.getCell(4).getNumericCellValue(), now, bn1, cn1);
+
+		}
+
+		return a;
+	}
+
+	@RequestMapping("/avallupload")
+	public @ResponseBody int avallupload(@RequestParam("file") MultipartFile file) throws IOException  {
+		int a=1;
+		
+		
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+		 if (!extension.equals("xlsx") && !extension.equals("xls")) {
+		      a=2;
+		      return a;
+		    }
+		 Workbook workbook = null;
+		 
+		 if (extension.equals("xlsx")) {
+		      workbook = new XSSFWorkbook(file.getInputStream());
+		    } else if (extension.equals("xls")) {
+		      workbook = new HSSFWorkbook(file.getInputStream());
+		    }
+
+		    Sheet worksheet = workbook.getSheetAt(0);
+		    
+		    for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+		        Row row = worksheet.getRow(i);
+
+		   
+		        double an1,an2,an3,an4;
+		        Integer a1,a2,a3=null,a4=null;
+		       String dd=";";
+				an1=row.getCell(0).getNumericCellValue();
+				a1=(int)Math.round(an1);
+				
+		        an2=row.getCell(1).getNumericCellValue();
+		        a2=(int)Math.round(an2);
+		        
+		        
+		        
+		        if(row.getCell(2)!=null) {
+		        	an3=row.getCell(2).getNumericCellValue();
+			        a3=(int)Math.round(an3);
+		        }
+		        
+		        
+		        if(row.getCell(3)!=null) {
+		        	an4=row.getCell(3).getNumericCellValue();
+			        a4=(int)Math.round(an4);
+		        }
+
+		        if(centerDao.checkDao3(a1)==null){
+		        	a=4;
+		        }
+		        else {
+		        	if(centerDao.checkDao2(a1, "050400"+a2)==null) {
+		        		centerDao.innsertDao(a1, "050400"+a2, a3, a4);
+		        	}
+		        	else {
+		        		if(a3==null&&a4!=null) {
+		        			centerDao.updateDao4(a4
+					        		,  a1 ,"050400"+a2);
+		        		}
+		        		else if(a4==null&&a3!=null) {
+		        			centerDao.updateDao5(a3
+					        		,  a1 ,"050400"+a2);
+		        		}
+		        		else if(a3==null&&a4==null) {
+		        			
+		        		}
+		        		else {
+		        		 centerDao.updateDao3(a3,a4
+					        		,  a1 ,"050400"+a2);
+		        		 }
+		        	}
+		        	
+		        	
+		        }
+		        
+		      }
+		    
+		    
+		    return a;
+	}
+
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setDefaultEncoding("UTF-8"); // 파일 인코딩 설정
+		multipartResolver.setMaxUploadSizePerFile(5 * 1024 * 1024); // 파일당 업로드 크기 제한 (5MB)
+		return multipartResolver;
+	}
 
 }
