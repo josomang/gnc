@@ -5,7 +5,7 @@ package com.gnc.dto;
 public class Paging {
     
     private int totalCount; 
-    private int displayPageNum = 20; 
+    private int displayPageNum = 200; 
     
     private int startPage; 
     private int endPage;  
