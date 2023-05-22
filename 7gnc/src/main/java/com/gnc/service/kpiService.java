@@ -52,8 +52,8 @@ public class kpiService {
 	@Autowired
 	DeviceDao deviceDao;
 	
-@Scheduled(cron = "30 * * * * *")	
-//@Scheduled(cron = "0 30 22 31 12 ?")
+//@Scheduled(cron = "30 * * * * *")	
+@Scheduled(cron = "0 30 22 31 12 ?")
 public void kpi() throws Exception{
 		
 		LocalDateTime now = LocalDateTime.now();
@@ -201,11 +201,11 @@ public void kpi() throws Exception{
 		
 		
 		
-	 String url = "http://61.83.247.71:9000/kpi";
+	// String url = "http://61.83.247.71:9000/kpi";
 			//restTemplate.postForObject(url, "5" , Object.class);
 			//System.out.println("response:"+response);
 			 //System.out.println(obj.getAsJsonObject());
-	ResponseEntity<Void> response = restTemplate.postForEntity(url, map, Void.class);
+	restTemplate.postForEntity("http://61.83.247.153:9000/kpi", map, Object.class);
 	//System.out.println(map);
 			 //restTemplate.postForEntity(url, request, Object.class);
 			
